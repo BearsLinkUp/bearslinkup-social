@@ -1,0 +1,72 @@
+name: Publicar Bears LinkUp
+
+# Horas en UTC. Puerto Rico es AST (UTC-4) todo el año — no hay horario de
+# verano, así que estas horas no se mueven nunca.
+#   Lun 12:00 p.m. AST → 16:00 UTC   carrusel
+#   Mar  6:00 a.m. AST → 10:00 UTC   imagen · diagnóstico
+#   Mié  7:00 p.m. AST → 23:00 UTC   reel
+#   Vie 12:00 p.m. AST → 16:00 UTC   imagen · precio real
+#   Dom  6:00 p.m. AST → 22:00 UTC   imagen · oportunidad
+#
+# El cron de GitHub no es puntual al minuto: puede atrasarse varios minutos
+# cuando hay cola. Por eso el script busca la pieza que cae dentro de una
+# ventana de 45 minutos en vez de casarse con la hora exacta.
+
+on:
+  schedule:
+    - cron: '0 16 * * 1'
+    - cron: '0 10 * * 2'
+    - cron: '0 23 * * 3'
+    - cron: '0 16 * * 5'
+    - cron: '0 22 * * 0'
+  workflow_dispatch:
+    inputs:
+      dia:
+        description: 'Forzar una pieza (lun, mar, mie, vie, dom). Vacío = la que toque ahora.'
+        required: false
+        default: ''
+      dry:
+        description: 'Simulacro: valida y no publica'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: publicar-bearslinkup
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Publicar
+        env:
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.dia }}" ]; then ARGS="$ARGS --dia=${{ github.event.inputs.dia }}"; fi
+          if [ "${{ github.event.inputs.dry }}" = "true" ]; then ARGS="$ARGS --dry"; fi
+          node publicar.js $ARGS
+
+      - name: Anotar lo publicado
+        if: always()
+        run: |
+          if ! git diff --quiet -- semana/semana.json; then
+            git config user.name "bearslinkup-publisher"
+            git config user.email "admin@bearslinkup.com"
+            git add semana/semana.json
+            git commit -m "publicado: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          else
+            echo "Sin cambios que anotar."
+          fi
