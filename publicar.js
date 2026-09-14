@@ -28,13 +28,14 @@ const fs = require('fs');
 const path = require('path');
 
 const GRAPH = 'https://graph.facebook.com/v21.0';
-const {
-  META_TOKEN,
-  FB_PAGE_ID = '922908814235896',
-  GITHUB_REPOSITORY,
-  GITHUB_REF_NAME = 'main',
-} = process.env;
-let { IG_USER_ID } = process.env;
+const { META_TOKEN, GITHUB_REPOSITORY } = process.env;
+
+// Ojo: un Secret que no existe llega como CADENA VACIA, no como undefined, asi
+// que el valor por defecto de la desestructuracion nunca entraba y la URL se
+// armaba sin ID de pagina. Con || se cubren los dos casos.
+const FB_PAGE_ID = process.env.FB_PAGE_ID || '922908814235896';
+const GITHUB_REF_NAME = process.env.GITHUB_REF_NAME || 'main';
+let IG_USER_ID = process.env.IG_USER_ID || null;
 
 const args = process.argv.slice(2);
 const soloDia = (args.find(a => a.startsWith('--dia=')) || '').split('=')[1] || null;
