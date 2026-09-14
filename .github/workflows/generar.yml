@@ -1,0 +1,83 @@
+name: Generar semana Bears LinkUp
+
+# Lunes 6:00 a.m. AST = 10:00 UTC. Puerto Rico no tiene horario de verano,
+# asi que esta hora no se mueve nunca.
+#
+# Esta corrida hace TODO el trabajo creativo: escoge el tema del banco,
+# genera las 8 fotos y los 3 clips con ElevenLabs, monta la capa de marca,
+# arma el reel y deja semana/ listo. Despues, el workflow "Publicar" saca
+# cada pieza a su hora. Nadie toca nada.
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+    inputs:
+      semana:
+        description: 'Forzar una entrada del banco (w1, w2, w3, w4). Vacio = la que toque.'
+        required: false
+        default: ''
+      solo_plan:
+        description: 'Solo escribir semana.json, sin generar medios'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: generar-bearslinkup
+  cancel-in-progress: false
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Instalar ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Generar la semana
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          MODELO_IMAGEN: ${{ secrets.MODELO_IMAGEN }}
+          MODELO_VIDEO: ${{ secrets.MODELO_VIDEO }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.semana }}" ]; then ARGS="$ARGS --semana=${{ github.event.inputs.semana }}"; fi
+          if [ "${{ github.event.inputs.solo_plan }}" = "true" ]; then ARGS="$ARGS --solo-plan"; fi
+          node generar.js $ARGS
+
+      - name: Guardar la semana en el repo
+        run: |
+          if ! git diff --quiet -- semana/ || [ -n "$(git status --porcelain semana/)" ]; then
+            git config user.name "bearslinkup-publisher"
+            git config user.email "admin@bearslinkup.com"
+            git add -A semana/
+            git commit -m "semana: $(date -u +%G-W%V)"
+            git push
+          else
+            echo "Sin cambios en semana/."
+          fi
+
+      - name: Resumen
+        if: always()
+        run: |
+          echo "### Semana generada" >> $GITHUB_STEP_SUMMARY
+          if [ -f semana/semana.json ]; then
+            node -e "const s=require('./semana/semana.json');console.log('Banco: '+s.banco+' — '+(s.tema||''));s.piezas.forEach(p=>console.log('- '+p.dia+' · '+p.tipo+' · '+p.hora))" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No se genero semana.json." >> $GITHUB_STEP_SUMMARY
+          fi
