@@ -4,7 +4,7 @@ name: Generar semana Bears LinkUp
 # asi que esta hora no se mueve nunca.
 #
 # Esta corrida hace TODO el trabajo creativo: escoge el tema del banco,
-# genera las 8 fotos y los 3 clips con ElevenLabs, monta la capa de marca,
+# genera las 8 fotos y los 3 clips con fal.ai, monta la capa de marca,
 # arma el reel y deja semana/ listo. Despues, el workflow "Publicar" saca
 # cada pieza a su hora. Nadie toca nada.
 
@@ -51,7 +51,7 @@ jobs:
 
       - name: Generar la semana
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          FAL_KEY: ${{ secrets.FAL_KEY }}
           MODELO_IMAGEN: ${{ secrets.MODELO_IMAGEN }}
           MODELO_VIDEO: ${{ secrets.MODELO_VIDEO }}
         run: |
