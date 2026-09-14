@@ -22,6 +22,7 @@
  *   node generar.js              → la semana que toca
  *   node generar.js --semana=w2  → fuerza una entrada del banco
  *   node generar.js --solo-plan  → escribe semana.json y no genera medios
+ *   node generar.js --remontar    → re-monta la marca sobre las crudas, gratis
  */
 
 const fs = require('fs');
@@ -51,9 +52,26 @@ const SEG_CLIP = 8;
 const args = process.argv.slice(2);
 const forzarSemana = (args.find(a => a.startsWith('--semana=')) || '').split('=')[1] || null;
 const soloPlan = args.includes('--solo-plan');
+const remontar = args.includes('--remontar');
 
 const SALIDA = 'semana';
 const TMP = '.tmp-generacion';
+
+// Las fotos y clips sin marca se guardan en el repo. Asi un cambio de logo, de
+// color o de tipografia se re-monta gratis con --remontar, sin volver a pagar
+// generacion. Es la diferencia entre que un ajuste de marca cueste $4 o $0.
+const CRUDAS = path.join(SALIDA, 'crudas');
+
+// El logo NUNCA se genera con IA: se monta en post-produccion sobre la pieza ya
+// renderizada. Regla de la direccion de arte del cliente.
+//
+// Vive como base64 en marca/logo.b64 y no como PNG suelto porque este repo se
+// edita por la web de GitHub, que no deja pegar binarios. En texto si entra, y
+// el navegador lo monta como data URI sin escribir nada a disco.
+const LOGO_B64 = 'marca/logo.b64';
+const LOGO = fs.existsSync(LOGO_B64)
+  ? `data:image/webp;base64,${fs.readFileSync(LOGO_B64, 'utf8').trim()}`
+  : null;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const log = (...a) => console.log(...a);
@@ -118,7 +136,7 @@ async function fal(ruta, metodo = 'GET', cuerpo = null) {
  * se agrega otro modelo, se agrega su caso aqui y nada mas.
  */
 function cuerpoFoto(modelo, prompt) {
-  const base = { prompt, aspect_ratio: '4:5', output_format: 'png', num_images: 1 };
+  const base = { prompt, aspect_ratio: '4:5', output_format: 'jpeg', num_images: 1 };
   return modelo.includes('-pro') ? { ...base, resolution: '2K' } : base;
 }
 
@@ -267,9 +285,7 @@ body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 .slide.luz .card .d{color:var(--acero);}
 .inner{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;
   justify-content:space-between;padding:76px 70px;}
-.badge{width:96px;height:96px;border-radius:24px;background:var(--bosque);
-  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.35);}
-.badge svg{width:52px;height:52px;}
+.badge{width:96px;height:96px;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.35));}
 .dots{display:flex;gap:9px;margin-top:26px;}
 .dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.32);}
 .slide.luz .dots i{background:rgba(15,42,29,.22);}
@@ -310,7 +326,7 @@ body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 .cierre .csite{font-family:'PlexMono',monospace;font-weight:500;font-size:24px;letter-spacing:.16em;
   color:rgba(255,255,255,.80);margin-top:30px;}
 .cierre .badgewrap{position:absolute;top:76px;left:70px;z-index:5;}
-.cierre .badge{background:rgba(255,255,255,.14);}
+.cierre .badge{border-radius:24px;box-shadow:0 0 0 6px #fff;}
 .reel .photo,.reel .edge{display:none;}
 .reel .panel{background:linear-gradient(to bottom,
   rgba(10,10,10,.62) 0%, rgba(10,10,10,0) 20%, rgba(10,10,10,0) 44%, rgba(10,10,10,.90) 72%, rgba(10,10,10,.96) 100%);}
@@ -326,7 +342,7 @@ const ICONOS = `<svg style="display:none">
 <symbol id="chk" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
 <path d="M20 6 9 17l-5-5"/></symbol></svg>`;
 
-const marca = () => `<div class="badge"><svg><use href="#link"/></svg></div><div class="dots"><i></i><i></i><i></i></div>`;
+const marca = () => `${LOGO ? `<img class="badge" src="${LOGO}" alt="">` : ''}<div class="dots"><i></i><i></i><i></i></div>`;
 
 function paginaHTML(cuerpo, fuentes) {
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><style>${CSS.replace(/FONTS/g, fuentes)}</style></head><body>${ICONOS}${cuerpo}</body></html>`;
@@ -410,7 +426,7 @@ function armarReel(clips, capaPng, destino) {
 // ─────────────────────────── Corrida ───────────────────────────
 
 (async () => {
-  if (!soloPlan && !FAL_KEY) {
+  if (!soloPlan && !remontar && !FAL_KEY) {
     console.error('Falta FAL_KEY en los Secrets del repo. No genero nada.');
     process.exit(1);
   }
@@ -424,14 +440,65 @@ function armarReel(clips, capaPng, destino) {
 
   // Semana par abre en inglés; impar abre en español. Así ningún día se casa con un idioma.
   const abreEn = num % 2 === 0;
-  const idiomaDe = (i) => (abreEn ? (i % 2 === 0 ? 'en' : 'es') : (i % 2 === 0 ? 'es' : 'en'));
+  const pedido = (i) => (abreEn ? (i % 2 === 0 ? 'en' : 'es') : (i % 2 === 0 ? 'es' : 'en'));
+
+  /**
+   * Una pieza solo sale en inglés si SU ARTE tiene versión en inglés. Si el
+   * banco no la trae, el post completo baja a español. Nunca un arte en un
+   * idioma y un copy en otro: eso se ve amateur y es lo que pasaba antes.
+   */
+  const hayEn = o => o && o.titular_en !== undefined;
+  const idiomaDe = (i) => {
+    const p = sem.piezas[orden[i]];
+    if (pedido(i) !== 'en') return 'es';
+    const ok = p.slides ? p.slides.every(hayEn) : hayEn(p);
+    return ok ? 'en' : 'es';
+  };
+
+  /** Cambia los textos del arte al idioma que toca. Los shots y clips no se tocan. */
+  const enIdioma = (p, idi) => {
+    if (idi !== 'en') return p;
+    const tr = (o) => {
+      const r = { ...o };
+      for (const k of ['titular', 'sub', 'hook', 'cta', 'pie', 'tarjetas']) {
+        if (o[`${k}_en`] !== undefined) r[k] = o[`${k}_en`];
+      }
+      return r;
+    };
+    const r = tr(p);
+    if (p.slides) r.slides = p.slides.map(tr);
+    return r;
+  };
 
   log(`Bears LinkUp · semana ISO ${anio}-W${String(num).padStart(2, '0')} · banco "${sem.id}" · ${sem.tema}`);
   log(`Protagonista: ${sem.protagonista} · abre en ${abreEn ? 'inglés' : 'español'}\n`);
 
-  fs.rmSync(SALIDA, { recursive: true, force: true });
+  if (remontar) {
+    if (!fs.existsSync(CRUDAS)) {
+      console.error(`No hay ${CRUDAS}/. Re-montar necesita las fotos crudas de una corrida anterior.`);
+      process.exit(1);
+    }
+    log('Re-montando sobre las crudas guardadas. No se genera ni se paga nada.\n');
+    for (const f of fs.readdirSync(SALIDA)) {
+      if (f !== 'crudas') fs.rmSync(path.join(SALIDA, f), { recursive: true, force: true });
+    }
+  } else {
+    fs.rmSync(SALIDA, { recursive: true, force: true });
+    fs.mkdirSync(CRUDAS, { recursive: true });
+  }
   fs.mkdirSync(SALIDA, { recursive: true });
   fs.mkdirSync(TMP, { recursive: true });
+
+  /** Genera la foto, o reusa la cruda guardada si estamos re-montando. */
+  async function foto(nombre, prompt) {
+    const ruta = path.resolve(CRUDAS, nombre);
+    if (remontar) {
+      if (!fs.existsSync(ruta)) throw new Error(`Falta la cruda ${nombre}`);
+      return ruta;
+    }
+    await generarFoto(prompt, ruta);
+    return ruta;
+  }
 
   const orden = ['lun', 'mar', 'mie', 'vie', 'dom'];
   const piezas = [];
@@ -454,6 +521,8 @@ function armarReel(clips, capaPng, destino) {
     process.exit(0);
   }
 
+  if (!LOGO) console.error(`AVISO: falta ${LOGO_B64}. Las piezas saldran sin el sello de marca.`);
+
   const { chromium } = require('playwright');
   const navegador = await chromium.launch();
   const fuentes = path.resolve('node_modules/@fontsource');
@@ -463,19 +532,18 @@ function armarReel(clips, capaPng, destino) {
     const p = sem.piezas[dia];
     const idi = idiomaDe(i);
     const copy = `${p[`copy_${idi}`]}\n\n${p[`hashtags_${idi}`]}`;
+    const pl = enIdioma(p, idi);
     log(`── ${dia.toUpperCase()} · ${p.tipo} · ${idi}`);
 
     if (p.tipo === 'carrusel') {
       const archivos = [];
       for (let s = 0; s < p.slides.length; s++) {
-        const slide = { ...p.slides[s], variante: p.variantes[s] };
-        let foto = null;
-        if (slide.variante !== 'cierre') {
-          foto = path.resolve(TMP, `lun-foto-${s}.png`);
-          await generarFoto(promptFoto(sem, p.shots[s]), foto);
-        }
+        const slide = { ...pl.slides[s], variante: p.variantes[s] };
+        const ruta = slide.variante === 'cierre'
+          ? null
+          : await foto(`lun-${s}.jpg`, promptFoto(sem, p.shots[s]));
         const out = path.join(SALIDA, `lun-${s + 1}.png`);
-        await render(navegador, slide, foto, out, fuentes);
+        await render(navegador, slide, ruta, out, fuentes);
         archivos.push(`lun-${s + 1}.png`);
         log(`   ✓ slide ${s + 1}/${p.slides.length}`);
       }
@@ -484,22 +552,25 @@ function armarReel(clips, capaPng, destino) {
     } else if (p.tipo === 'reel') {
       const clips = [];
       for (let c = 0; c < p.clips.length; c++) {
-        const f = path.resolve(TMP, `clip${c}.mp4`);
-        await generarClip(promptClip(sem, p.clips[c]), f);
+        const f = path.resolve(CRUDAS, `clip${c}.mp4`);
+        if (remontar) {
+          if (!fs.existsSync(f)) throw new Error(`Falta el clip crudo clip${c}.mp4`);
+        } else {
+          await generarClip(promptClip(sem, p.clips[c]), f);
+        }
         clips.push(f);
         log(`   ✓ clip ${c + 1}/${p.clips.length}`);
       }
       const capa = path.join(TMP, 'capa-reel.png');
-      await render(navegador, { ...p, reel: true }, null, capa, fuentes);
+      await render(navegador, { ...pl, reel: true }, null, capa, fuentes);
       armarReel(clips, capa, path.join(SALIDA, 'mie.mp4'));
       log('   ✓ reel armado');
       piezas.push({ dia, tipo: 'reel', archivo: 'mie.mp4', copy, hora: horaDe(dia) });
 
     } else {
-      const foto = path.resolve(TMP, `${dia}-foto.png`);
-      await generarFoto(promptFoto(sem, p.shot), foto);
+      const ruta = await foto(`${dia}.jpg`, promptFoto(sem, p.shot));
       const out = path.join(SALIDA, `${dia}.png`);
-      await render(navegador, p, foto, out, fuentes);
+      await render(navegador, pl, ruta, out, fuentes);
       log('   ✓ imagen montada');
       piezas.push({ dia, tipo: 'imagen', archivo: `${dia}.png`, copy, hora: horaDe(dia) });
     }
