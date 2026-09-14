@@ -99,7 +99,7 @@ function horaDe(dia) {
 // ─────────────────────────── ElevenLabs ───────────────────────────
 
 async function fal(ruta, metodo = 'GET', cuerpo = null) {
-  const r = await fetch(`${FAL}${ruta}`, {
+  const r = await fetch(ruta.startsWith('http') ? ruta : `${FAL}${ruta}`, {
     method: metodo,
     headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
     body: cuerpo ? JSON.stringify(cuerpo) : undefined,
@@ -142,7 +142,14 @@ async function arrancar(modelos, hazCuerpo) {
     try {
       const j = await fal(`/${modelo}`, 'POST', hazCuerpo(modelo));
       log(`   \u00b7 encolado en ${modelo} (${j.request_id})`);
-      return { modelo, id: j.request_id };
+      // fal devuelve las URLs ya armadas. Se usan tal cual: construirlas a mano
+      // falla en los modelos de ruta larga, que responden 405 en /status.
+      return {
+        modelo,
+        id: j.request_id,
+        estado: j.status_url || `/${modelo}/requests/${j.request_id}/status`,
+        resultado: j.response_url || `/${modelo}/requests/${j.request_id}`,
+      };
     } catch (e) {
       ultimo = e;
       log(`   \u00b7 ${modelo} no entro: ${e.message.slice(0, 260)}`);
@@ -152,11 +159,12 @@ async function arrancar(modelos, hazCuerpo) {
 }
 
 /** Espera a que termine la cola y devuelve el resultado completo. */
-async function esperar(modelo, id, maxMin = 12) {
+async function esperar(trabajo, maxMin = 12) {
+  const { modelo, id, estado, resultado } = trabajo;
   const limite = Date.now() + maxMin * 60000;
   while (Date.now() < limite) {
-    const s = await fal(`/${modelo}/requests/${id}/status`);
-    if (s.status === 'COMPLETED') return fal(`/${modelo}/requests/${id}`);
+    const s = await fal(estado);
+    if (s.status === 'COMPLETED') return fal(resultado);
     if (s.status === 'FAILED' || s.status === 'ERROR') {
       throw new Error(`${modelo} ${id} fallo: ${JSON.stringify(s).slice(0, 300)}`);
     }
@@ -173,18 +181,18 @@ async function bajar(url, destino) {
 }
 
 async function generarFoto(prompt, destino) {
-  const { modelo, id } = await arrancar(MODELOS_IMAGEN, m => cuerpoFoto(m, prompt));
-  const r = await esperar(modelo, id);
+  const trabajo = await arrancar(MODELOS_IMAGEN, m => cuerpoFoto(m, prompt));
+  const r = await esperar(trabajo);
   const url = r.images?.[0]?.url;
-  if (!url) throw new Error(`${modelo} termino sin imagen: ${JSON.stringify(r).slice(0, 200)}`);
+  if (!url) throw new Error(`${trabajo.modelo} termino sin imagen: ${JSON.stringify(r).slice(0, 200)}`);
   return bajar(url, destino);
 }
 
 async function generarClip(prompt, destino) {
-  const { modelo, id } = await arrancar(MODELOS_VIDEO, m => cuerpoVideo(m, prompt));
-  const r = await esperar(modelo, id, 20);
+  const trabajo = await arrancar(MODELOS_VIDEO, m => cuerpoVideo(m, prompt));
+  const r = await esperar(trabajo, 20);
   const url = r.video?.url || r.video_url;
-  if (!url) throw new Error(`${modelo} termino sin video: ${JSON.stringify(r).slice(0, 200)}`);
+  if (!url) throw new Error(`${trabajo.modelo} termino sin video: ${JSON.stringify(r).slice(0, 200)}`);
   return bajar(url, destino);
 }
 
