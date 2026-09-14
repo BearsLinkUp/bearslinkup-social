@@ -1,0 +1,46 @@
+name: Verificar token
+
+# Prueba de humo. No publica nada: solo le pregunta a Meta si el token sirve
+# y si ve la pagina y el Instagram. Se corre a mano desde Actions.
+# El token nunca se imprime.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Probar el token contra Meta
+        env:
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+        run: |
+          cat > check.js <<'EOF'
+          const T = process.env.META_TOKEN;
+          const P = process.env.FB_PAGE_ID || '922908814235896';
+          if (!T) { console.error('No hay META_TOKEN en los Secrets del repo.'); process.exit(1); }
+          (async () => {
+            const url = 'https://graph.facebook.com/v21.0/' + P
+              + '?fields=name,instagram_business_account&access_token=' + T;
+            const j = await (await fetch(url)).json();
+            if (j.error) {
+              console.error('Meta [' + j.error.code + ']: ' + j.error.message);
+              process.exit(1);
+            }
+            console.log('Pagina ..... ' + j.name + ' (' + P + ')');
+            if (!j.instagram_business_account) {
+              console.error('Instagram .. NO DEVUELTO');
+              console.error('Falta el vinculo con la pagina o el permiso instagram_basic en el token.');
+              process.exit(1);
+            }
+            console.log('Instagram .. ' + j.instagram_business_account.id);
+            console.log('');
+            console.log('Token OK. El publicador puede escribir en la pagina y en el Instagram.');
+          })();
+          EOF
+          node check.js
