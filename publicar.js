@@ -52,14 +52,33 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const RAW = `https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}/semana`;
 const urlDe = archivo => `${RAW}/${encodeURIComponent(archivo)}`;
 
-async function meta(ruta, params = {}, metodo = 'GET') {
+async function meta(ruta, params = {}, metodo = 'GET', token = META_TOKEN) {
   const url = `${GRAPH}/${ruta}`;
   const r = metodo === 'POST'
-    ? await fetch(url, { method: 'POST', body: new URLSearchParams({ ...params, access_token: META_TOKEN }) })
-    : await fetch(`${url}?${new URLSearchParams({ ...params, access_token: META_TOKEN })}`);
+    ? await fetch(url, { method: 'POST', body: new URLSearchParams({ ...params, access_token: token }) })
+    : await fetch(`${url}?${new URLSearchParams({ ...params, access_token: token })}`);
   const j = await r.json();
   if (j.error) throw new Error(`Meta [${j.error.code}/${j.error.error_subcode || 0}]: ${j.error.message}`);
   return j;
+}
+
+/**
+ * Facebook exige token DE PAGINA para publicar en el muro y para subir fotos
+ * sin publicar. Con el token de usuario responde:
+ *   (#200) Unpublished posts must be posted to a page as the page itself.
+ * Instagram si acepta el de usuario. Por eso solo las llamadas de FB lo usan.
+ * No hace falta guardar otro secret: se le pide a Meta en caliente.
+ */
+let PAGE_TOKEN = null;
+async function tokenPagina() {
+  if (PAGE_TOKEN) return PAGE_TOKEN;
+  const j = await meta(FB_PAGE_ID, { fields: 'access_token' });
+  if (!j.access_token) {
+    throw new Error('Meta no devolvio token de pagina. Al META_TOKEN le falta pages_show_list / pages_manage_posts, o la cuenta no es admin de la pagina.');
+  }
+  PAGE_TOKEN = j.access_token;
+  console.log('· token de pagina obtenido');
+  return PAGE_TOKEN;
 }
 
 /** El ig_user_id no se guarda a mano: se le pregunta a la página. */
@@ -111,29 +130,38 @@ async function publicarIG(pieza, urls) {
 }
 
 async function publicarFB(pieza, urls) {
+  const tk = await tokenPagina();
   if (pieza.tipo === 'reel') {
-    const { id } = await meta(`${FB_PAGE_ID}/videos`, { file_url: urls[0], description: pieza.copy }, 'POST');
+    const { id } = await meta(`${FB_PAGE_ID}/videos`, { file_url: urls[0], description: pieza.copy }, 'POST', tk);
     return id;
   }
   if (pieza.tipo === 'carrusel') {
     const adjuntos = {};
     for (let i = 0; i < urls.length; i++) {
-      const { id } = await meta(`${FB_PAGE_ID}/photos`, { url: urls[i], published: 'false' }, 'POST');
+      const { id } = await meta(`${FB_PAGE_ID}/photos`, { url: urls[i], published: 'false' }, 'POST', tk);
       adjuntos[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id });
     }
-    const { id } = await meta(`${FB_PAGE_ID}/feed`, { message: pieza.copy, ...adjuntos }, 'POST');
+    const { id } = await meta(`${FB_PAGE_ID}/feed`, { message: pieza.copy, ...adjuntos }, 'POST', tk);
     return id;
   }
-  const { id } = await meta(`${FB_PAGE_ID}/photos`, { url: urls[0], caption: pieza.copy, published: 'true' }, 'POST');
+  const { id } = await meta(`${FB_PAGE_ID}/photos`, { url: urls[0], caption: pieza.copy, published: 'true' }, 'POST', tk);
   return id;
 }
 
-/** Marca la pieza como publicada para que un cron repetido no la duplique. */
-function marcar(planPath, plan, dia, resultado) {
+/**
+ * Marca lo que ya salio, red por red, y lo escribe a disco de inmediato.
+ * Se guarda apenas Instagram responde, sin esperar a Facebook: si Facebook
+ * falla despues, el reintento ve el id de IG y NO vuelve a publicar alli.
+ * Antes se marcaba solo al final y un fallo de FB duplicaba el post de IG.
+ */
+function marcar(planPath, plan, dia, parcial) {
   const p = plan.piezas.find(x => x.dia === dia);
-  if (p) { p.publicado = resultado; }
+  if (p) { p.publicado = { ...(p.publicado || {}), ...parcial, cuando: new Date().toISOString() }; }
   fs.writeFileSync(planPath, JSON.stringify(plan, null, 2));
 }
+
+/** Una pieza esta cerrada solo cuando salio en las dos redes. */
+const completa = p => Boolean(p.publicado && p.publicado.ig && p.publicado.fb);
 
 (async () => {
   const planPath = path.join('semana', 'semana.json');
@@ -142,7 +170,7 @@ function marcar(planPath, plan, dia, resultado) {
   const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
   const ahora = Date.now();
 
-  let piezas = plan.piezas.filter(p => !p.publicado);
+  let piezas = plan.piezas.filter(p => !completa(p));
   if (soloDia) piezas = piezas.filter(p => p.dia === soloDia);
   else if (!todas) {
     piezas = piezas.filter(p => {
@@ -166,10 +194,26 @@ function marcar(planPath, plan, dia, resultado) {
       const urls = archivos.map(urlDe);
       if (dry) { console.log(`· ${pieza.dia} ${pieza.tipo} — ${urls.length} URL(s) OK`); continue; }
 
-      const ig = await publicarIG(pieza, urls);
-      const fb = await publicarFB(pieza, urls);
+      const hecho = pieza.publicado || {};
+
+      let ig = hecho.ig;
+      if (ig) {
+        console.log(`· ${pieza.dia} — IG ya estaba publicado (${ig}). No lo repito.`);
+      } else {
+        ig = await publicarIG(pieza, urls);
+        marcar(planPath, plan, pieza.dia, { ig });
+        console.log(`· ${pieza.dia} — IG ${ig}`);
+      }
+
+      let fb = hecho.fb;
+      if (fb) {
+        console.log(`· ${pieza.dia} — FB ya estaba publicado (${fb}). No lo repito.`);
+      } else {
+        fb = await publicarFB(pieza, urls);
+        marcar(planPath, plan, pieza.dia, { fb });
+      }
+
       console.log(`✓ ${pieza.dia} · ${pieza.tipo} — IG ${ig} · FB ${fb}`);
-      marcar(planPath, plan, pieza.dia, { ig, fb, cuando: new Date().toISOString() });
     } catch (e) {
       fallos++;
       console.error(`✗ ${pieza.dia} · ${pieza.tipo} — ${e.message}`);
