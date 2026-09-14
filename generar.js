@@ -31,8 +31,15 @@ const { execFileSync } = require('child_process');
 const XI = 'https://api.elevenlabs.io/v1';
 const { ELEVENLABS_API_KEY } = process.env;
 
-const MODELOS_IMAGEN = [process.env.MODELO_IMAGEN, 'gemini-3-pro-image', 'gpt-image-2', 'gemini-2.5-flash-image'].filter(Boolean);
-const MODELOS_VIDEO = [process.env.MODELO_VIDEO, 'veo-3.1-fast-generate-001', 'veo-3.1-generate-001'].filter(Boolean);
+// El orden importa: se prueba de arriba abajo y se queda con el primero que el
+// plan de la cuenta permita. Los premium van primero por calidad; si la cuenta
+// no los cubre, la API devuelve 402 y el script baja al siguiente sin parar.
+const MODELOS_IMAGEN = [process.env.MODELO_IMAGEN,
+  'gemini-3-pro-image', 'gpt-image-2', 'bytedance-seedream-4',
+  'gemini-3.1-flash-image', 'gemini-2.5-flash-image'].filter(Boolean);
+const MODELOS_VIDEO = [process.env.MODELO_VIDEO,
+  'veo-3.1-fast-generate-001', 'bytedance-seedance-v1-pro', 'kling-2.5-turbo',
+  'ltx-v2-fast', 'wan-2.5-preview-video'].filter(Boolean);
 
 const args = process.argv.slice(2);
 const forzarSemana = (args.find(a => a.startsWith('--semana=')) || '').split('=')[1] || null;
@@ -96,17 +103,37 @@ async function xi(ruta, metodo = 'GET', cuerpo = null) {
   return j;
 }
 
-/** Arranca una generación probando los modelos en orden hasta que uno entre. */
+/**
+ * Arranca una generación probando los modelos en orden hasta que uno entre.
+ *
+ * Cada modelo acepta parámetros distintos: unos toman `resolution`, otros lo
+ * rechazan con un 422 que nombra el campo que sobra. En vez de mantener una
+ * tabla a mano —que se desactualiza sola cada vez que ElevenLabs mueve algo—
+ * el script lee ese nombre del propio error, quita ese campo y reintenta.
+ * Un 402 (el plan de la cuenta no cubre ese modelo) no se reintenta: baja al
+ * siguiente de la lista.
+ */
 async function arrancar(tipo, cuerpoBase, modelos) {
   let ultimo;
   for (const model of modelos) {
-    try {
-      const j = await xi(`/flows/${tipo}`, 'POST', { ...cuerpoBase, model_id: model });
-      log(`   · ${tipo} arrancado con ${model} (${j.id})`);
-      return j.id;
-    } catch (e) {
-      ultimo = e;
-      log(`   · ${model} no entró: ${e.message.slice(0, 120)}`);
+    const cuerpo = { ...cuerpoBase, model_id: model };
+    for (let intento = 0; intento < 5; intento++) {
+      try {
+        const j = await xi(`/flows/${tipo}`, 'POST', cuerpo);
+        const quitados = Object.keys(cuerpoBase).filter(k => cuerpo[k] === undefined);
+        log(`   · ${tipo} arrancado con ${model}${quitados.length ? ` (sin ${quitados.join(', ')})` : ''} — ${j.id}`);
+        return j.id;
+      } catch (e) {
+        ultimo = e;
+        const sobra = e.message.match(/"extra_forbidden","loc":\["body","[^"]*","([^"]+)"\]/);
+        if (sobra && cuerpo[sobra[1]] !== undefined) {
+          log(`   · ${model}: el parámetro "${sobra[1]}" sobra en este modelo, lo quito`);
+          delete cuerpo[sobra[1]];
+          continue;
+        }
+        log(`   · ${model} no entró: ${e.message.slice(0, 260)}`);
+        break;
+      }
     }
   }
   throw ultimo;
