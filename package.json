@@ -1,0 +1,15 @@
+{
+  "name": "bearslinkup-social",
+  "private": true,
+  "description": "Publicador automatico de Bears LinkUp. Montado por BAdvise.",
+  "scripts": {
+    "generar": "node generar.js",
+    "publicar": "node publicar.js"
+  },
+  "dependencies": {
+    "@fontsource/archivo": "^5.0.0",
+    "@fontsource/ibm-plex-mono": "^5.0.0",
+    "@fontsource/inter": "^5.0.0",
+    "playwright": "^1.47.0"
+  }
+}
