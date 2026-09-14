@@ -101,7 +101,7 @@ async function arrancar(tipo, cuerpoBase, modelos) {
   let ultimo;
   for (const model of modelos) {
     try {
-      const j = await xi(`/flows/${tipo}`, 'POST', { ...cuerpoBase, model });
+      const j = await xi(`/flows/${tipo}`, 'POST', { ...cuerpoBase, model_id: model });
       log(`   · ${tipo} arrancado con ${model} (${j.id})`);
       return j.id;
     } catch (e) {
@@ -136,7 +136,7 @@ async function bajar(url, destino) {
 }
 
 async function generarFoto(prompt, destino) {
-  const id = await arrancar('image', { prompt, aspect_ratio: '16:9', resolution: '2K' }, MODELOS_IMAGEN);
+  const id = await arrancar('image', { prompt, aspect_ratio: '4:5', resolution: '2K' }, MODELOS_IMAGEN);
   return bajar(await esperar('image', id), destino);
 }
 
