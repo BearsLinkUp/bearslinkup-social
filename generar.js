@@ -6,17 +6,17 @@
  *
  * Qué hace, de punta a punta:
  *   1. Escoge la semana del banco por número de semana ISO (rota sin repetir).
- *   2. Genera 8 fotos y 3 clips de video con la API de ElevenLabs.
+ *   2. Genera 8 fotos y 3 clips de video con la API de fal.ai.
  *   3. Recorta a 4:5 y 9:16 y monta la capa de marca con Chromium headless.
- *   4. Empalma los 3 clips en un reel de ~22 s y le quema la capa de texto.
+ *   4. Empalma los 3 clips en un reel de ~24 s y le quema la capa de texto.
  *   5. Escribe semana/ y semana.json con los copys y la hora de cada pieza.
  *
  * Después de esto, publicar.js hace el resto a la hora de cada pieza.
  *
  * VARIABLES (Secrets del repo):
- *   ELEVENLABS_API_KEY   obligatoria
- *   MODELO_IMAGEN        opcional, por defecto gemini-3-pro-image
- *   MODELO_VIDEO         opcional, por defecto veo-3.1-fast-generate-001
+ *   FAL_KEY         obligatoria
+ *   MODELO_IMAGEN   opcional, por defecto fal-ai/nano-banana-pro
+ *   MODELO_VIDEO    opcional, por defecto Kling v3 standard
  *
  * USO:
  *   node generar.js              → la semana que toca
@@ -28,18 +28,25 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const XI = 'https://api.elevenlabs.io/v1';
-const { ELEVENLABS_API_KEY } = process.env;
+const FAL = 'https://queue.fal.run';
+const { FAL_KEY } = process.env;
 
-// El orden importa: se prueba de arriba abajo y se queda con el primero que el
-// plan de la cuenta permita. Los premium van primero por calidad; si la cuenta
-// no los cubre, la API devuelve 402 y el script baja al siguiente sin parar.
+// El orden importa: se prueba de arriba abajo y gana el primero que entre.
+// Solo corre UNO — los de abajo son red de seguridad si fal tiene el modelo
+// caido o saturado. Un respaldo que no se usa no cuesta nada.
+//
+// Imagen: Nano Banana Pro. Video: Kling v3, escogido por consistencia de
+// personaje — el reel son tres tomas del mismo soldador y si cambia de cara
+// entre tomas el reel se cae. Veo entra solo si Kling no responde.
 const MODELOS_IMAGEN = [process.env.MODELO_IMAGEN,
-  'gemini-3-pro-image', 'gpt-image-2', 'bytedance-seedream-4',
-  'gemini-3.1-flash-image', 'gemini-2.5-flash-image'].filter(Boolean);
+  'fal-ai/nano-banana-pro', 'fal-ai/nano-banana'].filter(Boolean);
 const MODELOS_VIDEO = [process.env.MODELO_VIDEO,
-  'veo-3.1-fast-generate-001', 'bytedance-seedance-v1-pro', 'kling-2.5-turbo',
-  'ltx-v2-fast', 'wan-2.5-preview-video'].filter(Boolean);
+  'fal-ai/kling-video/v3/standard/text-to-video', 'fal-ai/veo3.1/fast'].filter(Boolean);
+
+// 8 s por clip. Es el maximo de Veo y cae comodo dentro del rango de Kling
+// (3-15 s), asi que el mismo numero sirve para los dos. Tres clips = 24 s,
+// dentro del minimo de 15 s y el maximo de 1 min que pide el cliente.
+const SEG_CLIP = 8;
 
 const args = process.argv.slice(2);
 const forzarSemana = (args.find(a => a.startsWith('--semana=')) || '').split('=')[1] || null;
@@ -91,68 +98,71 @@ function horaDe(dia) {
 
 // ─────────────────────────── ElevenLabs ───────────────────────────
 
-async function xi(ruta, metodo = 'GET', cuerpo = null) {
-  const r = await fetch(`${XI}${ruta}`, {
+async function fal(ruta, metodo = 'GET', cuerpo = null) {
+  const r = await fetch(`${FAL}${ruta}`, {
     method: metodo,
-    headers: { 'xi-api-key': ELEVENLABS_API_KEY, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
     body: cuerpo ? JSON.stringify(cuerpo) : undefined,
   });
   const txt = await r.text();
   let j; try { j = JSON.parse(txt); } catch { j = { raw: txt }; }
-  if (!r.ok) throw new Error(`ElevenLabs ${r.status} en ${ruta}: ${txt.slice(0, 300)}`);
+  if (!r.ok) throw new Error(`fal ${r.status} en ${ruta}: ${txt.slice(0, 300)}`);
   return j;
 }
 
 /**
- * Arranca una generación probando los modelos en orden hasta que uno entre.
- *
- * Cada modelo acepta parámetros distintos: unos toman `resolution`, otros lo
- * rechazan con un 422 que nombra el campo que sobra. En vez de mantener una
- * tabla a mano —que se desactualiza sola cada vez que ElevenLabs mueve algo—
- * el script lee ese nombre del propio error, quita ese campo y reintenta.
- * Un 402 (el plan de la cuenta no cubre ese modelo) no se reintenta: baja al
- * siguiente de la lista.
+ * Cada modelo nombra sus parametros distinto: Kling mide la duracion en
+ * segundos (numero) y la familia Veo la nombra en texto ("8s"); el Nano Banana
+ * basico rechaza `resolution` y el Pro lo acepta. En vez de una capa generica
+ * que adivine, aqui va el mapeo explicito de los cuatro que usamos. Si manana
+ * se agrega otro modelo, se agrega su caso aqui y nada mas.
  */
-async function arrancar(tipo, cuerpoBase, modelos) {
+function cuerpoFoto(modelo, prompt) {
+  const base = { prompt, aspect_ratio: '4:5', output_format: 'png', num_images: 1 };
+  return modelo.includes('-pro') ? { ...base, resolution: '2K' } : base;
+}
+
+function cuerpoVideo(modelo, prompt) {
+  if (modelo.includes('kling')) {
+    return {
+      prompt, duration: SEG_CLIP, aspect_ratio: '9:16',
+      generate_audio: true, negative_prompt: NEGATIVO,
+    };
+  }
+  return {
+    prompt, duration: `${SEG_CLIP}s`, aspect_ratio: '9:16',
+    resolution: '1080p', generate_audio: true,
+  };
+}
+
+/** Encola el trabajo probando los modelos en orden hasta que uno entre. */
+async function arrancar(modelos, hazCuerpo) {
   let ultimo;
-  for (const model of modelos) {
-    const cuerpo = { ...cuerpoBase, model_id: model };
-    for (let intento = 0; intento < 5; intento++) {
-      try {
-        const j = await xi(`/flows/${tipo}`, 'POST', cuerpo);
-        const quitados = Object.keys(cuerpoBase).filter(k => cuerpo[k] === undefined);
-        log(`   · ${tipo} arrancado con ${model}${quitados.length ? ` (sin ${quitados.join(', ')})` : ''} — ${j.id}`);
-        return j.id;
-      } catch (e) {
-        ultimo = e;
-        const sobra = e.message.match(/"extra_forbidden","loc":\["body","[^"]*","([^"]+)"\]/);
-        if (sobra && cuerpo[sobra[1]] !== undefined) {
-          log(`   · ${model}: el parámetro "${sobra[1]}" sobra en este modelo, lo quito`);
-          delete cuerpo[sobra[1]];
-          continue;
-        }
-        log(`   · ${model} no entró: ${e.message.slice(0, 260)}`);
-        break;
-      }
+  for (const modelo of modelos) {
+    try {
+      const j = await fal(`/${modelo}`, 'POST', hazCuerpo(modelo));
+      log(`   \u00b7 encolado en ${modelo} (${j.request_id})`);
+      return { modelo, id: j.request_id };
+    } catch (e) {
+      ultimo = e;
+      log(`   \u00b7 ${modelo} no entro: ${e.message.slice(0, 260)}`);
     }
   }
   throw ultimo;
 }
 
-/** Espera a que termine y devuelve la URL firmada del archivo. */
-async function esperar(tipo, id, maxMin = 12) {
+/** Espera a que termine la cola y devuelve el resultado completo. */
+async function esperar(modelo, id, maxMin = 12) {
   const limite = Date.now() + maxMin * 60000;
   while (Date.now() < limite) {
-    const j = await xi(`/flows/${tipo}/${id}`);
-    if (j.status === 'completed') {
-      const url = j.content_url || j.output?.content_url || j.result?.content_url;
-      if (!url) throw new Error(`${tipo} ${id} terminó sin content_url`);
-      return url;
+    const s = await fal(`/${modelo}/requests/${id}/status`);
+    if (s.status === 'COMPLETED') return fal(`/${modelo}/requests/${id}`);
+    if (s.status === 'FAILED' || s.status === 'ERROR') {
+      throw new Error(`${modelo} ${id} fallo: ${JSON.stringify(s).slice(0, 300)}`);
     }
-    if (j.status === 'failed') throw new Error(`${tipo} ${id} falló: ${JSON.stringify(j).slice(0, 200)}`);
     await sleep(6000);
   }
-  throw new Error(`Timeout esperando ${tipo} ${id}`);
+  throw new Error(`Timeout esperando ${modelo} ${id}`);
 }
 
 async function bajar(url, destino) {
@@ -163,15 +173,19 @@ async function bajar(url, destino) {
 }
 
 async function generarFoto(prompt, destino) {
-  const id = await arrancar('image', { prompt, aspect_ratio: '4:5', resolution: '2K' }, MODELOS_IMAGEN);
-  return bajar(await esperar('image', id), destino);
+  const { modelo, id } = await arrancar(MODELOS_IMAGEN, m => cuerpoFoto(m, prompt));
+  const r = await esperar(modelo, id);
+  const url = r.images?.[0]?.url;
+  if (!url) throw new Error(`${modelo} termino sin imagen: ${JSON.stringify(r).slice(0, 200)}`);
+  return bajar(url, destino);
 }
 
 async function generarClip(prompt, destino) {
-  const id = await arrancar('video', {
-    prompt, duration_secs: 8, aspect_ratio: '9:16', resolution: '1080p', generate_audio: true,
-  }, MODELOS_VIDEO);
-  return bajar(await esperar('video', id, 20), destino);
+  const { modelo, id } = await arrancar(MODELOS_VIDEO, m => cuerpoVideo(m, prompt));
+  const r = await esperar(modelo, id, 20);
+  const url = r.video?.url || r.video_url;
+  if (!url) throw new Error(`${modelo} termino sin video: ${JSON.stringify(r).slice(0, 200)}`);
+  return bajar(url, destino);
 }
 
 // ─────────────────────────── Prompts ───────────────────────────
@@ -195,7 +209,7 @@ NEGATIVE: ${NEGATIVO}.`;
 }
 
 function promptClip(sem, clip) {
-  return `Vertical 9:16 cinematic video, 8 seconds, photorealistic, documentary feel.
+  return `Vertical 9:16 cinematic video, ${SEG_CLIP} seconds, photorealistic, documentary feel.
 
 SUBJECT: ${sem.sujeto}.
 
@@ -388,8 +402,8 @@ function armarReel(clips, capaPng, destino) {
 // ─────────────────────────── Corrida ───────────────────────────
 
 (async () => {
-  if (!soloPlan && !ELEVENLABS_API_KEY) {
-    console.error('Falta ELEVENLABS_API_KEY en los Secrets del repo. No genero nada.');
+  if (!soloPlan && !FAL_KEY) {
+    console.error('Falta FAL_KEY en los Secrets del repo. No genero nada.');
     process.exit(1);
   }
 
