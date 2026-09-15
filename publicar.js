@@ -42,8 +42,16 @@ const soloDia = (args.find(a => a.startsWith('--dia=')) || '').split('=')[1] || 
 const todas = args.includes('--todas');
 const dry = args.includes('--dry');
 
-// Ventana de tolerancia: el cron de GitHub no es puntual al minuto.
-const VENTANA_MIN = 45;
+// Margen de arranque. El cron de GitHub NO es puntual: medido en este repo,
+// llego 4h10m tarde el lunes y 4h40m el martes. Por eso ya no existe una
+// ventana que cierre. Una pieza se publica si su hora ya paso y sigue
+// pendiente, sin importar cuanto se atrase el disparador: tarde publica, y
+// tarde es mejor que nunca. Este margen solo evita adelantarse a la hora.
+const MARGEN_MIN = 10;
+
+// Cuanto puede llegar tarde una pieza antes de que el proceso lo grite en rojo
+// en vez de publicarla callado. Publica igual; lo que cambia es el aviso.
+const TARDE_MIN = 60;
 
 if (!META_TOKEN) { console.error('Falta META_TOKEN. Aborto sin publicar nada.'); process.exit(1); }
 if (!GITHUB_REPOSITORY) { console.error('Falta GITHUB_REPOSITORY. ¿Esto corre fuera de Actions?'); process.exit(1); }
@@ -170,16 +178,27 @@ const completa = p => Boolean(p.publicado && p.publicado.ig && p.publicado.fb);
   const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
   const ahora = Date.now();
 
+  const atraso = p => Math.round((ahora - new Date(p.hora).getTime()) / 60000);
+
   let piezas = plan.piezas.filter(p => !completa(p));
-  if (soloDia) piezas = piezas.filter(p => p.dia === soloDia);
-  else if (!todas) {
-    piezas = piezas.filter(p => {
-      const t = new Date(p.hora).getTime();
-      return ahora >= t - VENTANA_MIN * 60000 && ahora <= t + VENTANA_MIN * 60000;
-    });
+  if (soloDia) {
+    piezas = piezas.filter(p => p.dia === soloDia);
+  } else if (!todas) {
+    // Vencidas y pendientes, de la mas vieja a la mas nueva. Se toma UNA por
+    // corrida: si quedo atraso, las demas salen en las corridas siguientes en
+    // vez de caerle encima al feed cuatro posts de golpe.
+    piezas = piezas
+      .filter(p => atraso(p) >= -MARGEN_MIN)
+      .sort((a, b) => new Date(a.hora) - new Date(b.hora))
+      .slice(0, 1);
   }
 
-  if (!piezas.length) { console.log('No toca ninguna pieza ahora mismo. Salgo limpio.'); process.exit(0); }
+  if (!piezas.length) { console.log('No hay ninguna pieza vencida y pendiente. Salgo limpio.'); process.exit(0); }
+
+  for (const p of piezas) {
+    const m = atraso(p);
+    if (m >= TARDE_MIN) console.log(`! ${p.dia} sale con ${Math.floor(m/60)}h ${m%60}m de atraso sobre su hora pautada`);
+  }
 
   console.log(`Bears LinkUp · ${plan.semana || 's/f'} · ${piezas.length} pieza(s)${dry ? ' · SIMULACRO' : ''}`);
 
@@ -221,5 +240,21 @@ const completa = p => Boolean(p.publicado && p.publicado.ig && p.publicado.fb);
   }
 
   if (dry) { console.log('\nSimulacro terminado. No se publicó nada.'); process.exit(0); }
+
+  // Auditoria final. Antes, una corrida que no publicaba nada salia en verde y
+  // el fallo pasaba invisible durante horas. Ahora, si quedo alguna pieza
+  // vencida sin publicar, esto termina en ROJO y dice cual.
+  const colgadas = plan.piezas.filter(p => !completa(p) && atraso(p) >= TARDE_MIN);
+  if (colgadas.length) {
+    console.error('');
+    console.error('PIEZAS VENCIDAS Y SIN PUBLICAR:');
+    for (const p of colgadas) {
+      const m = atraso(p);
+      const falta = !p.publicado ? 'IG y FB' : (!p.publicado.ig ? 'IG' : 'FB');
+      console.error(`  ✗ ${p.dia} · ${p.tipo} — ${Math.floor(m/60)}h ${m%60}m tarde — falta ${falta}`);
+    }
+    process.exit(1);
+  }
+
   process.exit(fallos ? 1 : 0);
 })();
