@@ -53,6 +53,10 @@ const args = process.argv.slice(2);
 const forzarSemana = (args.find(a => a.startsWith('--semana=')) || '').split('=')[1] || null;
 const soloPlan = args.includes('--solo-plan');
 const remontar = args.includes('--remontar');
+// --solo=mar,dom  → vuelve a generar SOLO esos dias y re-monta el resto sobre
+// sus crudas. Sirve para arreglar una pieza sin volver a pagar la semana entera.
+const soloArg = (args.find(x => x.startsWith('--solo=')) || '').split('=')[1] || '';
+const soloDias = soloArg ? new Set(soloArg.split(',').map(x => x.trim()).filter(Boolean)) : null;
 
 const SALIDA = 'semana';
 const TMP = '.tmp-generacion';
@@ -256,14 +260,22 @@ const SEGURIDAD = 'Every person in frame wears the protection the task requires.
   'If the face is visible, then there is no torch in the hands and no arc, no spark and no glow anywhere in frame. ' +
   'These two situations never mix.';
 
-function promptFoto(sem, shot, tercio = 'lower') {
+function promptFoto(sem, shot, tercio = 'lower', sobre = {}) {
+  // Una pieza puede traer su propia escena o su propio sujeto. Sin esto, la
+  // escena de la semana se come la toma: si la semana pasa en el portal de una
+  // casa y la pieza pide un inspector en una nave industrial, el modelo intenta
+  // cumplir las dos y saca un collage.
+  const sujeto = sobre.sujeto || sem.sujeto;
+  const escena = sobre.escena || sem.escena;
+  // Si la toma pide que no salga nadie, el bloque SUBJECT sobra y estorba.
+  const sinGente = /\bno (person|face|hands)\b/i.test(shot);
   return `Vertical documentary photograph of the welding and metal fabrication trade, photorealistic, shot on a 35mm lens, hard natural light, fine film grain.
-
-SUBJECT: ${sem.sujeto}.
-
+${sinGente ? '' : `
+SUBJECT: ${sujeto}.
+`}
 SAFETY (non-negotiable): ${SEGURIDAD}
 
-SCENE: ${sem.escena}.
+SCENE: ${escena}.
 
 SHOT: ${shot}.
 
@@ -620,12 +632,14 @@ function armarReel(clips, capaPng, destino) {
   log(`Bears LinkUp · semana ISO ${anio}-W${String(num).padStart(2, '0')} · banco "${sem.id}" · ${sem.tema}`);
   log(`Protagonista: ${sem.protagonista} · abre en ${abreEn ? 'inglés' : 'español'}\n`);
 
-  if (remontar) {
+  if (remontar || soloDias) {
     if (!fs.existsSync(CRUDAS)) {
       console.error(`No hay ${CRUDAS}/. Re-montar necesita las fotos crudas de una corrida anterior.`);
       process.exit(1);
     }
-    log('Re-montando sobre las crudas guardadas. No se genera ni se paga nada.\n');
+    log(soloDias
+      ? `Regenerando solo ${[...soloDias].join(', ')}. El resto se re-monta sobre sus crudas.\n`
+      : 'Re-montando sobre las crudas guardadas. No se genera ni se paga nada.\n');
     for (const f of fs.readdirSync(SALIDA)) {
       if (f !== 'crudas') fs.rmSync(path.join(SALIDA, f), { recursive: true, force: true });
     }
@@ -637,9 +651,10 @@ function armarReel(clips, capaPng, destino) {
   fs.mkdirSync(TMP, { recursive: true });
 
   /** Genera la foto, o reusa la cruda guardada si estamos re-montando. */
-  async function foto(nombre, prompt) {
+  async function foto(nombre, prompt, dia) {
     const ruta = path.resolve(CRUDAS, nombre);
-    if (remontar) {
+    const reusar = remontar || (soloDias && dia && !soloDias.has(dia));
+    if (reusar) {
       if (!fs.existsSync(ruta)) throw new Error(`Falta la cruda ${nombre}`);
       return ruta;
     }
@@ -688,7 +703,7 @@ function armarReel(clips, capaPng, destino) {
         const slide = { ...pl.slides[s], variante: p.variantes[s] };
         const ruta = slide.variante === 'cierre'
           ? null
-          : await foto(`lun-${s}.jpg`, promptFoto(sem, p.shots[s]));
+          : await foto(`lun-${s}.jpg`, promptFoto(sem, p.shots[s], 'lower', p), dia);
         const out = path.join(SALIDA, `lun-${s + 1}.png`);
         await render(navegador, slide, ruta, out, fuentes);
         archivos.push(`lun-${s + 1}.png`);
@@ -700,7 +715,7 @@ function armarReel(clips, capaPng, destino) {
       const clips = [];
       for (let c = 0; c < p.clips.length; c++) {
         const f = path.resolve(CRUDAS, `clip${c}.mp4`);
-        if (remontar) {
+        if (remontar || (soloDias && !soloDias.has(dia))) {
           if (!fs.existsSync(f)) throw new Error(`Falta el clip crudo clip${c}.mp4`);
         } else {
           await generarClip(promptClip(sem, p.clips[c]), f);
@@ -715,7 +730,7 @@ function armarReel(clips, capaPng, destino) {
       piezas.push({ dia, tipo: 'reel', archivo: 'mie.mp4', copy, hora: horaDe(dia) });
 
     } else {
-      const ruta = await foto(`${dia}.jpg`, promptFoto(sem, p.shot));
+      const ruta = await foto(`${dia}.jpg`, promptFoto(sem, p.shot, 'lower', p), dia);
       const out = path.join(SALIDA, `${dia}.png`);
       await render(navegador, pl, ruta, out, fuentes);
       log('   ✓ imagen montada');
