@@ -22,6 +22,11 @@ on:
         type: boolean
         required: false
         default: false
+      remontar:
+        description: 'Re-montar la marca sobre las fotos ya generadas. GRATIS, no llama a fal.'
+        type: boolean
+        required: false
+        default: false
 
 concurrency:
   group: generar-bearslinkup
@@ -58,6 +63,7 @@ jobs:
           ARGS=""
           if [ -n "${{ github.event.inputs.semana }}" ]; then ARGS="$ARGS --semana=${{ github.event.inputs.semana }}"; fi
           if [ "${{ github.event.inputs.solo_plan }}" = "true" ]; then ARGS="$ARGS --solo-plan"; fi
+          if [ "${{ github.event.inputs.remontar }}" = "true" ]; then ARGS="$ARGS --remontar"; fi
           node generar.js $ARGS
 
       - name: Guardar la semana en el repo
