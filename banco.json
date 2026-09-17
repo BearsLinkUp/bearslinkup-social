@@ -318,27 +318,38 @@
           "slides": [
             {
               "titular": "Cinco señales<br>de que ese cliente<br><em>no te va a pagar</em>",
-              "sub": "Las dos primeras salen <b>en la primera llamada</b>."
+              "sub": "Las dos primeras salen <b>en la primera llamada</b>.",
+              "titular_en": "Five signs<br>that client<br><em>won't pay you</em>",
+              "sub_en": "The first two show up <b>on the first call</b>."
             },
             {
               "num": "01 / 05",
               "titular": "No quiere<br><em>nada por escrito</em>",
-              "sub": "\"Confía en mí\" es la frase. <b>Siempre es la misma frase</b>."
+              "sub": "\"Confía en mí\" es la frase. <b>Siempre es la misma frase</b>.",
+              "titular_en": "Wants nothing<br><em>in writing</em>",
+              "sub_en": "\"Trust me\" is the line. <b>It's always the same line</b>."
             },
             {
               "num": "02 / 05",
               "titular": "Regatea<br><em>el adelanto</em>",
-              "sub": "Si el material lo pones tú, <b>ya perdiste</b> antes de empezar."
+              "sub": "Si el material lo pones tú, <b>ya perdiste</b> antes de empezar.",
+              "titular_en": "Haggles<br><em>the deposit</em>",
+              "sub_en": "If you front the material, <b>you already lost</b>."
             },
             {
               "num": "03 / 05",
               "titular": "Cambia el trabajo<br><em>a mitad</em>",
-              "sub": "Sin cambio de precio por escrito, el cambio <b>lo pagas tú</b>."
+              "sub": "Sin cambio de precio por escrito, el cambio <b>lo pagas tú</b>.",
+              "titular_en": "Changes the job<br><em>halfway through</em>",
+              "sub_en": "No written change order and <b>you eat it</b>."
             },
             {
               "titular": "Las otras dos<br>las corta <em>la plataforma</em>",
               "sub": "Acuerdo, evidencia y pago protegido en un mismo sitio. Sin apretón de manos.",
-              "cta": "Crea tu perfil"
+              "cta": "Crea tu perfil",
+              "titular_en": "The other two<br>get cut by <em>the platform</em>",
+              "sub_en": "Agreement, evidence and protected payment in one place. No handshake deals.",
+              "cta_en": "Create your profile"
             }
           ],
           "copy_es": "Todos hemos cogido ese trabajo.\n\nEl que empieza con \"confía en mí\" y termina con el teléfono apagado. Las señales estaban ahí desde la primera llamada.\n\nLas otras dos no hay que detectarlas: se caen solas cuando el acuerdo y el pago viven en la plataforma.\n\n¿Cuál te tocó a ti?",
@@ -359,7 +370,13 @@
           "copy_es": "Los puntitos no son estéticos. Son el aviso.\n\nAlgo entró donde no debía. Puede ser el gas, puede ser la superficie, puede ser el electrodo. Las tres dejan la misma marca.\n\n¿Qué lo causó?",
           "copy_en": "Those pinholes aren't cosmetic. They're the warning.\n\nSomething got in where it shouldn't. Could be the gas, the surface prep, or the electrode. All three leave the same mark.\n\nWhat caused it?",
           "hashtags_es": "#BearsLinkUp #soldadura #porosidad #soldador #cordon #PuertoRico",
-          "hashtags_en": "#BearsLinkUp #welding #porosity #welder #weldporn #skilledtrades"
+          "hashtags_en": "#BearsLinkUp #welding #porosity #welder #weldporn #skilledtrades",
+          "titular_en": "That bead has<br><em>something inside</em><br>you can't see",
+          "sub_en": "And the surface is already shouting it. <b>Look at the pinholes</b>.",
+          "hook_en": {
+            "lbl": "Comment",
+            "q": "What caused it?"
+          }
         },
         "mie": {
           "tipo": "reel",
@@ -377,7 +394,13 @@
           "copy_es": "Nadie postea la parte aburrida.\n\nCepillo, desengrase, ajuste. Dos minutos ahí y el cordón sale limpio a la primera. Sáltatelos y pasas una hora con el esmeril.\n\nEl trabajo bien hecho se documenta. En Bears LinkUp queda con evidencia.",
           "copy_en": "Nobody posts the boring part.\n\nBrush, degrease, fit. Two minutes there and the bead comes out clean the first time. Skip them and you spend an hour with the grinder.\n\nGood work gets documented. On Bears LinkUp it carries evidence.",
           "hashtags_es": "#BearsLinkUp #soldadura #soldador #taller #PuertoRico #herreria",
-          "hashtags_en": "#BearsLinkUp #welding #welder #fabrication #metalwork #skilledtrades"
+          "hashtags_en": "#BearsLinkUp #welding #welder #fabrication #metalwork #skilledtrades",
+          "titular_en": "Two minutes cleaning,<br><em>one hour less</em> grinding",
+          "sub_en": "The surface decides the bead before you strike.",
+          "hook_en": {
+            "lbl": "Bears LinkUp",
+            "q": "Hire with backup"
+          }
         },
         "vie": {
           "tipo": "imagen",
@@ -392,7 +415,13 @@
           "copy_es": "Doce pies, corredizo, con motor puesto.\n\nAquí es donde se separa el que cotiza por acero del que cotiza por trabajo. El riel, el eléctrico y el ajuste no son extras: son la mitad del trabajo.\n\n¿Cuánto cobrarías tú?",
           "copy_en": "Twelve feet, sliding, motor installed.\n\nThis is where quoting by steel splits from quoting by work. The track, the electrical and the alignment aren't extras: they're half the job.\n\nWhat would you charge?",
           "hashtags_es": "#BearsLinkUp #portones #herreria #soldadura #PuertoRico #acero",
-          "hashtags_en": "#BearsLinkUp #gates #metalwork #fabrication #welding #ironwork"
+          "hashtags_en": "#BearsLinkUp #gates #metalwork #fabrication #welding #ironwork",
+          "titular_en": "Sliding gate,<br>twelve feet,<br><em>motor installed</em>",
+          "sub_en": "Fabrication, install and the electrical. <b>Nothing else</b>.",
+          "hook_en": {
+            "lbl": "Drop your number",
+            "q": "What would you charge?"
+          }
         },
         "dom": {
           "tipo": "imagen",
@@ -417,7 +446,23 @@
           "copy_es": "Pagaste un adelanto y no volvieron.\n\nLe pasó a alguien que conoces, o te pasó a ti. El problema nunca fue el trabajo: fue que no había nada que lo respaldara.\n\nAcuerdo, evidencia y pago en un mismo sitio. bearslinkup.com",
           "copy_en": "You paid a deposit and they never came back.\n\nIt happened to someone you know, or it happened to you. The job was never the problem: nothing backed it up.\n\nAgreement, evidence and payment in one place. bearslinkup.com",
           "hashtags_es": "#BearsLinkUp #herreria #soldadura #PuertoRico #hogar #contratista",
-          "hashtags_en": "#BearsLinkUp #fabrication #welding #contractor #homeimprovement #skilledtrades"
+          "hashtags_en": "#BearsLinkUp #fabrication #welding #contractor #homeimprovement #skilledtrades",
+          "titular_en": "Hiring shouldn't<br>be <em>a gamble</em>",
+          "sub_en": "Validated identity, clear specialty and <b>protected payment</b>.",
+          "tarjetas_en": [
+            {
+              "t": "Trust",
+              "d": "Validated identity"
+            },
+            {
+              "t": "Clarity",
+              "d": "Defined specialty"
+            },
+            {
+              "t": "Backup",
+              "d": "Documented work"
+            }
+          ]
         }
       }
     },
@@ -447,27 +492,38 @@
           "slides": [
             {
               "titular": "Saliste de la escuela.<br>Y ahora <em>qué</em>",
-              "sub": "Cuatro cosas que separan al que coloca <b>del que espera</b>."
+              "sub": "Cuatro cosas que separan al que coloca <b>del que espera</b>.",
+              "titular_en": "School's done.<br>Now <em>what</em>",
+              "sub_en": "Four things that separate who places <b>from who waits</b>."
             },
             {
               "num": "01 / 05",
               "titular": "Guarda<br><em>cada cupón</em>",
-              "sub": "Foto de cada práctica. <b>Eso es tu portafolio</b>, no el diploma."
+              "sub": "Foto de cada práctica. <b>Eso es tu portafolio</b>, no el diploma.",
+              "titular_en": "Keep<br><em>every coupon</em>",
+              "sub_en": "A photo of each one. <b>That's your portfolio</b>, not the diploma."
             },
             {
               "num": "02 / 05",
               "titular": "Escribe<br><em>los procesos</em>",
-              "sub": "No \"sé soldar\". <b>SMAW, GMAW, FCAW</b>. Y en qué posición."
+              "sub": "No \"sé soldar\". <b>SMAW, GMAW, FCAW</b>. Y en qué posición.",
+              "titular_en": "Write down<br><em>the processes</em>",
+              "sub_en": "Not \"I weld\". <b>SMAW, GMAW, FCAW</b>. And in what position."
             },
             {
               "num": "03 / 05",
               "titular": "Zona<br><em>y disponibilidad</em>",
-              "sub": "El match empieza ahí. <b>Sin zona no hay llamada</b>."
+              "sub": "El match empieza ahí. <b>Sin zona no hay llamada</b>.",
+              "titular_en": "Area<br><em>and availability</em>",
+              "sub_en": "The match starts there. <b>No area, no call</b>."
             },
             {
               "titular": "La cuarta es<br>que <em>te vean</em>",
               "sub": "Un perfil abierto recibe proyectos. Un diploma en una gaveta no.",
-              "cta": "Crea tu perfil"
+              "cta": "Crea tu perfil",
+              "titular_en": "The fourth is<br>being <em>seen</em>",
+              "sub_en": "An open profile gets projects. A diploma in a drawer doesn't.",
+              "cta_en": "Create your profile"
             }
           ],
           "copy_es": "El diploma no consigue el trabajo. El perfil sí.\n\nLo que separa al egresado que coloca del que espera no es la nota: es tener el trabajo documentado y visible desde el primer día.\n\nGuarda cada cupón. Escribe cada proceso. Pon tu zona.\n\n¿Cuál te falta?",
@@ -488,7 +544,13 @@
           "copy_es": "Mira el principio y mira el final. No son el mismo cordón.\n\nAlgo cambió a mitad del pase y el metal lo registró. Hay dos culpables clásicos y casi siempre es uno de los dos.\n\n¿Velocidad o amperaje?",
           "copy_en": "Look at the start, then the end. Not the same bead.\n\nSomething changed mid-pass and the metal recorded it. There are two usual suspects and it's almost always one of them.\n\nTravel speed or amperage?",
           "hashtags_es": "#BearsLinkUp #soldadura #practica #soldador #cordon #PuertoRico #aprendiz",
-          "hashtags_en": "#BearsLinkUp #welding #weldingschool #welder #weldporn #apprentice"
+          "hashtags_en": "#BearsLinkUp #welding #weldingschool #welder #weldporn #apprentice",
+          "titular_en": "Started clean.<br>Ended <em>cold</em>",
+          "sub_en": "The hand changed mid-pass. <b>It shows right away</b>.",
+          "hook_en": {
+            "lbl": "Comment",
+            "q": "Travel speed or amperage?"
+          }
         },
         "mie": {
           "tipo": "reel",
@@ -506,7 +568,13 @@
           "copy_es": "Nadie enseña el cupón número uno.\n\nY es el que explica todo. El cien sale bien porque los noventa y nueve anteriores salieron mal y alguien siguió.\n\nDocumenta la práctica. En Bears LinkUp eso es lo que te abre proyectos.",
           "copy_en": "Nobody shows coupon number one.\n\nAnd it's the one that explains everything. Number one hundred comes out clean because ninety-nine came out wrong and somebody kept going.\n\nDocument the practice. On Bears LinkUp that's what opens projects.",
           "hashtags_es": "#BearsLinkUp #soldadura #aprendiz #escuelatecnica #PuertoRico #soldador",
-          "hashtags_en": "#BearsLinkUp #welding #weldingschool #apprentice #skilledtrades #welder"
+          "hashtags_en": "#BearsLinkUp #welding #weldingschool #apprentice #skilledtrades #welder",
+          "titular_en": "Coupon one hundred<br><em>looks nothing</em> like the first",
+          "sub_en": "Nobody sees the ninety-nine. That's why you keep them.",
+          "hook_en": {
+            "lbl": "Bears LinkUp",
+            "q": "Your practice, on your profile"
+          }
         },
         "vie": {
           "tipo": "imagen",
@@ -521,7 +589,13 @@
           "copy_es": "Cuarenta pies de verja. Postes hundidos en concreto, acabado puesto.\n\nEl que nunca la ha instalado cotiza el acero. El que sí, cotiza el concreto, el nivel y el día perdido esperando que fragüe.\n\n¿Cuánto cobrarías tú?",
           "copy_en": "Forty feet of fence. Posts set in concrete, finish applied.\n\nWhoever hasn't installed one quotes the steel. Whoever has quotes the concrete, the leveling, and the day lost waiting for it to cure.\n\nWhat would you charge?",
           "hashtags_es": "#BearsLinkUp #verjas #herreria #soldadura #PuertoRico #acero #taller",
-          "hashtags_en": "#BearsLinkUp #fencing #metalwork #fabrication #welding #ironwork"
+          "hashtags_en": "#BearsLinkUp #fencing #metalwork #fabrication #welding #ironwork",
+          "titular_en": "Forty feet<br>of fence,<br><em>installed</em>",
+          "sub_en": "Posts, concrete and finish. <b>Start to finish</b>.",
+          "hook_en": {
+            "lbl": "Drop your number",
+            "q": "What would you charge?"
+          }
         },
         "dom": {
           "tipo": "imagen",
@@ -546,7 +620,23 @@
           "copy_es": "El primer trabajo casi siempre llega como favor.\n\nY el favor se paga tarde, o no se paga. No porque el trabajo estuviera mal: porque no había nada que lo sostuviera.\n\nEmpieza con un perfil, no con un favor. bearslinkup.com",
           "copy_en": "The first job almost always arrives as a favor.\n\nAnd favors pay late, or not at all. Not because the work was bad: because nothing backed it up.\n\nStart with a profile, not a favor. bearslinkup.com",
           "hashtags_es": "#BearsLinkUp #soldador #egresado #PuertoRico #oficio #trabajoPR",
-          "hashtags_en": "#BearsLinkUp #welder #apprentice #skilledtrades #weldingjobs #tradelife"
+          "hashtags_en": "#BearsLinkUp #welder #apprentice #skilledtrades #weldingjobs #tradelife",
+          "titular_en": "First job.<br>Not <em>first favor</em>",
+          "sub_en": "A verifiable profile <b>changes the conversation</b> from day one.",
+          "tarjetas_en": [
+            {
+              "t": "Profile",
+              "d": "Documented practice"
+            },
+            {
+              "t": "Match",
+              "d": "Projects by area"
+            },
+            {
+              "t": "Payment",
+              "d": "Protected on platform"
+            }
+          ]
         }
       }
     }
