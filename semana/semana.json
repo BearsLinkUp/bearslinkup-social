@@ -1,7 +1,7 @@
 {
   "semana": "2026-W38",
-  "banco": "w3",
-  "tema": "El cliente que no sabe a quién llamar",
+  "banco": "w4",
+  "tema": "Del salón al taller",
   "piezas": [
     {
       "dia": "lun",
@@ -13,35 +13,35 @@
         "lun-4.png",
         "lun-5.png"
       ],
-      "copy": "We've all taken that job.\n\nThe one that starts with \"trust me\" and ends with a phone that's off. The signs were there on the first call.\n\nThe other two don't need spotting: they disappear when the agreement and the payment live on the platform.\n\nWhich one got you?\n\n#BearsLinkUp #welder #fabrication #skilledtrades #smallbusiness #getpaid",
+      "copy": "The diploma doesn't land the job. The profile does.\n\nWhat separates the graduate who places from the one who waits isn't the grade: it's having the work documented and visible from day one.\n\nSave every coupon. List every process. Set your area.\n\nWhich one are you missing?\n\n#BearsLinkUp #weldingschool #welder #skilledtrades #apprentice #weldingjobs",
       "hora": "2026-09-14T16:00:00Z"
     },
     {
       "dia": "mar",
       "tipo": "imagen",
       "archivo": "mar.png",
-      "copy": "Los puntitos no son estéticos. Son el aviso.\n\nAlgo entró donde no debía. Puede ser el gas, puede ser la superficie, puede ser el electrodo. Las tres dejan la misma marca.\n\n¿Qué lo causó?\n\n#BearsLinkUp #soldadura #porosidad #soldador #cordon #PuertoRico",
+      "copy": "Mira el principio y mira el final. No son el mismo cordón.\n\nAlgo cambió a mitad del pase y el metal lo registró. Hay dos culpables clásicos y casi siempre es uno de los dos.\n\n¿Velocidad o amperaje?\n\n#BearsLinkUp #soldadura #practica #soldador #cordon #PuertoRico #aprendiz",
       "hora": "2026-09-15T10:00:00Z"
     },
     {
       "dia": "mie",
       "tipo": "reel",
       "archivo": "mie.mp4",
-      "copy": "Nobody posts the boring part.\n\nBrush, degrease, fit. Two minutes there and the bead comes out clean the first time. Skip them and you spend an hour with the grinder.\n\nGood work gets documented. On Bears LinkUp it carries evidence.\n\n#BearsLinkUp #welding #welder #fabrication #metalwork #skilledtrades",
+      "copy": "Nobody shows coupon number one.\n\nAnd it's the one that explains everything. Number one hundred comes out clean because ninety-nine came out wrong and somebody kept going.\n\nDocument the practice. On Bears LinkUp that's what opens projects.\n\n#BearsLinkUp #welding #weldingschool #apprentice #skilledtrades #welder",
       "hora": "2026-09-16T23:00:00Z"
     },
     {
       "dia": "vie",
       "tipo": "imagen",
       "archivo": "vie.png",
-      "copy": "Doce pies, corredizo, con motor puesto.\n\nAquí es donde se separa el que cotiza por acero del que cotiza por trabajo. El riel, el eléctrico y el ajuste no son extras: son la mitad del trabajo.\n\n¿Cuánto cobrarías tú?\n\n#BearsLinkUp #portones #herreria #soldadura #PuertoRico #acero",
+      "copy": "Cuarenta pies de verja. Postes hundidos en concreto, acabado puesto.\n\nEl que nunca la ha instalado cotiza el acero. El que sí, cotiza el concreto, el nivel y el día perdido esperando que fragüe.\n\n¿Cuánto cobrarías tú?\n\n#BearsLinkUp #verjas #herreria #soldadura #PuertoRico #acero #taller",
       "hora": "2026-09-18T16:00:00Z"
     },
     {
       "dia": "dom",
       "tipo": "imagen",
       "archivo": "dom.png",
-      "copy": "You paid a deposit and they never came back.\n\nIt happened to someone you know, or it happened to you. The job was never the problem: nothing backed it up.\n\nAgreement, evidence and payment in one place. bearslinkup.com\n\n#BearsLinkUp #fabrication #welding #contractor #homeimprovement #skilledtrades",
+      "copy": "The first job almost always arrives as a favor.\n\nAnd favors pay late, or not at all. Not because the work was bad: because nothing backed it up.\n\nStart with a profile, not a favor. bearslinkup.com\n\n#BearsLinkUp #welder #apprentice #skilledtrades #weldingjobs #tradelife",
       "hora": "2026-09-20T22:00:00Z"
     }
   ]
