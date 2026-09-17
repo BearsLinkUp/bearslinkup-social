@@ -116,16 +116,44 @@ function horaDe(dia) {
 
 // ─────────────────────────── ElevenLabs ───────────────────────────
 
-async function fal(ruta, metodo = 'GET', cuerpo = null) {
-  const r = await fetch(ruta.startsWith('http') ? ruta : `${FAL}${ruta}`, {
-    method: metodo,
-    headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
-    body: cuerpo ? JSON.stringify(cuerpo) : undefined,
-  });
-  const txt = await r.text();
-  let j; try { j = JSON.parse(txt); } catch { j = { raw: txt }; }
-  if (!r.ok) throw new Error(`fal ${r.status} en ${ruta}: ${txt.slice(0, 300)}`);
-  return j;
+/**
+ * Cliente de fal con reintentos.
+ *
+ * Por que existe esto: el 17/sep/2026 una corrida de 11 minutos murio con
+ * "fetch failed" en el clip 3 de 3. Un corte de red de un segundo tiro a la
+ * basura seis imagenes y dos videos ya pagados, porque el script no guarda
+ * nada hasta el final. Un fallo de RED se reintenta; un fallo de la API
+ * (4xx/5xx con respuesta) no, porque ese no se arregla repitiendo.
+ */
+async function fal(ruta, metodo = 'GET', cuerpo = null, intentos = 4) {
+  const url = ruta.startsWith('http') ? ruta : `${FAL}${ruta}`;
+  let ultimoFallo;
+
+  for (let n = 1; n <= intentos; n++) {
+    let r;
+    try {
+      r = await fetch(url, {
+        method: metodo,
+        headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
+        body: cuerpo ? JSON.stringify(cuerpo) : undefined,
+      });
+    } catch (e) {
+      // Aqui no hubo respuesta: DNS, socket cortado, timeout. Eso si se reintenta.
+      ultimoFallo = e;
+      if (n === intentos) break;
+      const espera = 2000 * n;
+      log(`   · red fallo (${e.message}). Reintento ${n}/${intentos - 1} en ${espera / 1000}s`);
+      await sleep(espera);
+      continue;
+    }
+
+    const txt = await r.text();
+    let j; try { j = JSON.parse(txt); } catch { j = { raw: txt }; }
+    if (!r.ok) throw new Error(`fal ${r.status} en ${ruta}: ${txt.slice(0, 300)}`);
+    return j;
+  }
+
+  throw new Error(`fal sin respuesta en ${ruta} tras ${intentos} intentos: ${ultimoFallo && ultimoFallo.message}`);
 }
 
 /**
