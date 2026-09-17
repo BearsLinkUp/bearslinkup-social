@@ -1,0 +1,9 @@
+{
+  "_lee_esto": "Tocar este archivo y empujarlo dispara la corrida de generar. Los argumentos salen de aqui. semana: w1..w4 o vacio para la que toque. solo: dias separados por coma (mar,dom) para regenerar solo esos y re-montar el resto. remontar: true para no pagar generacion. crudas_de: SHA de un commit del que traer semana/crudas antes de montar.",
+  "semana": "w3",
+  "solo": "mar,dom",
+  "remontar": false,
+  "solo_plan": false,
+  "crudas_de": "",
+  "nota": "Rehacer la foto del martes (inspector, nave industrial) y la del domingo (macro de tuberia, sin gente). Las dos traen escena propia en el banco."
+}
