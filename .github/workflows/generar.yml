@@ -27,6 +27,10 @@ on:
         type: boolean
         required: false
         default: false
+      crudas_de:
+        description: 'SHA de un commit del que traer semana/crudas antes de montar. Vacio = las que ya estan.'
+        required: false
+        default: ''
 
 concurrency:
   group: generar-bearslinkup
@@ -53,6 +57,16 @@ jobs:
 
       - name: Instalar ffmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Traer las crudas de otro commit
+        if: ${{ github.event.inputs.crudas_de != '' }}
+        run: |
+          set -e
+          SHA="${{ github.event.inputs.crudas_de }}"
+          git fetch --depth=1 origin "$SHA" || git fetch --unshallow origin
+          git checkout "$SHA" -- semana/crudas || git checkout FETCH_HEAD -- semana/crudas
+          echo "Crudas traidas de $SHA:"
+          ls -la semana/crudas
 
       - name: Generar la semana
         env:
