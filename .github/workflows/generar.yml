@@ -31,6 +31,10 @@ on:
         description: 'SHA de un commit del que traer semana/crudas antes de montar. Vacio = las que ya estan.'
         required: false
         default: ''
+      solo:
+        description: 'Regenerar solo estos dias (ej: mar,dom) y re-montar el resto. Vacio = la semana entera.'
+        required: false
+        default: ''
 
 concurrency:
   group: generar-bearslinkup
@@ -78,6 +82,7 @@ jobs:
           if [ -n "${{ github.event.inputs.semana }}" ]; then ARGS="$ARGS --semana=${{ github.event.inputs.semana }}"; fi
           if [ "${{ github.event.inputs.solo_plan }}" = "true" ]; then ARGS="$ARGS --solo-plan"; fi
           if [ "${{ github.event.inputs.remontar }}" = "true" ]; then ARGS="$ARGS --remontar"; fi
+          if [ -n "${{ github.event.inputs.solo }}" ]; then ARGS="$ARGS --solo=${{ github.event.inputs.solo }}"; fi
           node generar.js $ARGS
 
       - name: Guardar la semana en el repo
