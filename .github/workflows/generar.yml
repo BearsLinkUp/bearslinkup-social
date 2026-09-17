@@ -7,10 +7,22 @@ name: Generar semana Bears LinkUp
 # genera las 8 fotos y los 3 clips con fal.ai, monta la capa de marca,
 # arma el reel y deja semana/ listo. Despues, el workflow "Publicar" saca
 # cada pieza a su hora. Nadie toca nada.
+#
+# Tres formas de arrancarla:
+#   1. sola, los lunes por cron
+#   2. a mano, con el boton "Run workflow" y sus campos
+#   3. empujando un commit que toque disparo.json — los argumentos salen de
+#      ese archivo. Asi se puede disparar sin pasar por la pagina de GitHub.
+#
+# Pase lo que pase, la corrida deja estado-corrida.md commiteado con el
+# resultado y el log completo. Si algo revienta, ahi queda escrito.
 
 on:
   schedule:
     - cron: '0 10 * * 1'
+  push:
+    paths:
+      - 'disparo.json'
   workflow_dispatch:
     inputs:
       semana:
@@ -53,6 +65,39 @@ jobs:
         with:
           node-version: '20'
 
+      # Los argumentos salen de los campos del boton, o de disparo.json cuando
+      # la corrida viene de un push. Se resuelven aqui para que el resto de los
+      # pasos lean una sola variable y no haya dos caminos que mantener.
+      - name: Resolver argumentos
+        id: args
+        run: |
+          set -e
+          SEMANA="${{ github.event.inputs.semana }}"
+          SOLO_PLAN="${{ github.event.inputs.solo_plan }}"
+          REMONTAR="${{ github.event.inputs.remontar }}"
+          CRUDAS_DE="${{ github.event.inputs.crudas_de }}"
+          SOLO="${{ github.event.inputs.solo }}"
+
+          if [ "${{ github.event_name }}" = "push" ] && [ -f disparo.json ]; then
+            leer() { node -e "const d=require('./disparo.json');const v=d['$1'];process.stdout.write(v===undefined||v===null?'':String(v))"; }
+            SEMANA=$(leer semana)
+            SOLO_PLAN=$(leer solo_plan)
+            REMONTAR=$(leer remontar)
+            CRUDAS_DE=$(leer crudas_de)
+            SOLO=$(leer solo)
+            echo "Argumentos tomados de disparo.json"
+          fi
+
+          ARGS=""
+          [ -n "$SEMANA" ] && ARGS="$ARGS --semana=$SEMANA"
+          [ "$SOLO_PLAN" = "true" ] && ARGS="$ARGS --solo-plan"
+          [ "$REMONTAR" = "true" ] && ARGS="$ARGS --remontar"
+          [ -n "$SOLO" ] && ARGS="$ARGS --solo=$SOLO"
+
+          echo "args=$ARGS" >> $GITHUB_OUTPUT
+          echo "crudas_de=$CRUDAS_DE" >> $GITHUB_OUTPUT
+          echo "ARGS resueltos: '$ARGS'  crudas_de: '$CRUDAS_DE'"
+
       - name: Instalar dependencias
         run: npm install --no-audit --no-fund
 
@@ -63,10 +108,10 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
 
       - name: Traer las crudas de otro commit
-        if: ${{ github.event.inputs.crudas_de != '' }}
+        if: ${{ steps.args.outputs.crudas_de != '' }}
         run: |
           set -e
-          SHA="${{ github.event.inputs.crudas_de }}"
+          SHA="${{ steps.args.outputs.crudas_de }}"
           git fetch --depth=1 origin "$SHA" || git fetch --unshallow origin
           git checkout "$SHA" -- semana/crudas || git checkout FETCH_HEAD -- semana/crudas
           echo "Crudas traidas de $SHA:"
@@ -78,24 +123,58 @@ jobs:
           MODELO_IMAGEN: ${{ secrets.MODELO_IMAGEN }}
           MODELO_VIDEO: ${{ secrets.MODELO_VIDEO }}
         run: |
-          ARGS=""
-          if [ -n "${{ github.event.inputs.semana }}" ]; then ARGS="$ARGS --semana=${{ github.event.inputs.semana }}"; fi
-          if [ "${{ github.event.inputs.solo_plan }}" = "true" ]; then ARGS="$ARGS --solo-plan"; fi
-          if [ "${{ github.event.inputs.remontar }}" = "true" ]; then ARGS="$ARGS --remontar"; fi
-          if [ -n "${{ github.event.inputs.solo }}" ]; then ARGS="$ARGS --solo=${{ github.event.inputs.solo }}"; fi
-          node generar.js $ARGS
+          set -o pipefail
+          node generar.js ${{ steps.args.outputs.args }} 2>&1 | tee corrida.log
 
       - name: Guardar la semana en el repo
         run: |
-          if ! git diff --quiet -- semana/ || [ -n "$(git status --porcelain semana/)" ]; then
+          if [ -n "$(git status --porcelain semana/)" ]; then
             git config user.name "bearslinkup-publisher"
             git config user.email "admin@bearslinkup.com"
             git add -A semana/
             git commit -m "semana: $(date -u +%G-W%V)"
+            git pull --rebase --autostash
             git push
           else
             echo "Sin cambios en semana/."
           fi
+
+      # Deja por escrito como termino la corrida, pase lo que pase. Sin esto
+      # hay que entrar a la pagina de Actions para saber por que fallo algo, y
+      # eso no siempre se puede.
+      - name: Dejar el estado escrito
+        if: always()
+        run: |
+          git config user.name "bearslinkup-publisher"
+          git config user.email "admin@bearslinkup.com"
+          {
+            echo "# Ultima corrida de generar"
+            echo
+            echo "- resultado: **${{ job.status }}**"
+            echo "- corrida: ${{ github.run_number }} (id ${{ github.run_id }})"
+            echo "- disparada por: ${{ github.event_name }}"
+            echo "- terminada: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo "- argumentos: \`${{ steps.args.outputs.args }}\`"
+            echo "- crudas_de: \`${{ steps.args.outputs.crudas_de }}\`"
+            echo
+            if [ -f semana/semana.json ]; then
+              echo "## Semana en el repo"
+              echo
+              echo '```'
+              node -e "const s=require('./semana/semana.json');console.log('banco: '+s.banco+' — '+(s.tema||''));s.piezas.forEach(p=>console.log('- '+p.dia+' · '+p.tipo+' · '+p.hora))" 2>&1 || true
+              echo '```'
+              echo
+            fi
+            echo "## Log"
+            echo
+            echo '```'
+            if [ -f corrida.log ]; then cat corrida.log; else echo "(la corrida no llego a ejecutar generar.js)"; fi
+            echo '```'
+          } > estado-corrida.md
+          git add estado-corrida.md
+          git commit -m "estado: corrida ${{ github.run_number }} ${{ job.status }}" || echo "sin cambios en el estado"
+          git pull --rebase --autostash || true
+          git push || echo "no se pudo empujar el estado"
 
       - name: Resumen
         if: always()
