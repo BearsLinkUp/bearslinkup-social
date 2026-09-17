@@ -258,7 +258,9 @@ const SEGURIDAD = 'Every person in frame wears the protection the task requires.
   'If an electrode holder, MIG gun or TIG torch is in the hands, or if any arc, spark or weld glow is visible anywhere in frame, ' +
   'the welding helmet is DOWN and covers the whole face, dark lens forward, and the face is not visible. ' +
   'If the face is visible, then there is no torch in the hands and no arc, no spark and no glow anywhere in frame. ' +
-  'These two situations never mix.';
+  'These two situations never mix. ' +
+  'Skin is covered for the work: long sleeves down to the wrists, a welding jacket or a full work shirt, ' +
+  'leather gloves on both hands. No bare forearms, no bare shoulders, no sleeveless shirt, no rolled-up sleeves, no shorts.';
 
 function promptFoto(sem, shot, tercio = 'lower', sobre = {}) {
   // Una pieza puede traer su propia escena o su propio sujeto. Sin esto, la
