@@ -376,7 +376,9 @@
           "copy_es": "Soldadores, fabricadores e inspectores. Tres roles, un solo tablero.\n\nTIG, MIG, SMAW, FCAW. Estructural o tubería. CWI, CSWIP. Si mueves volumen ya sabes que el problema no es encontrar gente: es no perderle el rastro a nadie entre que postula y que firma.\n\nContratación por proyecto, control por reclutador, evidencias descargables.\n\n¿Cuántas contrataciones mueves al mes?",
           "copy_en": "Welders, fabricators and inspectors. Three roles, one board.\n\nTIG, MIG, SMAW, FCAW. Structural or pipe. CWI, CSWIP. If you move volume you already know the problem isn't finding people: it's losing track of somebody between applied and hired.\n\nHiring by project, permissions by recruiter, downloadable records.\n\nHow many hires do you move in a month?",
           "hashtags_es": "#BearsLinkUp #staffing #soldadura #reclutamiento #PuertoRico #industrial #inspector",
-          "hashtags_en": "#BearsLinkUp #staffing #welding #recruiting #skilledtrades #inspector #industrial"
+          "hashtags_en": "#BearsLinkUp #staffing #welding #recruiting #skilledtrades #inspector #industrial",
+          "sujeto": "a welding inspector in his 50s, hard hat and safety glasses, high-visibility vest over a work shirt, clipboard under one arm, calm and methodical, no torch and no electrode holder in his hands",
+          "escena": "an industrial fabrication bay: structural steel members laid out on stands, an overhead crane rail, weld curtains along one wall, cool daylight from high windows. No house, no driveway, no gate, no palm trees"
         },
         "mie": {
           "tipo": "reel",
@@ -462,7 +464,8 @@
           "copy_es": "El match no es una búsqueda por palabra.\n\nUn staffing necesita 6G en tubería, en un pueblo específico, empezando el lunes. Un perfil que solo dice \"soldador\" nunca aparece en esa búsqueda.\n\nLa IA de Bears LinkUp lee el proceso, la posición y la zona, y pone a los dos lados frente a frente.\n\n¿Qué tendría que decir tu perfil para salir de primero?",
           "copy_en": "The match isn't a keyword search.\n\nA staffing agency needs 6G on pipe, in a specific town, starting Monday. A profile that only says \"welder\" never surfaces in that search.\n\nBears LinkUp's AI reads the process, the position and the zone, and puts the two sides in front of each other.\n\nWhat would your profile need to say to come up first?",
           "hashtags_es": "#BearsLinkUp #soldadura #soldador #tuberia #staffing #PuertoRico #empleos",
-          "hashtags_en": "#BearsLinkUp #welding #welder #pipewelding #staffing #skilledtrades #weldingjobs"
+          "hashtags_en": "#BearsLinkUp #welding #welder #pipewelding #staffing #skilledtrades #weldingjobs",
+          "escena": "a pipe fabrication shop, neutral blurred background, nobody in frame, single subject filling the whole frame, one continuous photograph with no panels, no split screen and no collage"
         }
       }
     },
