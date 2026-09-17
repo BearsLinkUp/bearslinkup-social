@@ -1,7 +1,7 @@
 {
   "semana": "2026-W38",
-  "banco": "w2",
-  "tema": "Lo que mira un staffing",
+  "banco": "w3",
+  "tema": "El cliente que no sabe a quién llamar",
   "piezas": [
     {
       "dia": "lun",
@@ -13,35 +13,35 @@
         "lun-4.png",
         "lun-5.png"
       ],
-      "copy": "Staffing doesn't read your resume. It scans it.\n\nProcesses, positions, evidence. In that order, in the first few seconds. Everything else only matters if those three cleared.\n\nMost profiles fail on the first one for not spelling out the acronyms.\n\nWhich one is weak on yours?\n\n#BearsLinkUp #staffing #welding #welder #skilledtrades #structuralwelding #hiring",
+      "copy": "We've all taken that job.\n\nThe one that starts with \"trust me\" and ends with a phone that's off. The signs were there on the first call.\n\nThe other two don't need spotting: they disappear when the agreement and the payment live on the platform.\n\nWhich one got you?\n\n#BearsLinkUp #welder #fabrication #skilledtrades #smallbusiness #getpaid",
       "hora": "2026-09-14T16:00:00Z"
     },
     {
       "dia": "mar",
       "tipo": "imagen",
       "archivo": "mar.png",
-      "copy": "El filete está puesto. El problema no es el filete.\n\nMira el pie del cordón, del lado de la placa. Ahí está lo que un inspector marca sin pensarlo dos veces.\n\n¿Qué le ves?\n\n#BearsLinkUp #soldadura #inspeccion #soldador #cordon #PuertoRico",
+      "copy": "Soldadores, fabricadores e inspectores. Tres roles, un solo tablero.\n\nTIG, MIG, SMAW, FCAW. Estructural o tubería. CWI, CSWIP. Si mueves volumen ya sabes que el problema no es encontrar gente: es no perderle el rastro a nadie entre que postula y que firma.\n\nContratación por proyecto, control por reclutador, evidencias descargables.\n\n¿Cuántas contrataciones mueves al mes?\n\n#BearsLinkUp #staffing #soldadura #reclutamiento #PuertoRico #industrial #inspector",
       "hora": "2026-09-15T10:00:00Z"
     },
     {
       "dia": "mie",
       "tipo": "reel",
       "archivo": "mie.mp4",
-      "copy": "The joint is won before the arc.\n\nForce the fit-up and the bead pays for it. It cracks where nobody is looking, months later.\n\nOn Bears LinkUp the work carries evidence and traceability. Not somebody's word.\n\n#BearsLinkUp #structuralwelding #fabrication #welding #welder #ironworker",
+      "copy": "Companies post. Staffing agencies post. You apply once.\n\nBears LinkUp was built for welders, fabricators and inspectors working in Puerto Rico and the United States. The same profile travels to both markets.\n\nProjects with the scope written down, the dates written down, and payment handled on the platform.\n\n🔧 Where do you want the next one to be?\n\n#BearsLinkUp #weldingjobs #welder #PuertoRico #skilledtrades #ironworker #fabrication",
       "hora": "2026-09-16T23:00:00Z"
     },
     {
       "dia": "vie",
       "tipo": "imagen",
       "archivo": "vie.png",
-      "copy": "Doce pasos, baranda soldada, instalada en sitio.\n\nEste es el trabajo donde más gente se equivoca cotizando: se acuerdan del acero y se olvidan del transporte y de la instalación.\n\n¿Cuánto cobrarías tú?\n\n#BearsLinkUp #herreria #escaleras #soldadura #PuertoRico #acero #taller",
+      "copy": "Doce pies, corredizo, con motor puesto.\n\nAquí es donde se separa el que cotiza por acero del que cotiza por trabajo. El riel, el eléctrico y el ajuste no son extras: son la mitad del trabajo.\n\n¿Cuánto cobrarías tú?\n\n#BearsLinkUp #portones #herreria #soldadura #PuertoRico #acero",
       "hora": "2026-09-18T16:00:00Z"
     },
     {
       "dia": "dom",
       "tipo": "imagen",
       "archivo": "dom.png",
-      "copy": "The three-person shop loses contracts it could have handled.\n\nNot for lack of capacity. For lack of visibility: whoever is hiring doesn't know it exists.\n\nA profile with finished projects changes that. Build yours at bearslinkup.com\n\n#BearsLinkUp #fabricationshop #welding #smallbusiness #skilledtrades",
+      "copy": "The match isn't a keyword search.\n\nA staffing agency needs 6G on pipe, in a specific town, starting Monday. A profile that only says \"welder\" never surfaces in that search.\n\nBears LinkUp's AI reads the process, the position and the zone, and puts the two sides in front of each other.\n\nWhat would your profile need to say to come up first?\n\n#BearsLinkUp #welding #welder #pipewelding #staffing #skilledtrades #weldingjobs",
       "hora": "2026-09-20T22:00:00Z"
     }
   ]
