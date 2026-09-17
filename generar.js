@@ -244,12 +244,24 @@ async function generarClip(prompt, destino) {
 
 // ─────────────────────────── Prompts ───────────────────────────
 
-const NEGATIVO = 'no text, no lettering, no signage, no logos, no brand marks, no certification stamps, no watermarks, no welding with the helmet up while the arc is lit, no bare hands near hot metal, no sparks toward unprotected eyes, no exaggerated smile, no clean corporate office, no 3D render, no plastic skin, no extra fingers, no deformed hands';
+const NEGATIVO = 'no text, no lettering, no signage, no logos, no brand marks, no certification stamps, no watermarks, no uncovered face near a lit arc, no bare hands near hot metal, no exaggerated smile, no clean corporate office, no 3D render, no plastic skin, no extra fingers, no deformed hands';
+
+// Regla de seguridad. Va en positivo y pegada al SUBJECT porque los modelos de
+// imagen leen la lista de negativos como tokens normales: pedir "sin careta
+// levantada" termina dibujando la careta levantada. Esta redaccion dice lo que
+// SI tiene que pasar, y ata el arco a la careta en la misma oracion.
+const SEGURIDAD = 'Every person in frame wears the protection the task requires. ' +
+  'If an electrode holder, MIG gun or TIG torch is in the hands, or if any arc, spark or weld glow is visible anywhere in frame, ' +
+  'the welding helmet is DOWN and covers the whole face, dark lens forward, and the face is not visible. ' +
+  'If the face is visible, then there is no torch in the hands and no arc, no spark and no glow anywhere in frame. ' +
+  'These two situations never mix.';
 
 function promptFoto(sem, shot, tercio = 'lower') {
   return `Vertical documentary photograph of the welding and metal fabrication trade, photorealistic, shot on a 35mm lens, hard natural light, fine film grain.
 
 SUBJECT: ${sem.sujeto}.
+
+SAFETY (non-negotiable): ${SEGURIDAD}
 
 SCENE: ${sem.escena}.
 
@@ -266,6 +278,8 @@ function promptClip(sem, clip) {
   return `Vertical 9:16 cinematic video, ${SEG_CLIP} seconds, photorealistic, documentary feel.
 
 SUBJECT: ${sem.sujeto}.
+
+SAFETY (non-negotiable): ${SEGURIDAD}
 
 SCENE: ${sem.escena}.
 
@@ -288,7 +302,11 @@ const CSS = `
 @font-face{font-family:'Inter';src:url('FONTS/inter/files/inter-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:block;}
 @font-face{font-family:'PlexMono';src:url('FONTS/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:block;}
 :root{--bosque:#1A5C38;--claro:#4EAF68;--accion:#16A34A;--logo:#104028;--negro:#0A0A0A;--acero:#4A5565;--hueso:#F4F5F3;}
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+/* Sin esto aparece una barra de desplazamiento cuando el texto desborda unos
+   pixeles, el lienzo de 1080 ya no cabe, y la captura se lleva el fondo de la
+   pagina por el lado derecho. Eso dejaba una franja blanca y cortaba el pie. */
+html,body{width:1080px;overflow:hidden;}
 body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
 .slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--negro);color:#fff;}
 .slide.reel{height:1920px;background:transparent;}
@@ -378,7 +396,7 @@ function paginaHTML(cuerpo, fuentes) {
 
 function slideHTML(p, fotoRuta) {
   const clases = ['slide', p.variante === 'luz' ? 'luz' : '', p.variante === 'cierre' ? 'cierre' : '', p.reel ? 'reel' : ''].filter(Boolean).join(' ');
-  const foto = fotoRuta ? `<div class="photo" style="background-image:url('file://${fotoRuta}')"></div><div class="edge"></div>` : '';
+  const foto = fotoRuta ? `<div class="photo" style="background-image:url('${fotoRuta}')"></div><div class="edge"></div>` : '';
   const pie = p.variante === 'cierre' ? '' :
     `<div class="foot"><div class="site">bearslinkup.com</div><div class="mono">${p.pie || 'Puerto Rico · USA'}</div></div>`;
 
@@ -408,16 +426,117 @@ function slideHTML(p, fotoRuta) {
   </div></div>`;
 }
 
+// Lee ancho y alto directo del encabezado IHDR del PNG. Sin dependencias.
+function medidasPNG(ruta) {
+  const fd = fs.openSync(ruta, 'r');
+  const cab = Buffer.alloc(24);
+  fs.readSync(fd, cab, 0, 24, 0);
+  fs.closeSync(fd);
+  return { ancho: cab.readUInt32BE(16), alto: cab.readUInt32BE(20) };
+}
+
 async function render(navegador, p, fotoRuta, destino, fuentes) {
   const alto = p.reel ? 1920 : 1350;
   const pag = await navegador.newPage({ viewport: { width: 1080, height: alto }, deviceScaleFactor: 1 });
-  const html = paginaHTML(slideHTML(p, fotoRuta), fuentes);
+  // La foto viaja como data URL: asi el lienzo del navegador no queda
+  // contaminado y se le puede recortar el borde antes de montar.
+  let fotoURL = null;
+  if (fotoRuta) {
+    const tipo = fotoRuta.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
+    fotoURL = 'data:' + tipo + ';base64,' + fs.readFileSync(fotoRuta).toString('base64');
+  }
+  const html = paginaHTML(slideHTML(p, fotoURL), fuentes);
   const tmpHtml = path.join(TMP, `p-${Date.now()}-${Math.random().toString(36).slice(2, 7)}.html`);
   fs.writeFileSync(tmpHtml, html);
   await pag.goto('file://' + path.resolve(tmpHtml));
   await pag.waitForTimeout(900);
-  await pag.locator('.slide').screenshot({ path: destino, omitBackground: !!p.reel });
+
+  // El generador de imagen devuelve de vez en cuando la foto con un marco
+  // claro de unos pixeles. Si llega asi, se recorta antes de montar; si no,
+  // no se toca nada.
+  const recorte = await pag.evaluate(async () => {
+    const el = document.querySelector('.photo');
+    if (!el) return null;
+    const m = el.style.backgroundImage.match(/url\(["']?(.+?)["']?\)/);
+    if (!m) return null;
+    const img = new Image();
+    img.src = m[1];
+    await img.decode();
+    const W = img.naturalWidth, H = img.naturalHeight;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, W, H).data;
+    const claro = (X, Y) => { const i = (Y * W + X) * 4; return d[i] > 236 && d[i+1] > 236 && d[i+2] > 236; };
+    const col = X => { for (let Y = 0; Y < H; Y += 5) if (!claro(X, Y)) return false; return true; };
+    const fil = Y => { for (let X = 0; X < W; X += 5) if (!claro(X, Y)) return false; return true; };
+    const tope = Math.floor(Math.min(W, H) * 0.18);
+    let iz = 0, de = 0, ar = 0, ab = 0;
+    while (iz < tope && col(iz)) iz++;
+    while (de < tope && col(W - 1 - de)) de++;
+    while (ar < tope && fil(ar)) ar++;
+    while (ab < tope && fil(H - 1 - ab)) ab++;
+    if (!iz && !de && !ar && !ab) return { iz: 0, de: 0, ar: 0, ab: 0 };
+    const nw = W - iz - de, nh = H - ar - ab;
+    if (nw < W * 0.7 || nh < H * 0.7) return { iz: 0, de: 0, ar: 0, ab: 0, descartado: true };
+    const c2 = document.createElement('canvas');
+    c2.width = nw; c2.height = nh;
+    c2.getContext('2d').drawImage(c, iz, ar, nw, nh, 0, 0, nw, nh);
+    el.style.backgroundImage = "url('" + c2.toDataURL('image/jpeg', 0.95) + "')";
+    return { iz, de, ar, ab };
+  });
+  if (recorte && (recorte.iz || recorte.de || recorte.ar || recorte.ab)) {
+    console.log('   · marco claro recortado de la foto: ' + JSON.stringify(recorte));
+  }
+  await pag.waitForTimeout(150);
+
+  // El reel se exporta transparente; el resto se pinta sobre negro de marca para
+  // que ninguna fuga de fondo salga blanca.
+  if (!p.reel) await pag.evaluate(() => { document.documentElement.style.background = '#0A0A0A'; });
+
+  // Guardia. La franja blanca del borde derecho salia porque la pagina medía
+  // menos de 1080 y la captura rellenaba el resto con fondo. Aqui se mide antes
+  // de disparar: si el lienzo no esta exactamente donde debe, la corrida revienta
+  // en vez de subir una pieza cortada.
+  const geo = await pag.evaluate(() => {
+    const r = document.querySelector('.slide').getBoundingClientRect();
+    const h = document.documentElement;
+    return {
+      slide: [Math.round(r.width), Math.round(r.height), Math.round(r.left), Math.round(r.top)],
+      layout: h.clientWidth,
+      scroll: h.scrollWidth,
+    };
+  });
+  const torcido =
+    geo.slide[0] !== 1080 || geo.slide[1] !== alto ||
+    geo.slide[2] !== 0 || geo.slide[3] !== 0 ||
+    geo.layout !== 1080 || geo.scroll > 1080;
+  if (torcido) {
+    throw new Error(
+      'Lienzo torcido en ' + path.basename(destino) + ': ' + JSON.stringify(geo) +
+      ' (se esperaba slide 1080x' + alto + ' en 0,0 y pagina de 1080)'
+    );
+  }
+
+  // Region fija en vez del cuadro del elemento: si el nodo se corre un pixel,
+  // el recorte sigue siendo 1080 x alto y nunca entra fondo de pagina.
+  await pag.screenshot({
+    path: destino,
+    clip: { x: 0, y: 0, width: 1080, height: alto },
+    omitBackground: !!p.reel,
+  });
   await pag.close();
+
+  // Ultima red: el archivo que quedo en disco tiene que medir exactamente el
+  // lienzo. Si mide menos, la captura se topo con una pagina mas angosta.
+  const dim = destino.endsWith('.png') ? medidasPNG(destino) : { ancho: 1080, alto };
+  if (dim.ancho !== 1080 || dim.alto !== alto) {
+    throw new Error(
+      'Pieza con medidas malas: ' + path.basename(destino) +
+      ' salio ' + dim.ancho + 'x' + dim.alto + ' y debia ser 1080x' + alto
+    );
+  }
   return destino;
 }
 
