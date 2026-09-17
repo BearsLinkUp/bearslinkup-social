@@ -5,7 +5,7 @@
       "id": "w1",
       "tema": "Antes de aceptar el proyecto",
       "protagonista": "soldador independiente",
-      "sujeto": "a Latina woman welder-fabricator, around 30 years old, real working build, worn navy workwear with rolled sleeves, leather welding gloves, safety glasses, welding helmet flipped up resting on her head, hair tied back, face marked by a long shift, not smiling",
+      "sujeto": "a Latina woman welder-fabricator, around 30 years old, real working build, worn navy workwear with rolled sleeves, leather welding gloves, safety glasses, her welding helmet resting on the bench beside her, hair tied back, face marked by a long shift, not smiling",
       "escena": "interior of a real fabrication shop: scarred steel workbench, clamps, a vise, stubs of electrode scattered, an angle grinder off to the side, hard directional side light entering from an open roll-up door on the left, dust floating in the light, deep shadows, dark green-grey industrial walls out of focus",
       "piezas": {
         "lun": {
@@ -80,7 +80,7 @@
           },
           "clips": [
             "wide: the subject walks into frame and sets a steel piece on the bench, then clamps it. Slow push-in. Helmet up, arc not lit.",
-            "medium: the helmet comes down and the arc lights, sparks scattering. Camera holds steady. This is the money shot.",
+            "medium: she lowers the helmet until it fully covers her face, dark lens forward, and only then the arc lights, sparks scattering. Her face stays hidden the whole shot. Camera holds steady. This is the money shot.",
             "close: gloved hands brush the finished bead with a wire brush, then the helmet comes up and the subject looks at the work."
           ],
           "copy_es": "El cordón bonito empieza antes de encender.\n\nChanfle, limpieza, ajuste. Tres minutos ahí te ahorran una hora de esmeril después.\n\nEn Bears LinkUp tu trabajo queda documentado, no contado.",
@@ -169,7 +169,7 @@
             },
             {
               "num": "02 / 05",
-              "titular": "Posiciones<br><em>que dominas</em>",
+              "titular": "Posiciones<br><em>que trabajas</em>",
               "sub": "1G a 6G, estructural o tubería. Sin eso, <b>no hay match</b>.",
               "titular_en": "Positions<br><em>you can hold</em>",
               "sub_en": "1G through 6G, structural or pipe. Without it, <b>no match</b>."
@@ -216,11 +216,11 @@
           "sub": "Una junta pareja aguanta. Una junta forzada se raja donde nadie mira.",
           "hook": {
             "lbl": "Bears LinkUp",
-            "q": "Talento verificado, proyecto real"
+            "q": "Perfil con evidencia, proyecto real"
           },
           "clips": [
             "wide: two workers guide a steel beam into position on the deck, hard sun, harnesses on. Slow push-in.",
-            "medium: the subject checks the gap with a gauge, then the helmet comes down and the arc lights on the joint.",
+            "medium: the subject checks the gap with a gauge, then lowers the helmet until it fully covers his face, dark lens forward, and only then the arc lights on the joint. His face stays hidden while the arc burns.",
             "close: gloved hands run along the finished joint, then the subject stands back and looks up at the structure."
           ],
           "copy_es": "La junta se gana antes del arco.\n\nSi el ajuste está forzado, el cordón lo paga. Y se raja donde nadie está mirando, meses después.\n\nEn Bears LinkUp el trabajo queda con evidencia y trazabilidad. No con la palabra de alguien.",
@@ -296,7 +296,7 @@
       "id": "w3",
       "tema": "El cliente que no sabe a quién llamar",
       "protagonista": "cliente particular",
-      "sujeto": "a young Latino fabricator in his mid 20s, lean build, faded work shirt with the sleeves cut, leather gloves, safety glasses, welding helmet pushed up, focused and quiet",
+      "sujeto": "a young Latino fabricator in his mid 20s, lean build, faded work shirt with the sleeves cut, leather gloves, safety glasses, his welding helmet hanging at his side, focused and quiet",
       "escena": "the driveway of a house in Puerto Rico: a half-installed steel gate on sawhorses, a portable welder on the ground, extension cord running to the garage, late afternoon light, palm shadow on a concrete wall",
       "piezas": {
         "lun": {
@@ -310,7 +310,7 @@
           ],
           "shots": [
             "medium-wide, subject standing beside the half-installed gate looking at the camera once",
-            "medium, subject tack-welding a hinge on the gate frame, eyes on the work",
+            "medium, subject clamping and squaring a hinge on the gate frame before any welding, eyes on the work, helmet still in hand, no arc, no sparks, no glow",
             "from behind, subject checking the gate swing against the post",
             "tight close-up of gloved hands setting a hinge, no face in frame",
             "wide, the finished gate installed, subject walking out of frame"
@@ -360,47 +360,47 @@
         "mar": {
           "tipo": "imagen",
           "variante": "oscuro",
-          "shot": "extreme close-up of a weld bead with visible porosity, small pinholes along the surface, hard raking light, neutral blurred background",
-          "titular": "Ese cordón<br>tiene <em>algo dentro</em><br>que no se ve",
-          "sub": "Y la superficie ya lo está gritando. <b>Mira los puntos</b>.",
+          "shot": "a welding inspector in his 50s holding a fillet weld gauge against a structural joint, hard hat and safety glasses, clipboard under the arm, industrial fabrication bay behind, cool side light, waist-up three-quarter framing, lower third calm and uncluttered",
+          "titular": "Soldadores, fabricadores<br>e inspectores.<br><em>Un solo tablero</em>",
+          "sub": "Postulado, preseleccionado, contratado. <b>Sin hojas sueltas</b>.",
           "hook": {
-            "lbl": "Comenta",
-            "q": "¿Qué lo causó?"
+            "lbl": "Para staffing",
+            "q": "¿Cuántos mueves al mes?"
           },
-          "copy_es": "Los puntitos no son estéticos. Son el aviso.\n\nAlgo entró donde no debía. Puede ser el gas, puede ser la superficie, puede ser el electrodo. Las tres dejan la misma marca.\n\n¿Qué lo causó?",
-          "copy_en": "Those pinholes aren't cosmetic. They're the warning.\n\nSomething got in where it shouldn't. Could be the gas, the surface prep, or the electrode. All three leave the same mark.\n\nWhat caused it?",
-          "hashtags_es": "#BearsLinkUp #soldadura #porosidad #soldador #cordon #PuertoRico",
-          "hashtags_en": "#BearsLinkUp #welding #porosity #welder #weldporn #skilledtrades",
-          "titular_en": "That bead has<br><em>something inside</em><br>you can't see",
-          "sub_en": "And the surface is already shouting it. <b>Look at the pinholes</b>.",
+          "titular_en": "Welders, fabricators<br>and inspectors.<br><em>One board</em>",
+          "sub_en": "Applied, shortlisted, hired. <b>No loose spreadsheets</b>.",
           "hook_en": {
-            "lbl": "Comment",
-            "q": "What caused it?"
-          }
+            "lbl": "For staffing",
+            "q": "How many a month?"
+          },
+          "copy_es": "Soldadores, fabricadores e inspectores. Tres roles, un solo tablero.\n\nTIG, MIG, SMAW, FCAW. Estructural o tubería. CWI, CSWIP. Si mueves volumen ya sabes que el problema no es encontrar gente: es no perderle el rastro a nadie entre que postula y que firma.\n\nContratación por proyecto, control por reclutador, evidencias descargables.\n\n¿Cuántas contrataciones mueves al mes?",
+          "copy_en": "Welders, fabricators and inspectors. Three roles, one board.\n\nTIG, MIG, SMAW, FCAW. Structural or pipe. CWI, CSWIP. If you move volume you already know the problem isn't finding people: it's losing track of somebody between applied and hired.\n\nHiring by project, permissions by recruiter, downloadable records.\n\nHow many hires do you move in a month?",
+          "hashtags_es": "#BearsLinkUp #staffing #soldadura #reclutamiento #PuertoRico #industrial #inspector",
+          "hashtags_en": "#BearsLinkUp #staffing #welding #recruiting #skilledtrades #inspector #industrial"
         },
         "mie": {
           "tipo": "reel",
-          "titular": "Dos minutos de limpieza,<br><em>una hora menos</em> de esmeril",
-          "sub": "La superficie decide el cordón antes de que enciendas.",
+          "titular": "Ofertas en Puerto Rico<br>y en <em>Estados Unidos</em>",
+          "sub": "El mismo perfil sirve en los dos sitios.",
           "hook": {
             "lbl": "Bears LinkUp",
-            "q": "Contrata con respaldo"
+            "q": "Un perfil, dos mercados"
           },
-          "clips": [
-            "wide: the subject carries a steel gate section to the sawhorses in a driveway, late afternoon light. Slow push-in.",
-            "medium: he wire-brushes the joint clean, then the helmet comes down and the arc lights.",
-            "close: gloved hands run along the cooled bead, then he pushes the helmet up and checks the line of the gate."
-          ],
-          "copy_es": "Nadie postea la parte aburrida.\n\nCepillo, desengrase, ajuste. Dos minutos ahí y el cordón sale limpio a la primera. Sáltatelos y pasas una hora con el esmeril.\n\nEl trabajo bien hecho se documenta. En Bears LinkUp queda con evidencia.",
-          "copy_en": "Nobody posts the boring part.\n\nBrush, degrease, fit. Two minutes there and the bead comes out clean the first time. Skip them and you spend an hour with the grinder.\n\nGood work gets documented. On Bears LinkUp it carries evidence.",
-          "hashtags_es": "#BearsLinkUp #soldadura #soldador #taller #PuertoRico #herreria",
-          "hashtags_en": "#BearsLinkUp #welding #welder #fabrication #metalwork #skilledtrades",
-          "titular_en": "Two minutes cleaning,<br><em>one hour less</em> grinding",
-          "sub_en": "The surface decides the bead before you strike.",
+          "titular_en": "Offers in Puerto Rico<br>and <em>stateside</em>",
+          "sub_en": "The same profile travels to both.",
           "hook_en": {
             "lbl": "Bears LinkUp",
-            "q": "Hire with backup"
-          }
+            "q": "One profile, two markets"
+          },
+          "clips": [
+            "wide: a fabricator walks along a row of finished structural pieces in an open shop bay, morning light through a roll-up door, slow push-in",
+            "medium: the same fabricator checks a joint on a beam, gloved hands, helmet flipped up, camera holds steady",
+            "close: gloved hands set a level on the finished piece, then the subject steps back and looks at the work"
+          ],
+          "copy_es": "Empresas publican. Staffing publica. Tú te postulas una vez.\n\nBears LinkUp se hizo para soldadores, fabricadores e inspectores que trabajan en Puerto Rico y en Estados Unidos. El mismo perfil sirve para los dos mercados.\n\nProyectos con el alcance escrito, las fechas escritas y el pago manejado en plataforma.\n\n🔧 ¿Dónde quieres que sea el próximo?",
+          "copy_en": "Companies post. Staffing agencies post. You apply once.\n\nBears LinkUp was built for welders, fabricators and inspectors working in Puerto Rico and the United States. The same profile travels to both markets.\n\nProjects with the scope written down, the dates written down, and payment handled on the platform.\n\n🔧 Where do you want the next one to be?",
+          "hashtags_es": "#BearsLinkUp #empleos #soldadura #soldador #PuertoRico #trabajo #oficio",
+          "hashtags_en": "#BearsLinkUp #weldingjobs #welder #PuertoRico #skilledtrades #ironworker #fabrication"
         },
         "vie": {
           "tipo": "imagen",
@@ -426,43 +426,43 @@
         "dom": {
           "tipo": "imagen",
           "variante": "oscuro",
-          "shot": "portrait against a near-black background, three-quarter from the waist up, the subject holding the helmet at his side, looking slightly off camera, cool side light",
-          "titular": "Contratar no<br>debería ser<br><em>una apuesta</em>",
-          "sub": "Identidad validada, especialidad clara y <b>pago protegido</b>.",
+          "shot": "extreme close-up of a 6G pipe weld joint on stainless pipe, root pass visible, neutral blurred fabrication shop background, hard raking light, no hands, no face",
+          "titular": "El match no es<br>una <em>búsqueda por palabra</em>",
+          "sub": "Proceso, posición y zona. <b>La IA lee los tres</b>.",
           "tarjetas": [
             {
-              "t": "Confianza",
-              "d": "Identidad validada"
+              "t": "Proceso",
+              "d": "TIG · MIG · FCAW"
             },
             {
-              "t": "Claridad",
-              "d": "Especialidad definida"
+              "t": "Posición",
+              "d": "3G · 6G"
             },
             {
-              "t": "Respaldo",
-              "d": "Documentación del trabajo"
+              "t": "Zona",
+              "d": "PR · US"
             }
           ],
-          "copy_es": "Pagaste un adelanto y no volvieron.\n\nLe pasó a alguien que conoces, o te pasó a ti. El problema nunca fue el trabajo: fue que no había nada que lo respaldara.\n\nAcuerdo, evidencia y pago en un mismo sitio. bearslinkup.com",
-          "copy_en": "You paid a deposit and they never came back.\n\nIt happened to someone you know, or it happened to you. The job was never the problem: nothing backed it up.\n\nAgreement, evidence and payment in one place. bearslinkup.com",
-          "hashtags_es": "#BearsLinkUp #herreria #soldadura #PuertoRico #hogar #contratista",
-          "hashtags_en": "#BearsLinkUp #fabrication #welding #contractor #homeimprovement #skilledtrades",
-          "titular_en": "Hiring shouldn't<br>be <em>a gamble</em>",
-          "sub_en": "Validated identity, clear specialty and <b>protected payment</b>.",
+          "titular_en": "The match isn't<br>a <em>keyword search</em>",
+          "sub_en": "Process, position and zone. <b>The AI reads all three</b>.",
           "tarjetas_en": [
             {
-              "t": "Trust",
-              "d": "Validated identity"
+              "t": "Process",
+              "d": "TIG · MIG · FCAW"
             },
             {
-              "t": "Clarity",
-              "d": "Defined specialty"
+              "t": "Position",
+              "d": "3G · 6G"
             },
             {
-              "t": "Backup",
-              "d": "Documented work"
+              "t": "Zone",
+              "d": "PR · US"
             }
-          ]
+          ],
+          "copy_es": "El match no es una búsqueda por palabra.\n\nUn staffing necesita 6G en tubería, en un pueblo específico, empezando el lunes. Un perfil que solo dice \"soldador\" nunca aparece en esa búsqueda.\n\nLa IA de Bears LinkUp lee el proceso, la posición y la zona, y pone a los dos lados frente a frente.\n\n¿Qué tendría que decir tu perfil para salir de primero?",
+          "copy_en": "The match isn't a keyword search.\n\nA staffing agency needs 6G on pipe, in a specific town, starting Monday. A profile that only says \"welder\" never surfaces in that search.\n\nBears LinkUp's AI reads the process, the position and the zone, and puts the two sides in front of each other.\n\nWhat would your profile need to say to come up first?",
+          "hashtags_es": "#BearsLinkUp #soldadura #soldador #tuberia #staffing #PuertoRico #empleos",
+          "hashtags_en": "#BearsLinkUp #welding #welder #pipewelding #staffing #skilledtrades #weldingjobs"
         }
       }
     },
@@ -470,7 +470,7 @@
       "id": "w4",
       "tema": "Del salón al taller",
       "protagonista": "escuela / egresado",
-      "sujeto": "a Latina welding student in her early 20s, hair braided under a cap, brand-new but already scuffed workwear, leather gloves, safety glasses, welding helmet in hand, serious and a little nervous",
+      "sujeto": "a Latina welding student in her early 20s, hair braided under a cap, brand-new but already scuffed workwear, leather gloves, safety glasses, her welding helmet carried in one hand, serious and a little nervous",
       "escena": "a welding school training bay: rows of identical booths with curtains, practice coupons stacked on a rack, overhead fluorescent light mixed with the glow from a booth two stations down, concrete floor marked with spatter",
       "piezas": {
         "lun": {
@@ -484,7 +484,7 @@
           ],
           "shots": [
             "medium-wide, subject standing at her booth looking at the camera once, curtain half open",
-            "medium, subject running a practice bead on a coupon, eyes on the work",
+            "medium, subject setting up a practice coupon in the booth and dialing the machine, eyes on the work, helmet still in hand, no arc, no sparks, no glow",
             "from behind the shoulder, inspecting her own coupon under the light",
             "tight close-up of the gloved hands holding a finished practice coupon, no face",
             "wide, the training bay from the door, subject small at her booth"
@@ -562,7 +562,7 @@
           },
           "clips": [
             "wide: the subject walks into the training bay carrying a practice coupon, fluorescent light overhead. Slow push-in.",
-            "medium: helmet down, she runs a bead on the coupon in the booth, the glow filling the frame.",
+            "medium: the helmet is already down and fully covers her face, dark lens forward, before the arc lights; she runs a bead on the coupon in the booth, the glow filling the frame. Her face is never visible in this shot.",
             "close: gloved hands hold the finished coupon up to the light, then she pushes the helmet up and studies it."
           ],
           "copy_es": "Nadie enseña el cupón número uno.\n\nY es el que explica todo. El cien sale bien porque los noventa y nueve anteriores salieron mal y alguien siguió.\n\nDocumenta la práctica. En Bears LinkUp eso es lo que te abre proyectos.",
