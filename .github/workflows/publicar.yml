@@ -9,19 +9,33 @@ name: Publicar Bears LinkUp
 #   Vie 12:00 p.m. AST → 16:00 UTC   imagen · precio real
 #   Dom  6:00 p.m. AST → 22:00 UTC   imagen · oportunidad
 #
-# POR QUE CORRE CADA HORA Y NO CINCO VECES POR SEMANA:
-# el cron de GitHub no es puntual. Medido en este repo el 14 y 15 de septiembre
-# de 2026, llego 4h10m tarde un dia y 4h40m el otro. Con cinco crones exactos y
-# una ventana de tolerancia, el proceso despertaba cuando la ventana ya habia
-# cerrado, no publicaba nada y salia en verde.
-# Ahora despierta cada hora y el script decide: publica la pieza que ya vencio y
-# sigue pendiente, sin importar cuanto se atrase el disparador, una por corrida.
-# Si GitHub se salta una hora, la siguiente la agarra. En repo publico las
-# corridas de Actions no cuestan.
+# APAGADO EL 16/sep/2026 — LA PUBLICACION SE MUDO A METRICOOL.
+#
+# Este workflow YA NO PUBLICA SOLO. Se le quito el disparador automatico para
+# que no choque con Metricool: dos sistemas publicando la misma pieza duplican
+# el post en la cuenta del cliente, y eso es peor que un post tarde.
+#
+# El repo SIGUE VIVO Y HACE FALTA: Metricool no guarda los medios, se los baja
+# por URL publica de raw.githubusercontent.com. Si se borra semana/, Metricool
+# se queda sin de donde bajar los artes y los reels.
+#
+# Historial de por que se apago, para que nadie lo vuelva a encender sin saber:
+# el cron de GitHub nunca fue puntual. Medido aqui mismo, llego 4h10m tarde el
+# 14/sep y 4h40m el 15/sep. Puesto a correr cada hora, GitHub solo lo corrio
+# 4 veces en 24 horas en vez de 24. Ninguna corrida programada llego a publicar.
+#
+# Queda workflow_dispatch para poder correrlo A MANO en una emergencia — por
+# ejemplo si Metricool se cae y hay que sacar una pieza. Antes de usarlo,
+# confirma en Metricool que esa pieza no esta programada.
+#
+#   PARA VOLVER A ENCENDERLO: descomenta el bloque schedule de abajo Y apaga
+#   primero lo que este programado en Metricool. Nunca los dos a la vez.
+#
+# on:
+#   schedule:
+#     - cron: '0 * * * *'
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   workflow_dispatch:
     inputs:
       dia:
