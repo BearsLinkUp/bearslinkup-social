@@ -6,14 +6,10 @@
   "solo_plan": false,
   "crudas_de": "",
   "fotos": {
-    "mar": {
-      "url": "https://storage.googleapis.com/xi-backend/database/workspace/7555b2d82fbc4c95a478d5d40b40c796/content_generation/cWowH8RkynKDbBSLAEzC/YOlLIz0N3vLCasJVa11m/content.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=xi-backend-prod%40xi-labs.iam.gserviceaccount.com%2F20260917%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260917T233606Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=62e99d1d9b70ff8d52743cd496869f88a151a358890edf29545fe6bb1f1260e3f3a9dc67d70264d6dbafbd3ba564079c3081138a334fa71f7333de13fb5009af432579e231a9b9d25e494bc27af95668aa9f62837a9cd7b15765ad542903a603093bb7e595e8194071827b5e2e33c80815bec19c4a58bdfc8c5df4fbc6ccfb5fcc2dc9c10c3ba05daf25ee5a20e4a25439a78e4c42c603a4967bc17dc1aba7a574663a644c2d464438edb0828e6b9355c63a13edd03876f8792fa488bc667c9f46eb6294d50f808b4c6be56b1782ea99bfd007e5ceb55376699ecc6e6f19d1a8bccfd6764f672bd2cc60b45e4d3f7531425d69df21bce1ea5aa89383290e163b",
-      "recorte": "922:1152:820:0"
-    },
     "dom": {
       "url": "https://storage.googleapis.com/xi-backend/database/workspace/7555b2d82fbc4c95a478d5d40b40c796/content_generation/tJf9MbvhNnllQES63555/Xnc9q9PWthgy0WBV8ZTw/content.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=xi-backend-prod%40xi-labs.iam.gserviceaccount.com%2F20260917%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260917T233556Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=9dd2b980fe48e5a5dab4d0c6834351f826471fa5000facd9dd0c8218482407c9fd8ea36f34d757805e62648a3270fb8106caf0dbda8ade9d8d500775c7a028a5f4e74634a970dfeed09643bb4046f664de98c65587d3f8d90eef62725da604a04cfcb48226feee42c8199a2530b9a5a1e3c5dee48488898562809a5a3523b33bd3641d1135fc58995e050f3e7c479f1ba89e8c70dfb3ba00c21af7b0f4ab4481e28d0bd2de289ab18894b802d71757c1864130f6e06dc8eb00864f55f2f6370bf39626b5c2333a63af1956906c9442f84162a0379bc9ee7251ef5946d879000f0303f814ea538d476ede62fc22184fa3d18a185d6b2d3d16c9753740331e1f02",
       "recorte": "922:1152:563:0"
     }
   },
-  "nota": "Martes 22 y domingo 27 rehechos en ElevenLabs: inspector en nave industrial con mangas largas y guantes, y macro de junta 6G sin gente. Las URLs firmadas caducan; si la corrida se repite tarde, hay que renovarlas."
+  "nota": "Solo el domingo 27: la corrida anterior bajo unicamente la primera foto porque ffmpeg se comia el stdin. El martes 22 ya quedo bien en el repo."
 }
