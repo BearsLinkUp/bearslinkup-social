@@ -142,13 +142,13 @@ jobs:
           while IFS=$'\t' read -r nombre url recorte; do
             [ -z "$nombre" ] && continue
             echo "· bajando $nombre"
-            curl -fsSL "$url" -o cruda.bin
+            curl -fsSL "$url" -o cruda.bin < /dev/null
             if [ -n "$recorte" ]; then
               FILTRO="crop=$recorte,scale=1080:1350"
             else
               FILTRO="scale=1080:1350:force_original_aspect_ratio=increase,crop=1080:1350"
             fi
-            ffmpeg -v error -y -i cruda.bin -vf "$FILTRO" -q:v 2 "semana/crudas/$nombre.jpg"
+            ffmpeg -nostdin -v error -y -i cruda.bin -vf "$FILTRO" -q:v 2 "semana/crudas/$nombre.jpg"
             ls -l "semana/crudas/$nombre.jpg"
           done < fotos.txt
           rm -f cruda.bin fotos.txt
