@@ -153,6 +153,35 @@ jobs:
           done < fotos.txt
           rm -f cruda.bin fotos.txt
 
+      # Lo mismo para los clips del reel. Se normalizan a 1080x1920 h264 para
+      # que armarReel los pegue sin sorpresas.
+      - name: Traer clips por URL
+        if: ${{ steps.args.outputs.evento == 'push' }}
+        run: |
+          set -e
+          [ -f disparo.json ] || exit 0
+          node -e "
+            const d = require('./disparo.json');
+            const c = d.clips || {};
+            for (const [k, v] of Object.entries(c)) {
+              const url = typeof v === 'string' ? v : v.url;
+              if (url) console.log([k, url].join('\t'));
+            }
+          " > clips.txt
+          if [ ! -s clips.txt ]; then echo "disparo.json no trae clips."; exit 0; fi
+          mkdir -p semana/crudas
+          while IFS=$'\t' read -r nombre url; do
+            [ -z "$nombre" ] && continue
+            echo "· bajando $nombre"
+            curl -fsSL "$url" -o clip.bin < /dev/null
+            ffmpeg -nostdin -v error -y -i clip.bin \
+              -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" \
+              -c:v libx264 -pix_fmt yuv420p -c:a aac -movflags +faststart \
+              "semana/crudas/$nombre.mp4"
+            ls -l "semana/crudas/$nombre.mp4"
+          done < clips.txt
+          rm -f clip.bin clips.txt
+
       - name: Generar la semana
         env:
           FAL_KEY: ${{ secrets.FAL_KEY }}
