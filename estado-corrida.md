@@ -1,11 +1,22 @@
 # Ultima corrida de generar
 
-- resultado: **failure**
-- corrida: 17 (id 35286956930)
+- resultado: **success**
+- corrida: 18 (id 35289562992)
 - disparada por: push
-- terminada: 2026-09-17 23:28 UTC
-- argumentos: ` --semana=w3 --solo=mar,dom`
+- terminada: 2026-09-18 00:05 UTC
+- argumentos: ` --semana=w3 --remontar`
 - crudas_de: ``
+
+## Semana en el repo
+
+```
+banco: w3 — El cliente que no sabe a quién llamar
+- lun · carrusel · 2026-09-14T16:00:00Z
+- mar · imagen · 2026-09-15T10:00:00Z
+- mie · reel · 2026-09-16T23:00:00Z
+- vie · imagen · 2026-09-18T16:00:00Z
+- dom · imagen · 2026-09-20T22:00:00Z
+```
 
 ## Log
 
@@ -13,7 +24,7 @@
 Bears LinkUp · semana ISO 2026-W38 · banco "w3" · El cliente que no sabe a quién llamar
 Protagonista: cliente particular · abre en inglés
 
-Regenerando solo mar, dom. El resto se re-monta sobre sus crudas.
+Re-montando sobre las crudas guardadas. No se genera ni se paga nada.
 
 ── LUN · carrusel · en
    ✓ slide 1/5
@@ -24,8 +35,16 @@ Regenerando solo mar, dom. El resto se re-monta sobre sus crudas.
    ✓ slide 4/5
    ✓ slide 5/5
 ── MAR · imagen · es
-   · fal-ai/nano-banana-pro no entro: fal 403 en /fal-ai/nano-banana-pro: {"detail":"User is locked. Reason: Exhausted balance. Top up your balance at fal.ai/dashboard/billing."}
-   · fal-ai/nano-banana no entro: fal 403 en /fal-ai/nano-banana: {"detail":"User is locked. Reason: Exhausted balance. Top up your balance at fal.ai/dashboard/billing."}
+   ✓ imagen montada
+── MIE · reel · en
+   ✓ clip 1/3
+   ✓ clip 2/3
+   ✓ clip 3/3
+   ✓ reel armado
+── VIE · imagen · es
+   ✓ imagen montada
+── DOM · imagen · en
+   ✓ imagen montada
 
-✗ fal 403 en /fal-ai/nano-banana: {"detail":"User is locked. Reason: Exhausted balance. Top up your balance at fal.ai/dashboard/billing."}
+Listo. 5 piezas en semana/. Publican solas a su hora.
 ```
