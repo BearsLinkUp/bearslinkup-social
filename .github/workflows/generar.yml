@@ -96,6 +96,7 @@ jobs:
 
           echo "args=$ARGS" >> $GITHUB_OUTPUT
           echo "crudas_de=$CRUDAS_DE" >> $GITHUB_OUTPUT
+          echo "evento=${{ github.event_name }}" >> $GITHUB_OUTPUT
           echo "ARGS resueltos: '$ARGS'  crudas_de: '$CRUDAS_DE'"
 
       - name: Instalar dependencias
@@ -116,6 +117,41 @@ jobs:
           git checkout "$SHA" -- semana/crudas || git checkout FETCH_HEAD -- semana/crudas
           echo "Crudas traidas de $SHA:"
           ls -la semana/crudas
+
+      # Fotos traidas de fuera. Sirve cuando la pieza se genero en otro
+      # proveedor (ElevenLabs) y hay que montarla con la marca aqui, o cuando
+      # una sola foto salio mal y no vale la pena repetir la semana entera.
+      # Solo corre cuando el disparo viene de un push: el cron y el boton la
+      # ignoran, para que un disparo.json viejo no se meta en una corrida sola.
+      - name: Traer fotos por URL
+        if: ${{ steps.args.outputs.evento == 'push' }}
+        run: |
+          set -e
+          [ -f disparo.json ] || exit 0
+          node -e "
+            const d = require('./disparo.json');
+            const f = d.fotos || {};
+            for (const [k, v] of Object.entries(f)) {
+              const url = typeof v === 'string' ? v : v.url;
+              const recorte = (typeof v === 'object' && v.recorte) ? v.recorte : '';
+              if (url) console.log([k, url, recorte].join('\t'));
+            }
+          " > fotos.txt
+          if [ ! -s fotos.txt ]; then echo "disparo.json no trae fotos."; exit 0; fi
+          mkdir -p semana/crudas
+          while IFS=$'\t' read -r nombre url recorte; do
+            [ -z "$nombre" ] && continue
+            echo "· bajando $nombre"
+            curl -fsSL "$url" -o cruda.bin
+            if [ -n "$recorte" ]; then
+              FILTRO="crop=$recorte,scale=1080:1350"
+            else
+              FILTRO="scale=1080:1350:force_original_aspect_ratio=increase,crop=1080:1350"
+            fi
+            ffmpeg -v error -y -i cruda.bin -vf "$FILTRO" -q:v 2 "semana/crudas/$nombre.jpg"
+            ls -l "semana/crudas/$nombre.jpg"
+          done < fotos.txt
+          rm -f cruda.bin fotos.txt
 
       - name: Generar la semana
         env:
