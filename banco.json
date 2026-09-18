@@ -487,8 +487,8 @@
           ],
           "shots": [
             "medium-wide, subject standing at her booth looking at the camera once, curtain half open",
-            "medium, subject setting up a practice coupon in the booth and dialing the machine, eyes on the work, helmet still in hand, no arc, no sparks, no glow",
-            "from behind the shoulder, inspecting her own coupon under the light",
+            "medium, subject standing at the bench turning the dial on the welding machine with one gloved hand while the other rests flat on a practice coupon, both hands empty, her welding helmet tucked under one arm, no electrode holder, no MIG gun, no TIG torch, no arc, no sparks, no glow anywhere in frame",
+            "close over-the-shoulder from behind, she holds a finished practice coupon up under a work light and studies it, the coupon large and clearly visible in her gloved hands, helmet pushed up, no arc, no sparks",
             "tight close-up of the gloved hands holding a finished practice coupon, no face",
             "wide, the training bay from the door, subject small at her booth"
           ],
@@ -537,7 +537,8 @@
         "mar": {
           "tipo": "imagen",
           "variante": "oscuro",
-          "shot": "extreme close-up of a practice weld coupon with an uneven bead: wide at the start, thin and cold at the end, hard raking light, neutral background",
+          "shot": "extreme macro close-up of one practice weld coupon with an uneven bead: wide at the start, thin and cold at the end, the coupon filling the whole frame, hard raking light, neutral blurred background, no person, no hands, no face",
+          "escena": "a bare steel bench top under neutral light, nobody in frame, a single steel coupon filling the whole frame, one continuous photograph with no panels, no split screen and no collage. No booths, no curtains, no rows of stations, no figure",
           "titular": "Empezó bien.<br>Terminó <em>frío</em>",
           "sub": "La mano cambió a mitad del pase. <b>Se nota de una</b>.",
           "hook": {
@@ -582,7 +583,8 @@
         "vie": {
           "tipo": "imagen",
           "variante": "luz",
-          "shot": "a finished welded security fence section standing in a bright yard, clean vertical bars, primer finish, no person in frame",
+          "shot": "a finished welded security fence section standing in a bright residential yard, clean vertical bars, primer finish, posts set in concrete, no person in frame",
+          "escena": "a bright open residential yard on a sunny day, grass and a low concrete curb, a house wall far back in the distance, daylight from above. No shop interior, no booths, no curtains, no machinery, nobody in frame",
           "titular": "Cuarenta pies<br>de verja,<br><em>instalada</em>",
           "sub": "Postes, concreto y acabado. <b>De principio a fin</b>.",
           "hook": {
@@ -603,7 +605,8 @@
         "dom": {
           "tipo": "imagen",
           "variante": "oscuro",
-          "shot": "portrait against a near-black background, three-quarter from the waist up, helmet held against her chest, looking straight at the camera, cool side light with a faint warm rim",
+          "shot": "studio portrait against a plain near-black seamless background, three-quarter from the waist up, helmet held against her chest, looking straight at the camera, cool side light with a faint warm rim",
+          "escena": "a plain near-black seamless studio backdrop and nothing else. No booths, no curtains, no windows, no machinery, no daylight, no glow and no fire anywhere in the background",
           "titular": "Primer trabajo.<br>No <em>primer favor</em>",
           "sub": "Un perfil verificable <b>cambia la conversación</b> desde el día uno.",
           "tarjetas": [
