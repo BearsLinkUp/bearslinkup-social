@@ -1,65 +1,82 @@
 # Ultima corrida mensual
 
-- resultado: **failure**
-- corrida: 1 · disparada por workflow_dispatch
-- terminada: 2026-10-01 01:58 UTC
-- argumentos: ` --mes=2026-10`
+- resultado: **success**
+- corrida: 2 · disparada por push
+- terminada: 2026-10-01 02:27 UTC
+- argumentos: ` --mes=2026-10 --remontar`
 
 ```
 Bears LinkUp · mes 2026-10
 Plan existente: 13 piezas
 
+── 01 · 2026-10-05T12:00 · carrusel · es · El certificado no se muda contigo.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
 ── 02 · 2026-10-07T19:00 · reel · en · Three passes. Nobody asked to see them.
-   · clip NO pasa — The image does not show what was requested.; It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
-   · clip NO pasa — The image does not show what was requested.
    ✓ clip 1/4
-   · clip PASA 
    ✓ clip 2/4
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.
-   · clip PASA 
    ✓ clip 3/4
-   · clip NO pasa — The image does not show what was requested.; Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine).; It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
-   · clip NO pasa — The image does not show what was requested.; A lit torch is visible.; Spark/glow is visible.
    ✓ clip 4/4
    ✓ lista (marcada para revisar: la IA de QA no quedó conforme)
 
+── 03 · 2026-10-09T12:00 · imagen · es · Tu resumé dice soldador. Tu perfil dice 6G.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
+── 04 · 2026-10-12T12:00 · carrusel · en · You passed the CWI. The phone didn't ring.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
 ── 05 · 2026-10-14T19:00 · reel · es · 6G no es un título. Es una posición.
-   · clip PASA 
    ✓ clip 1/4
-   · clip NO pasa — Clearly readable letters, words, numbers, logos or watermarks anywhere
-   · clip NO pasa — The image does not show what was requested.
    ✓ clip 2/4
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.
-   · clip NO pasa — The image does not show what was requested.
    ✓ clip 3/4
-   · clip PASA 
    ✓ clip 4/4
    ✓ lista (marcada para revisar: la IA de QA no quedó conforme)
 
 ── 06 · 2026-10-16T12:00 · imagen · en · They call for the price. Not the work.
-   · candidata PASA (nota 9) 
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
+── 07 · 2026-10-19T12:00 · carrusel · es · El portafolio que no tienes en ningún sitio.
+   · uso la foto ya guardada en crudas/
    ✓ lista
 
 ── 08 · 2026-10-21T19:00 · reel · en · TIG, MIG or Stick?
-   · clip NO pasa — The image does not show what was requested.; Bare hands or bare forearms near hot metal or welding.
-   · clip NO pasa — The image does not show what was requested.; Bare hands or bare forearms near hot metal or welding.
    ✓ clip 1/4
-   · clip NO pasa — Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine).; The image does not show what was requested.
-   · clip NO pasa — Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine).; It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
    ✓ clip 2/4
-   · clip NO pasa — The image does not show what was requested.; Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine).
-   · clip NO pasa — It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
    ✓ clip 3/4
-   · clip NO pasa — The image does not show what was requested.; A human face is visible while a torch/electrode holder is in the hands.; It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
-   · clip NO pasa — A human is visible with a lit torch in hand.; The image does not show what was requested.
    ✓ clip 4/4
    ✓ lista (marcada para revisar: la IA de QA no quedó conforme)
 
-── 11 · 2026-10-28T19:00 · reel · es · Sube el resumé. Marca lo que corres.
-   · clip NO pasa — The image does not show what was requested.; A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.; The image does not show what was requested.
-   ✓ clip 1/4
-   ✗ Tope de gasto alcanzado ($11.56 de $12)
+── 09 · 2026-10-23T12:00 · imagen · es · La galga no miente. El récord tampoco.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
 
-12/13 piezas listas · estado parcial · gasto estimado $11.56
+── 10 · 2026-10-26T12:00 · carrusel · en · Stop paying to reject.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
+── 11 · 2026-10-28T19:00 · reel · es · Sube el resumé. Marca lo que corres.
+   ✓ clip 1/4
+   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.
+   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.; The image does not show what was requested.
+   ✓ clip 2/4
+   · clip PASA 
+   ✓ clip 3/4
+   · clip NO pasa — The image does not show what was requested.; A lit torch is visible.; Bare hands or bare forearms near hot metal or welding.
+   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.; The image does not show what was requested.
+   ✓ clip 4/4
+   ✓ lista (marcada para revisar: la IA de QA no quedó conforme)
+
+── 12 · 2026-10-30T12:00 · imagen · en · Same trade. New state. Same profile.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
+── 13 · 2026-11-02T12:00 · carrusel · es · Tu perfil en español.
+   · uso la foto ya guardada en crudas/
+   ✓ lista
+
+13/13 piezas listas · estado completo · gasto estimado $2.50
 ```
