@@ -279,6 +279,13 @@ const MOV_DEFECTO = 'Realistic documentary footage that continues this exact pho
  */
 const BANCO_VIDEO = fs.existsSync('marca/banco-video.json') ? JSON.parse(fs.readFileSync('marca/banco-video.json', 'utf8')).tomas : [];
 
+const BANCO_MUSICA = fs.existsSync('marca/banco-musica.json') ? JSON.parse(fs.readFileSync('marca/banco-musica.json', 'utf8')).pistas : [];
+function efectoPara(tags = []) {
+  const f = tags.includes('esmeril') ? 'marca/audio/esmeril-1.mp3'
+    : tags.some(t => ['tig', 'mig', 'stick', 'arco'].includes(t)) ? 'marca/audio/arco-1.mp3' : null;
+  return f && fs.existsSync(f) ? f : null;
+}
+
 /** Toma real del banco (Pexels): se baja, se corta a SEG_CLIP desde "inicio" y se lleva a 1080x1920. */
 async function clipStock(spec, destino) {
   const t = BANCO_VIDEO.find(x => x.id === spec.stock);
@@ -286,8 +293,20 @@ async function clipStock(spec, destino) {
   const crudo = path.join(TMP, `stock-${t.id}.mp4`);
   if (!fs.existsSync(crudo)) await bajar(t.url, crudo);
   const ini = Math.max(0, Math.min(Number(spec.inicio || 0), Math.max(0, t.dur - SEG_CLIP - 0.2)));
-  ff(['-ss', String(ini), '-i', crudo, '-t', String(SEG_CLIP),
-    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,fps=30,setsar=1,eq=saturation=0.92:contrast=1.04',
+  // Sonido: el audio original de la toma (si trae) + el efecto que le toca por tags (arco o esmeril).
+  const sfx = efectoPara(t.tags);
+  const conAudio = tieneAudio(crudo);
+  const entradas = ['-ss', String(ini), '-i', crudo];
+  const mezcla = [];
+  if (conAudio) mezcla.push('[0:a]volume=0.8[o]');
+  if (sfx) { entradas.push('-stream_loop', '-1', '-i', sfx); mezcla.push(`[${1}:a]volume=0.9[s]`); }
+  entradas.push('-f', 'lavfi', '-t', String(SEG_CLIP), '-i', 'anullsrc=r=44100:cl=stereo');
+  const silencio = sfx ? 2 : 1;
+  const etiquetas = [conAudio ? '[o]' : '', sfx ? '[s]' : '', `[${silencio}:a]`].filter(Boolean);
+  mezcla.push(`${etiquetas.join('')}amix=inputs=${etiquetas.length}:duration=longest:normalize=0,atrim=0:${SEG_CLIP}[a]`);
+  ff([...entradas, '-t', String(SEG_CLIP), '-filter_complex',
+    `[0:v]scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,fps=30,setsar=1,eq=saturation=0.92:contrast=1.04[v];` + mezcla.join(';'),
+    '-map', '[v]', '-map', '[a]', '-t', String(SEG_CLIP),
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-ar', '44100', '-ac', '2', destino]);
   return { ok: true, stock: t.id };
 }
@@ -303,11 +322,13 @@ async function clipMockup(nav, pantalla, destino) {
     <div style="position:absolute;left:470px;top:334px;width:140px;height:34px;border-radius:20px;background:#111"></div></div></body></html>`);
   await pag.screenshot({ path: fondo }); await pag.close();
   const W = 524, H = 1104, X = 278, Y = 318, T = SEG_CLIP;
-  ff(['-loop', '1', '-t', String(T), '-i', fondo, '-i', app, '-f', 'lavfi', '-t', String(T), '-i', 'anullsrc=r=44100:cl=stereo',
+  const tecleo = fs.existsSync('marca/audio/tecleo-1.mp3') ? 'marca/audio/tecleo-1.mp3' : null;
+  ff(['-loop', '1', '-t', String(T), '-i', fondo, '-i', app,
+    ...(tecleo ? ['-stream_loop', '-1', '-i', tecleo] : ['-f', 'lavfi', '-t', String(T), '-i', 'anullsrc=r=44100:cl=stereo']),
     '-filter_complex',
     `[1:v]scale=${W}:-2,pad=${W}:${H}:0:(oh-ih)/2:0xF4F5F5[a];[0:v][a]overlay=${X}:${Y}[f];` +
     `[0:v]colorkey=0x00FF00:0.3:0.05[k];[f][k]overlay=0:0,scale=w='1080*(1+0.03*t/${T})':h=-2:eval=frame,crop=1080:1920,fps=30,format=yuv420p[v]`,
-    '-map', '[v]', '-map', '2:a', '-t', String(T), '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-c:a', 'aac', '-ar', '44100', '-ac', '2', destino]);
+    '-map', '[v]', '-map', '2:a', '-af', `volume=0.7,afade=t=out:st=${T - 0.6}:d=0.6`, '-t', String(T), '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-c:a', 'aac', '-ar', '44100', '-ac', '2', destino]);
   return destino;
 }
 
@@ -526,7 +547,7 @@ function tieneAudio(f) {
 }
 
 /** Cada clip lleva su subtítulo encima; al final, 3 s de cierre de marca. Corte seco, nunca disolvencia. */
-function armarReel(segmentos, cierrePng, destino) {
+function armarReel(segmentos, cierrePng, destino, musica) {
   const partes = segmentos.map((s, i) => {
     const o = path.join(TMP, `seg${i}.mp4`);
     const audio = tieneAudio(s.clip);
@@ -545,8 +566,30 @@ function armarReel(segmentos, cierrePng, destino) {
   partes.push(cierre);
   const lista = path.join(TMP, 'lista.txt');
   fs.writeFileSync(lista, partes.map(f => `file '${path.resolve(f)}'`).join('\n'));
-  ff(['-f', 'concat', '-safe', '0', '-i', lista, '-c', 'copy', '-movflags', '+faststart', destino]);
+  const unido = path.join(TMP, 'unido.mp4');
+  ff(['-f', 'concat', '-safe', '0', '-i', lista, '-c', 'copy', unido]);
+  // Música de fondo (Pixabay) debajo de los efectos, con salida suave y volumen normalizado para Reels.
+  const dur = parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', unido]).toString()) || 21;
+  if (musica && fs.existsSync(musica.archivo)) {
+    ff(['-i', unido, '-ss', String(musica.inicio || 0), '-i', musica.archivo, '-filter_complex',
+      `[1:a]atrim=0:${dur},asetpts=PTS-STARTPTS,afade=t=in:d=0.3,afade=t=out:st=${dur - 1.5}:d=1.5,volume=0.55[m];` +
+      `[0:a]volume=0.9[e];[e][m]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[a]`,
+      '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', destino]);
+  } else {
+    ff(['-i', unido, '-c', 'copy', '-movflags', '+faststart', destino]);
+  }
   return destino;
+}
+
+/** Escoge la pista de música para un reel: la del plan si la trae; si no, rota por mes y número de pieza. */
+async function musicaPara(p, mes) {
+  if (!BANCO_MUSICA.length) return null;
+  const n = Number(mes.replace('-', '')) + Number(p.id);
+  const pista = p.musica ? BANCO_MUSICA.find(x => x.id === p.musica) : BANCO_MUSICA[n % BANCO_MUSICA.length];
+  if (!pista) return null;
+  const archivo = path.join(TMP, `musica-${pista.id}.mp3`);
+  try { if (!fs.existsSync(archivo)) await bajar(pista.url, archivo); } catch (e) { log(`   · no pude bajar la música ${pista.id}: ${e.message}`); return null; }
+  return { archivo, inicio: pista.inicio || 0, id: pista.id };
 }
 
 // ─────────────────────────── Plan con LLM ───────────────────────────
@@ -728,7 +771,9 @@ function mesQueToca() {
           log(`   ✓ clip ${c + 1}/${p.clips.length}`);
         }
         const cierre = await montar(nav, 'RC', { titular: p.cierre, linea: p.linea }, path.join(TMP, `${p.id}-cierre.png`));
-        armarReel(segmentos, cierre, path.join(dir, `${p.id}.mp4`));
+        const musica = await musicaPara(p, mes);
+        armarReel(segmentos, cierre, path.join(dir, `${p.id}.mp4`), musica);
+        reg.musica = musica ? musica.id : null;
         cuadro(path.join(dir, `${p.id}.mp4`), 1.0, path.join(dir, `${p.id}-portada.jpg`));
         reg.archivos = [`${p.id}.mp4`];
         reg.portada = `${p.id}-portada.jpg`;
