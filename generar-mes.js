@@ -222,7 +222,10 @@ function promptFoto(escena, layout) {
     : layout === 'B'
     ? 'Vertical 4:5 frame. The main subject sits in the upper two thirds; the bottom quarter is simple floor or wall with nothing important.'
     : 'Vertical 4:5 frame. The main subject sits in the upper and right part of the frame; the lower-left area is darker and calm, with nothing important, because a headline will be placed there.';
-  return `${ESTILO}\n\nSCENE: ${escena}\n\nFRAMING: ${encuadre}\n\nSAFETY (non-negotiable): ${SEGURIDAD}\n\nNO TEXT: no letters, words, numbers, signs, watermarks or logos anywhere in the image.`;
+  const vacia = /no people|no person|nobody/i.test(escena)
+    ? '\n\nEMPTY SCENE: there are absolutely no people, no hands, no arms and no gloves anywhere in the frame. No one is welding. Only objects.'
+    : '';
+  return `${ESTILO}\n\nSCENE: ${escena}${vacia}\n\nFRAMING: ${encuadre}\n\nSAFETY (non-negotiable): ${SEGURIDAD}\n\nNO TEXT: no letters, words, numbers, signs, watermarks or logos anywhere in the image.`;
 }
 
 const NEG_VIDEO = 'uncovered face near a lit arc, helmet up while welding, bare forearms, sparks, orange sparks, blue light, neon, text, subtitles, watermark, logo, distorted hands, extra fingers, 3d render, glossy, cartoon';
@@ -282,8 +285,9 @@ async function clipRevisado(spec, destino, fotoDestino, nav) {
   }
   let ultimo = null;
   const costo = SEG_CLIP * (PRECIO_SEG[RES_VIDEO] || 0.15);
-  for (let intento = 1; intento <= 2; intento++) {
-    if (intento > 1 && !hayPresupuesto(costo)) { log('   · sin presupuesto para repetir el clip'); break; }
+  // Un solo intento de video: el filtro de calidad caro es la FOTO (barata) antes de animar.
+  // Repetir Veo por la revisión gastó el saldo el 1 oct 2026 sin mejorar el resultado.
+  for (let intento = 1; intento <= 1; intento++) {
     if (!hayPresupuesto(costo)) throw new Error(`Tope de gasto alcanzado ($${gastado.toFixed(2)} de $${PRESUPUESTO})`);
     gastado += costo;
     const r = await correr(MODELO_VIDEO, {
