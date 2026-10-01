@@ -1,0 +1,68 @@
+{
+  "piezas": [
+    {
+      "fecha": "2026-10-05T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "es",
+      "titular": "El certificado <em>no se muda</em> contigo.",
+      "foto": "A welder in a Puerto Rico fabrication shop TIG welding a fixed steel pipe joint on a stand, helmet down, leather gloves.",
+      "slides": [
+        {
+          "texto": "Pasaste 6G en un taller.<br>Te mudas de pueblo.<br><em>Prueba nueva.</em>"
+        },
+        {
+          "texto": "El taller anterior no va a llamar para decir que <em>la pasaste</em>."
+        },
+        {
+          "lista": [
+            "Procesos",
+            "Posiciones",
+            "Certificaciones"
+          ],
+          "texto": "En un perfil que se va contigo."
+        },
+        {
+          "cierre": "Crea tu perfil. <em>Gratis.</em>"
+        }
+      ],
+      "copy": "6G pasada. Otra vez.\n\nTaller nuevo, prueba nueva. Y el taller anterior no va a llamar a nadie para confirmar que la pasaste.\n\nEn Bears LinkUp tu perfil guarda tus procesos, tus posiciones y tus certificaciones, y lo ve quien contrata antes de llamarte.\n\nNo te promete que no te vuelvan a probar. Te pone en la prueba con tu récord por delante.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldadura #soldador #6G #PuertoRico #fabricacion #oficio"
+    },
+    {
+      "fecha": "2026-10-07T19:00:00-04:00",
+      "tipo": "reel",
+      "idioma": "en",
+      "titular": "Three passes. <em>Nobody asked</em> to see them.",
+      "clips": [
+        {
+          "escena": "Macro shot of a welder running a root pass in an open steel butt joint, welding helmet down, face not visible, leather gloves. The arc travels slowly left to right as a small white point of light, molten pool following. Camera static.",
+          "sub": "Root."
+        },
+        {
+          "escena": "Same steel joint, fill pass over the root, welding helmet down, leather gloves, slightly wider framing, gentle weave motion of the electrode. Camera drifts in very slowly.",
+          "sub": "Fill."
+        },
+        {
+          "escena": "Same steel joint, cap pass, welding helmet down, leather gloves, the finished stack of weld beads visible below the torch. Slow push in.",
+          "sub": "Cap."
+        },
+        {
+          "escena": "Gloved hands resting beside a finished three-pass weld on a steel plate, cooling, no arc, no spark, no glow anywhere. One thumb runs along the bead. Camera slowly tilts up from the weld. No face in frame.",
+          "sub": "Three passes.<br><em>Nobody asked to see them.</em>"
+        }
+      ],
+      "cierre": "Your profile shows <em>the work.</em>",
+      "copy": "Root. Fill. Cap.\n\nThen someone reads one page of paper and decides whether you can weld.\n\nOn Bears LinkUp the profile leads with what you run and where you run it — process, position, finished work. The people hiring read that before they call.\n\nFree to sign up. Link in bio.",
+      "hashtags": "#BearsLinkUp #welding #welder #rootpass #skilledtrades #fabrication #weldlife"
+    },
+    {
+      "fecha": "2026-10-09T12:00:00-04:00",
+      "tipo": "imagen",
+      "idioma": "es",
+      "titular": "Tu resumé dice soldador. Tu perfil dice <em>6G</em>.",
+      "foto": "A welder standing at the doorway of a fabrication shop looking at a phone, helmet pushed up on the head, no torch, gloves tucked in the belt.",
+      "copy": "El resumé lo subes igual. Lo que cambia es lo que sale primero.\n\nQué procesos corres, en qué posiciones y en qué pueblo trabajas. Eso es lo que mira el que contrata antes de llamarte.\n\nCrea tu perfil desde el celular. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldador #soldadura #PuertoRico #empleo #taller #oficio"
+    }
+  ]
+}
