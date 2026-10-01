@@ -284,77 +284,70 @@ async function clipRevisado(escena, destino) {
 
 const FUENTES = path.resolve('node_modules/@fontsource');
 const CSS = `
-@font-face{font-family:'Archivo';src:url('file://${FUENTES}/archivo/files/archivo-latin-700-normal.woff2') format('woff2');font-weight:700;}
+@font-face{font-family:'Inter';src:url('file://${FUENTES}/inter/files/inter-latin-900-normal.woff2') format('woff2');font-weight:900;}
+@font-face{font-family:'Inter';src:url('file://${FUENTES}/inter/files/inter-latin-800-normal.woff2') format('woff2');font-weight:800;}
+@font-face{font-family:'Inter';src:url('file://${FUENTES}/inter/files/inter-latin-700-normal.woff2') format('woff2');font-weight:700;}
 @font-face{font-family:'Inter';src:url('file://${FUENTES}/inter/files/inter-latin-600-normal.woff2') format('woff2');font-weight:600;}
-@font-face{font-family:'Inter';src:url('file://${FUENTES}/inter/files/inter-latin-500-normal.woff2') format('woff2');font-weight:500;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
 html,body{width:1080px;overflow:hidden;background:transparent;}
-.s{position:relative;width:1080px;height:1350px;overflow:hidden;background:#0A0A0A;color:#fff;}
+.s{position:relative;width:1080px;height:1350px;overflow:hidden;background:#070908;color:#fff;font-family:'Inter';}
 .s.v{height:1920px;background:transparent;}
-.ph{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(.88) contrast(1.04);}
-h1{font-family:'Archivo';font-weight:700;letter-spacing:-.025em;line-height:1.04;text-wrap:balance;}
-h1 em{font-style:normal;color:#4EAF68;}
-.mark{display:flex;align-items:center;gap:14px;}
-.mark img{width:46px;height:46px;border-radius:11px;}
-.mark span{font-family:'Inter';font-weight:600;font-size:23px;letter-spacing:.01em;color:rgba(255,255,255,.9);}
-/* A · oscura a sangre */
-.A .grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,10,9,.86) 0%,rgba(8,10,9,.62) 26%,rgba(8,10,9,0) 52%);}
-.A .txt{position:absolute;left:72px;right:72px;bottom:76px;}
-.A h1{font-size:76px;max-width:840px;}
-.A .mark{margin-top:40px;}
-/* B · banda clara */
-.B .ph{bottom:330px;}
-.B .band{position:absolute;left:0;right:0;bottom:0;height:330px;background:#F4F5F3;padding:58px 72px 0;}
-.B h1{font-size:62px;color:#0F2A1D;max-width:920px;}
-.B h1 em{color:#1A5C38;}
-.B .mark{position:absolute;left:72px;bottom:52px;}
-.B .mark span{color:#0F2A1D;}
-/* T · tarjeta de texto del carrusel */
-.T{background:#0E1310;}
-.T .txt{position:absolute;left:84px;right:84px;top:50%;transform:translateY(-50%);}
-.T h1{font-size:68px;line-height:1.12;}
-.T .lista{font-family:'Archivo';font-weight:700;font-size:84px;line-height:1.1;letter-spacing:-.025em;}
-.T .lista div{padding:14px 0;border-bottom:2px solid rgba(78,175,104,.35);}
-.T .lista div:last-child{border-bottom:0;}
-.T p{font-family:'Inter';font-weight:500;font-size:34px;line-height:1.35;color:rgba(255,255,255,.78);margin-top:40px;max-width:820px;}
-.T .mark{position:absolute;left:84px;bottom:72px;}
-/* C · cierre en verde bosque */
-.C{background:#1A5C38;}
-.C .txt{position:absolute;left:84px;right:84px;top:50%;transform:translateY(-50%);}
-.C h1{font-size:84px;}
-.C h1 em{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:12px;}
-.C .pie{position:absolute;left:84px;right:84px;bottom:72px;display:flex;justify-content:space-between;align-items:center;}
-.C .web{font-family:'Inter';font-weight:600;font-size:26px;letter-spacing:.04em;color:rgba(255,255,255,.85);}
-.C .mark img{box-shadow:0 0 0 3px rgba(255,255,255,.9);}
-/* Reel · subtítulo sobre el clip, transparente */
-.R .grad{position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(to top,rgba(8,10,9,.78),rgba(8,10,9,0));}
-.R .txt{position:absolute;left:80px;right:80px;bottom:300px;}
-.R h1{font-size:86px;}
-.s.v.RC{height:1920px;background:#1A5C38;}
-.RC .txt{top:46%;}
-.RC h1{font-size:96px;}
-.RC .pie{bottom:300px;}
-.RC .mark img{width:72px;height:72px;border-radius:16px;}
-.RC .mark span{font-size:32px;}
-.RC .web{font-size:30px;}
+.ph{position:absolute;inset:0;background-size:cover;background-position:center;filter:contrast(1.05) saturate(.95);}
+.logo{position:absolute;left:72px;top:72px;width:150px;height:150px;border-radius:30px;box-shadow:0 14px 40px rgba(0,0,0,.45);}
+h1{font-weight:900;letter-spacing:-.035em;line-height:.98;text-wrap:balance;text-shadow:0 4px 24px rgba(0,0,0,.45);}
+h1 em{font-style:normal;color:#22C55E;}
+h1 br+em,h1 em{}
+.bar{width:150px;height:12px;background:#16A34A;margin:40px 0 30px;}
+.linea{font-weight:700;font-size:40px;line-height:1.3;color:#fff;letter-spacing:-.005em;text-shadow:0 2px 12px rgba(0,0,0,.5);}
+/* A · foto a sangre, texto abajo */
+.A .grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,7,6,.97) 0%,rgba(5,7,6,.88) 30%,rgba(5,7,6,.35) 52%,rgba(5,7,6,0) 66%);}
+.A .txt{position:absolute;left:72px;right:72px;bottom:88px;}
+.A h1{font-size:104px;max-width:900px;}
+/* B · foto a la derecha, texto a la izquierda sobre negro */
+.B .ph{left:22%;}
+.B .grad{position:absolute;inset:0;background:linear-gradient(to right,#070908 0%,#070908 22%,rgba(7,9,8,.88) 40%,rgba(7,9,8,.35) 62%,rgba(7,9,8,0) 78%),linear-gradient(to top,rgba(7,9,8,.75) 0%,rgba(7,9,8,0) 35%);}
+.B .txt{position:absolute;left:72px;right:200px;top:50%;transform:translateY(-38%);}
+.B h1{font-size:100px;}
+/* T · tarjeta de texto del carrusel: negro con resplandor verde */
+.T{background:radial-gradient(ellipse 70% 55% at 75% 30%,rgba(22,163,74,.38) 0%,rgba(22,163,74,.10) 45%,rgba(7,9,8,0) 70%),#070908;}
+.T .txt{position:absolute;left:72px;right:72px;bottom:120px;}
+.T h1{font-size:92px;line-height:1.02;}
+.T .lista{font-weight:900;font-size:112px;line-height:1.0;letter-spacing:-.035em;}
+.T .lista div{padding:18px 0;}
+.T .lista div:nth-child(2){color:#22C55E;}
+/* C · cierre */
+.C{background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(22,163,74,.55) 0%,rgba(22,163,74,.15) 45%,rgba(7,9,8,0) 72%),#070908;}
+.C .txt{position:absolute;left:72px;right:72px;bottom:120px;}
+.C h1{font-size:112px;}
+.C .linea{color:rgba(255,255,255,.9);}
+/* Reel · subtitulo sobre el clip */
+.R .grad{position:absolute;left:0;right:0;bottom:0;height:50%;background:linear-gradient(to top,rgba(5,7,6,.9),rgba(5,7,6,0));}
+.R .txt{position:absolute;left:80px;right:80px;bottom:330px;}
+.R h1{font-size:118px;}
+.R .logo{top:110px;left:80px;width:130px;height:130px;}
+.s.v.RC{background:radial-gradient(ellipse 80% 50% at 50% 40%,rgba(22,163,74,.55) 0%,rgba(22,163,74,.15) 45%,rgba(7,9,8,0) 72%),#070908;}
+.RC .txt{bottom:520px;}
+.RC h1{font-size:124px;}
+.RC .logo{width:190px;height:190px;border-radius:40px;top:auto;bottom:1020px;left:80px;}
 `;
 
-const marca = () => `<div class="mark">${LOGO ? `<img src="${LOGO}">` : ''}<span>Bears LinkUp</span></div>`;
+const logo = () => LOGO ? `<img class="logo" src="${LOGO}">` : '';
+const pie = d => d.linea ? `<div class="bar"></div><div class="linea">${d.linea}</div>` : '';
 
 function htmlPieza(tipo, d) {
   const foto = d.foto ? `<div class="ph" style="background-image:url('${d.foto}')"></div>` : '';
   switch (tipo) {
-    case 'A': return `<div class="s A">${foto}<div class="grad"></div><div class="txt"><h1>${d.titular}</h1>${marca()}</div></div>`;
-    case 'B': return `<div class="s B">${foto}<div class="band"><h1>${d.titular}</h1>${marca()}</div></div>`;
+    case 'A': return `<div class="s A">${foto}<div class="grad"></div>${logo()}<div class="txt"><h1>${d.titular}</h1>${pie(d)}</div></div>`;
+    case 'B': return `<div class="s B">${foto}<div class="grad"></div>${logo()}<div class="txt"><h1>${d.titular}</h1>${pie(d)}</div></div>`;
     case 'T': {
       const cuerpo = d.lista
-        ? `<div class="lista">${d.lista.map(x => `<div>${x}</div>`).join('')}</div>${d.texto ? `<p>${d.texto}</p>` : ''}`
+        ? `<div class="lista">${d.lista.map(x => `<div>${x}</div>`).join('')}</div>${d.texto ? `<div class="bar"></div><div class="linea">${d.texto}</div>` : ''}`
         : `<h1>${d.texto}</h1>`;
-      return `<div class="s T"><div class="txt">${cuerpo}</div>${marca()}</div>`;
+      return `<div class="s T">${logo()}<div class="txt">${cuerpo}</div></div>`;
     }
-    case 'C': return `<div class="s C"><div class="txt"><h1>${d.titular}</h1></div><div class="pie">${marca()}<div class="web">bearslinkup.com</div></div></div>`;
+    case 'C': return `<div class="s C">${logo()}<div class="txt"><h1>${d.titular}</h1>${pie({ linea: d.linea || 'bearslinkup.com' })}</div></div>`;
     case 'R': return `<div class="s v R"><div class="grad"></div><div class="txt"><h1>${d.titular}</h1></div></div>`;
-    case 'RC': return `<div class="s v C RC"><div class="txt"><h1>${d.titular}</h1></div><div class="pie">${marca()}<div class="web">bearslinkup.com</div></div></div>`;
+    case 'RC': return `<div class="s v C RC">${logo()}<div class="txt"><h1>${d.titular}</h1>${pie({ linea: d.linea || 'bearslinkup.com' })}</div></div>`;
   }
   throw new Error(`Plantilla desconocida ${tipo}`);
 }
@@ -419,6 +412,7 @@ function validarPlan(plan, slots) {
     if (!p.titular || !/<em>.+<\/em>/.test(p.titular)) err.push(`Pieza ${id}: titular con una palabra clave en <em>`);
     if (p.titular && p.titular.replace(/<[^>]+>/g, '').length > 60) err.push(`Pieza ${id}: titular de más de 60 caracteres`);
     if (!p.copy || !p.hashtags) err.push(`Pieza ${id}: falta copy o hashtags`);
+    if (!p.linea) err.push(`Pieza ${id}: falta "linea" (segmento · CTA corto)`);
     if (p.tipo !== 'reel' && !p.foto) err.push(`Pieza ${id}: falta "foto"`);
     if (p.tipo === 'carrusel' && (!Array.isArray(p.slides) || p.slides.length !== 4)) err.push(`Pieza ${id}: el carrusel lleva 4 "slides" después de la portada`);
     if (p.tipo === 'reel' && (!Array.isArray(p.clips) || p.clips.length !== 4 || !p.cierre)) err.push(`Pieza ${id}: el reel lleva 4 "clips" y "cierre"`);
@@ -555,16 +549,16 @@ function mesQueToca() {
         if (forzar || !fs.existsSync(cruda)) reg.qa.foto = await fotoRevisada(p.foto, layout, cruda);
         else { reg.qa.foto = previa?.qa?.foto || { ok: true, provista: true }; log('   · uso la foto ya guardada en crudas/'); }
         if (p.tipo === 'imagen') {
-          await montar(nav, 'B', { titular: p.titular, fotoRuta: cruda }, path.join(dir, `${p.id}.jpg`));
+          await montar(nav, 'B', { titular: p.titular, linea: p.linea, fotoRuta: cruda }, path.join(dir, `${p.id}.jpg`));
           reg.archivos = [`${p.id}.jpg`];
         } else {
           reg.archivos = [];
-          await montar(nav, 'A', { titular: p.titular, fotoRuta: cruda }, path.join(dir, `${p.id}-1.jpg`));
+          await montar(nav, 'A', { titular: p.titular, linea: p.linea, fotoRuta: cruda }, path.join(dir, `${p.id}-1.jpg`));
           reg.archivos.push(`${p.id}-1.jpg`);
           for (let s = 0; s < p.slides.length; s++) {
             const sl = p.slides[s];
             const n = `${p.id}-${s + 2}.jpg`;
-            if (sl.cierre) await montar(nav, 'C', { titular: sl.cierre }, path.join(dir, n));
+            if (sl.cierre) await montar(nav, 'C', { titular: sl.cierre, linea: p.linea_cierre }, path.join(dir, n));
             else await montar(nav, 'T', { texto: sl.texto, lista: sl.lista }, path.join(dir, n));
             reg.archivos.push(n);
           }
@@ -581,7 +575,7 @@ function mesQueToca() {
           segmentos.push({ clip, capa });
           log(`   ✓ clip ${c + 1}/${p.clips.length}`);
         }
-        const cierre = await montar(nav, 'RC', { titular: p.cierre }, path.join(TMP, `${p.id}-cierre.png`));
+        const cierre = await montar(nav, 'RC', { titular: p.cierre, linea: p.linea }, path.join(TMP, `${p.id}-cierre.png`));
         armarReel(segmentos, cierre, path.join(dir, `${p.id}.mp4`));
         cuadro(path.join(dir, `${p.id}.mp4`), 1.0, path.join(dir, `${p.id}-portada.jpg`));
         reg.archivos = [`${p.id}.mp4`];
