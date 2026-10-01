@@ -9,7 +9,8 @@
  *      (por fal / openrouter) siguiendo marca/reglas.md y sin repetir ganchos.
  *   2. Fotos con Seedream V4. Pide 2 candidatas por foto y una IA de visión
  *      revisa careta, texto, manos y look de IA. Si ninguna pasa, repite una vez.
- *   3. Clips con Wan 2.5 (5 s). Revisa un cuadro de cada clip igual.
+ *   3. Clips: foto de Seedream revisada + Veo 3.1 Fast la anima (6 s, con audio).
+ *      Un clip con "pantalla" monta la captura real de la app en el celular.
  *   4. Monta titular + logo con Chromium: A oscura (carrusel y reel),
  *      B clara (imagen de viernes). Minimalista: un titular y la marca.
  *   5. Edita los reels con ffmpeg: clips + subtítulo por clip + cierre de marca.
@@ -22,8 +23,8 @@
  * VARIABLES:
  *   FAL_KEY        obligatoria
  *   MODELO_IMAGEN  por defecto fal-ai/bytedance/seedream/v4/text-to-image
- *   MODELO_VIDEO   por defecto fal-ai/wan-25-preview/text-to-video
- *   RES_VIDEO      por defecto 720p ($0.10/s). 480p = $0.05/s, 1080p = $0.15/s
+ *   MODELO_VIDEO   por defecto fal-ai/veo3.1/fast/image-to-video (anima la foto de Seedream)
+ *   RES_VIDEO      por defecto 1080p ($0.15/s con audio)
  *   MODELO_LLM     por defecto anthropic/claude-sonnet-5
  *   MODELO_QA      por defecto google/gemini-2.5-flash
  *
@@ -42,8 +43,11 @@ const { execFileSync } = require('child_process');
 const FAL = 'https://queue.fal.run';
 const { FAL_KEY } = process.env;
 const MODELO_IMAGEN = process.env.MODELO_IMAGEN || 'fal-ai/bytedance/seedream/v4/text-to-image';
-const MODELO_VIDEO = process.env.MODELO_VIDEO || 'fal-ai/wan-25-preview/text-to-video';
-const RES_VIDEO = process.env.RES_VIDEO || '720p';
+// Video: Veo 3.1 Fast animando una foto de Seedream ya revisada (image-to-video).
+// La foto fija la apariencia real de antorchas y piezas; Veo solo le da movimiento suave.
+const MODELO_VIDEO = process.env.MODELO_VIDEO || 'fal-ai/veo3.1/fast/image-to-video';
+const RES_VIDEO = process.env.RES_VIDEO || '1080p';
+const SEG_CLIP = 6;
 const MODELO_LLM = process.env.MODELO_LLM || 'anthropic/claude-sonnet-5';
 const MODELO_QA = process.env.MODELO_QA || 'google/gemini-2.5-flash';
 const REPO = process.env.GITHUB_REPOSITORY || 'BearsLinkUp/bearslinkup-social';
@@ -59,10 +63,10 @@ const remontar = args.includes('--remontar');
 
 const TMP = '.tmp-mes';
 // Tope de gasto por corrida (USD). Las repeticiones por QA se cortan al llegar.
-const PRESUPUESTO = Number(process.env.PRESUPUESTO || 12);
+const PRESUPUESTO = Number(process.env.PRESUPUESTO || 20);
 let gastado = 0;
 const PRECIO_FOTO = 0.03;
-const PRECIO_SEG = { '480p': 0.05, '720p': 0.10, '1080p': 0.15 };
+const PRECIO_SEG = { '720p': 0.15, '1080p': 0.15, '4k': 0.35 }; // Veo 3.1 Fast con audio
 const hayPresupuesto = extra => gastado + extra <= PRESUPUESTO;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const log = (...a) => console.log(...a);
@@ -180,6 +184,8 @@ Reject (ok=false) if ANY of these is true:
 5. Deformed or extra fingers, melted or impossible objects, warped geometry.
 6. It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.
 7. The image does not show what was requested.
+8. A welding torch, MIG gun or electrode holder looks fake, toy-like, melted, oversized or physically impossible, or has no cable/hose attached, or someone appears to weld with no machine connected.
+9. A weld bead is in a place that makes no sense (for example on the open end of a pipe instead of at the joint).
 "nota" is how real and premium it looks (10 = indistinguishable from a real documentary photo).`;
 
 async function revisar(urlImagen, pedido) {
@@ -211,7 +217,9 @@ const ESTILO = 'Candid documentary photograph shot on 35mm film. Natural availab
   'no dramatic color grading, no colored or neon lighting. Any welding arc is a small intense point of white light with no sparks flying.';
 
 function promptFoto(escena, layout) {
-  const encuadre = layout === 'B'
+  const encuadre = layout === 'R'
+    ? 'Vertical 9:16 frame for a phone video. The main subject fills the upper two thirds; keep the bottom third simple and darker because a subtitle will be placed there.'
+    : layout === 'B'
     ? 'Vertical 4:5 frame. The main subject sits in the upper two thirds; the bottom quarter is simple floor or wall with nothing important.'
     : 'Vertical 4:5 frame. The main subject sits in the upper and right part of the frame; the lower-left area is darker and calm, with nothing important, because a headline will be placed there.';
   return `${ESTILO}\n\nSCENE: ${escena}\n\nFRAMING: ${encuadre}\n\nSAFETY (non-negotiable): ${SEGURIDAD}\n\nNO TEXT: no letters, words, numbers, signs, watermarks or logos anywhere in the image.`;
@@ -227,14 +235,14 @@ function promptClip(escena) {
 // ─────────────────────────── Generación con revisión ───────────────────────────
 
 /** Genera la foto de una pieza: 2 candidatas, la IA escoge; si ninguna pasa, una ronda más. */
-async function fotoRevisada(escena, layout, destino) {
+async function fotoRevisada(escena, layout, destino, size = { width: 1728, height: 2160 }) {
   const prompt = promptFoto(escena, layout);
   let mejor = null;
   for (let ronda = 1; ronda <= 2; ronda++) {
     if (ronda > 1 && !hayPresupuesto(2 * PRECIO_FOTO)) { log('   · sin presupuesto para repetir'); break; }
     gastado += 2 * PRECIO_FOTO;
     const r = await correr(MODELO_IMAGEN, {
-      prompt, image_size: { width: 1728, height: 2160 }, num_images: 2, max_images: 1,
+      prompt, image_size: size, num_images: 2, max_images: 1,
       enable_safety_checker: true, enhance_prompt_mode: 'standard',
     });
     for (const img of r.images || []) {
@@ -249,7 +257,7 @@ async function fotoRevisada(escena, layout, destino) {
   }
   if (!mejor) throw new Error('El modelo de imagen no devolvió imágenes');
   await bajar(mejor.url, destino);
-  return { ok: mejor.qa.ok, nota: mejor.qa.nota, problemas: mejor.qa.problemas || [], sinQA: !!mejor.qa.sinQA };
+  return { ok: mejor.qa.ok, nota: mejor.qa.nota, problemas: mejor.qa.problemas || [], sinQA: !!mejor.qa.sinQA, url: mejor.url };
 }
 
 function cuadro(clip, seg, destino) {
@@ -257,27 +265,121 @@ function cuadro(clip, seg, destino) {
   return destino;
 }
 
-async function clipRevisado(escena, destino) {
+const MOV_DEFECTO = 'Realistic documentary footage that continues this exact photo. Very slow, steady camera push-in. ' +
+  'Natural, subtle motion only: hands move slowly and steadily, a small white welding arc flickers if one is present, faint smoke drifts. ' +
+  'Every object keeps its exact shape and size. Nothing new appears. No sudden movements, no cuts, no camera shake. Ambient shop sound.';
+
+/**
+ * Un clip del reel: primero la foto (Seedream, revisada), luego Veo la anima.
+ * Si el clip trae "pantalla", el celular de la foto muestra la captura real de la app
+ * (sin IA en la pantalla).
+ */
+async function clipRevisado(spec, destino, fotoDestino, nav) {
+  const foto = await fotoRevisada(spec.escena, 'R', fotoDestino, { width: 1080, height: 1920 });
+  if (spec.pantalla) {
+    await clipPantalla(nav, fotoDestino, spec.pantalla, destino);
+    return { ok: foto.ok, problemas: foto.problemas, sinQA: foto.sinQA, pantalla: true };
+  }
   let ultimo = null;
-  const costo = 5 * (PRECIO_SEG[RES_VIDEO] || 0.10);
+  const costo = SEG_CLIP * (PRECIO_SEG[RES_VIDEO] || 0.15);
   for (let intento = 1; intento <= 2; intento++) {
     if (intento > 1 && !hayPresupuesto(costo)) { log('   · sin presupuesto para repetir el clip'); break; }
     if (!hayPresupuesto(costo)) throw new Error(`Tope de gasto alcanzado ($${gastado.toFixed(2)} de $${PRESUPUESTO})`);
     gastado += costo;
     const r = await correr(MODELO_VIDEO, {
-      prompt: promptClip(escena), negative_prompt: NEG_VIDEO, aspect_ratio: '9:16',
-      resolution: RES_VIDEO, duration: '5', enable_prompt_expansion: false, enable_safety_checker: true,
+      prompt: `${spec.movimiento || MOV_DEFECTO} Safety: ${SEGURIDAD} No text anywhere.`,
+      image_url: foto.url, duration: `${SEG_CLIP}s`, aspect_ratio: '9:16', resolution: RES_VIDEO,
+      generate_audio: true, negative_prompt: NEG_VIDEO,
     }, 20);
     const url = r.video?.url || r.video_url;
-    if (!url) throw new Error(`Wan terminó sin video: ${JSON.stringify(r).slice(0, 200)}`);
+    if (!url) throw new Error(`Veo terminó sin video: ${JSON.stringify(r).slice(0, 200)}`);
     await bajar(url, destino);
-    const f = cuadro(destino, 2.5, path.join(TMP, 'cuadro.jpg'));
-    const qa = await revisar(await subirFal(f, 'image/jpeg'), escena);
+    const f = cuadro(destino, 3, path.join(TMP, 'cuadro.jpg'));
+    const qa = await revisar(await subirFal(f, 'image/jpeg'), spec.escena);
     log(`   · clip ${qa.ok ? 'PASA' : 'NO pasa'} ${qa.problemas?.length ? '— ' + qa.problemas.join('; ') : ''}`);
     ultimo = qa;
     if (qa.ok) break;
   }
   return { ok: ultimo.ok, problemas: ultimo.problemas || [], sinQA: !!ultimo.sinQA };
+}
+
+/** Busca el rectángulo verde (la pantalla del celular) en la foto. */
+async function bboxVerde(nav, ruta) {
+  const pag = await nav.newPage();
+  const data = 'data:image/jpeg;base64,' + fs.readFileSync(ruta).toString('base64');
+  const r = await pag.evaluate(async (src) => {
+    const img = new Image(); img.src = src; await img.decode();
+    const W = img.naturalWidth, H = img.naturalHeight;
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, W, H).data;
+    let x0 = W, y0 = H, x1 = 0, y1 = 0, n = 0;
+    for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) {
+      const i = (y * W + x) * 4, R = d[i], G = d[i + 1], B = d[i + 2];
+      if (G > 140 && G > R * 1.6 && G > B * 1.6) { n++; if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; }
+    }
+    return { W, H, x0, y0, x1, y1, n };
+  }, data);
+  await pag.close();
+  if (r.n < 2000) throw new Error('La foto del celular no trae pantalla verde');
+  return r;
+}
+
+/**
+ * Video de la pantalla: la captura real del registro con un usuario de muestra escribiendo
+ * (correo, contraseña y toque en el botón). Nada se envía: es una animación sobre la captura.
+ * Posiciones en px de marca/app-registro.png (737 de ancho).
+ */
+const PANTALLA_CAMPOS = { correo: { x: 110, y: 433 }, clave: { x: 110, y: 555 }, boton: { x: 48, y: 606, w: 641, h: 46 } };
+async function videoPantalla(nav, pantalla, destino) {
+  const dims = await (async () => { const p = await nav.newPage(); const src = 'data:image/png;base64,' + fs.readFileSync(pantalla).toString('base64');
+    const r = await p.evaluate(async s => { const i = new Image(); i.src = s; await i.decode(); return [i.naturalWidth, i.naturalHeight]; }, src); await p.close(); return r; })();
+  const [W, H] = dims;
+  const pag = await nav.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+  const src = 'data:image/png;base64,' + fs.readFileSync(pantalla).toString('base64');
+  const F = PANTALLA_CAMPOS;
+  await pag.setContent(`<html><body style="margin:0"><div style="position:relative;width:${W}px;height:${H}px;background:url('${src}') 0 0/100% 100%;font-family:system-ui,Segoe UI,sans-serif">
+    <div id="c" style="position:absolute;left:${F.correo.x}px;top:${F.correo.y - 14}px;width:520px;height:30px;background:#fff;font-size:19px;color:#111;line-height:30px"></div>
+    <div id="k" style="position:absolute;left:${F.clave.x}px;top:${F.clave.y - 14}px;width:480px;height:30px;background:#F6F7F8;font-size:22px;color:#111;line-height:30px;letter-spacing:3px"></div>
+    <div id="b" style="position:absolute;left:${F.boton.x}px;top:${F.boton.y}px;width:${F.boton.w}px;height:${F.boton.h}px;border-radius:12px;background:#16A34A;color:#fff;font-weight:700;font-size:16px;letter-spacing:.06em;display:flex;align-items:center;justify-content:center;opacity:0;transition:none">CREAR CUENTA ↗</div>
+    <div id="t" style="position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.18);left:${F.boton.x + F.boton.w / 2 - 28}px;top:${F.boton.y - 5}px;opacity:0"></div>
+  </div></body></html>`);
+  await pag.evaluate(() => document.fonts.ready);
+  const correo = 'jose.rivera@gmail.com', fps = 15, total = SEG_CLIP * fps;
+  const dir = path.join(TMP, 'frames'); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
+  for (let f = 0; f < total; f++) {
+    const t = f / fps;
+    const nc = Math.max(0, Math.min(correo.length, Math.floor((t - 0.6) / 1.9 * correo.length)));
+    const nk = Math.max(0, Math.min(10, Math.floor((t - 2.8) / 1.0 * 10)));
+    const caret = Math.floor(t * 2) % 2 ? '|' : ' ';
+    await pag.evaluate(([c, k, bOp, tOp]) => {
+      document.getElementById('c').textContent = c; document.getElementById('k').textContent = k;
+      document.getElementById('b').style.opacity = bOp; document.getElementById('t').style.opacity = tOp;
+    }, [correo.slice(0, nc) + (t > 0.4 && t < 2.7 ? caret : ''), '•'.repeat(nk) + (t >= 2.7 && t < 3.9 ? caret : ''),
+      t > 4.0 ? '1' : '0', t > 4.3 && t < 4.9 ? '1' : '0']);
+    await pag.screenshot({ path: path.join(dir, `${String(f).padStart(4, '0')}.png`) });
+  }
+  await pag.close();
+  ff(['-framerate', String(fps), '-i', path.join(dir, '%04d.png'), '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2,fps=30,format=yuv420p', '-c:v', 'libx264', '-crf', '16', destino]);
+  return destino;
+}
+
+/** Monta el video de la app dentro de la pantalla verde, con un leve zoom. */
+async function clipPantalla(nav, foto, pantalla, destino) {
+  const base = path.join(TMP, 'pantalla-base.jpg');
+  ff(['-i', foto, '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920', '-q:v', '2', base]);
+  const b = await bboxVerde(nav, base);
+  const w = b.x1 - b.x0 + 6, h = b.y1 - b.y0 + 6, x = Math.max(0, b.x0 - 3), y = Math.max(0, b.y0 - 3);
+  const app = await videoPantalla(nav, pantalla, path.join(TMP, 'app.mp4'));
+  const T = SEG_CLIP;
+  ff(['-loop', '1', '-t', String(T), '-i', base, '-i', app,
+    '-filter_complex',
+    `[1:v]scale=${w}:${h}:force_original_aspect_ratio=decrease,pad=${w}:${h}:(ow-iw)/2:${Math.round(h * 0.05)}:0xF4F5F5[app];` +
+    `[0:v][app]overlay=${x}:${y}[f];` +
+    `[0:v]chromakey=0x00FF00:0.28:0.06,despill=green[k];` +
+    `[f][k]overlay=0:0,scale=w='1080*(1+0.035*t/${T})':h=-2:eval=frame,crop=1080:1920,fps=30,format=yuv420p[v]`,
+    '-map', '[v]', '-t', String(T), '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', destino]);
+  return destino;
 }
 
 // ─────────────────────────── Montaje (HTML → JPG/PNG) ───────────────────────────
@@ -382,9 +484,11 @@ function armarReel(segmentos, cierrePng, destino) {
   const partes = segmentos.map((s, i) => {
     const o = path.join(TMP, `seg${i}.mp4`);
     const audio = tieneAudio(s.clip);
-    ff(['-i', s.clip, '-i', s.capa, '-f', 'lavfi', '-t', '5', '-i', 'anullsrc=r=44100:cl=stereo',
+    let dur = SEG_CLIP;
+    try { dur = Math.min(SEG_CLIP, parseFloat(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', s.clip]).toString()) || SEG_CLIP); } catch {}
+    ff(['-i', s.clip, '-i', s.capa, '-f', 'lavfi', '-t', String(dur), '-i', 'anullsrc=r=44100:cl=stereo',
       '-filter_complex', '[0:v]scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,fps=30,setsar=1[b];[b][1:v]overlay=0:0[v]',
-      '-map', '[v]', '-map', audio ? '0:a' : '2:a', '-t', '5',
+      '-map', '[v]', '-map', audio ? '0:a' : '2:a', '-t', String(dur),
       '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-ar', '44100', '-ac', '2', o]);
     return o;
   });
@@ -416,7 +520,7 @@ function validarPlan(plan, slots) {
     if (!p.linea) err.push(`Pieza ${id}: falta "linea" (segmento · CTA corto)`);
     if (p.tipo !== 'reel' && !p.foto) err.push(`Pieza ${id}: falta "foto"`);
     if (p.tipo === 'carrusel' && (!Array.isArray(p.slides) || p.slides.length !== 4)) err.push(`Pieza ${id}: el carrusel lleva 4 "slides" después de la portada`);
-    if (p.tipo === 'reel' && (!Array.isArray(p.clips) || p.clips.length !== 4 || !p.cierre)) err.push(`Pieza ${id}: el reel lleva 4 "clips" y "cierre"`);
+    if (p.tipo === 'reel' && (!Array.isArray(p.clips) || p.clips.length < 3 || p.clips.length > 4 || !p.cierre)) err.push(`Pieza ${id}: el reel lleva 3 "clips" y "cierre"`);
     const texto = JSON.stringify(p).toLowerCase();
     for (const w of PROHIBIDAS) if (texto.includes(w)) err.push(`Pieza ${id}: palabra prohibida "${w.trim()}"`);
   });
@@ -571,7 +675,7 @@ function mesQueToca() {
           const clip = path.join(TMP, `${p.id}-c${c}.mp4`);
           const guardado = path.join(crudas, `${p.id}-c${c}.mp4`);
           if (!forzar && fs.existsSync(guardado)) { fs.copyFileSync(guardado, clip); reg.qa.clips.push(previa?.qa?.clips?.[c] || { ok: true }); }
-          else { reg.qa.clips.push(await clipRevisado(p.clips[c].escena, clip)); fs.copyFileSync(clip, guardado); }
+          else { reg.qa.clips.push(await clipRevisado(p.clips[c], clip, path.join(crudas, `${p.id}-c${c}.jpg`), nav)); fs.copyFileSync(clip, guardado); }
           const capa = await montar(nav, 'R', { titular: p.clips[c].sub }, path.join(TMP, `${p.id}-s${c}.png`));
           segmentos.push({ clip, capa });
           log(`   ✓ clip ${c + 1}/${p.clips.length}`);
