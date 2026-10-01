@@ -28,6 +28,11 @@ on:
         description: 'Regenerar solo estas piezas (ej: 03,07). Vacio = lo que falte.'
         required: false
         default: ''
+      remontar:
+        description: 'Re-montar textos y marca sobre lo ya generado (y completar lo que falte)'
+        type: boolean
+        required: false
+        default: false
       solo_plan:
         description: 'Solo escribir el plan, sin generar medios'
         type: boolean
@@ -57,14 +62,16 @@ jobs:
           MES="${{ github.event.inputs.mes }}"
           SOLO="${{ github.event.inputs.solo }}"
           SOLO_PLAN="${{ github.event.inputs.solo_plan }}"
+          REMONTAR="${{ github.event.inputs.remontar }}"
           if [ "${{ github.event_name }}" = "push" ] && [ -f disparo-mes.json ]; then
             leer() { node -e "const d=require('./disparo-mes.json');const v=d['$1'];process.stdout.write(v===undefined||v===null?'':String(v))"; }
-            MES=$(leer mes); SOLO=$(leer solo); SOLO_PLAN=$(leer solo_plan)
+            MES=$(leer mes); SOLO=$(leer solo); SOLO_PLAN=$(leer solo_plan); REMONTAR=$(leer remontar)
           fi
           ARGS=""
           [ -n "$MES" ] && ARGS="$ARGS --mes=$MES"
           [ -n "$SOLO" ] && ARGS="$ARGS --solo=$SOLO"
           [ "$SOLO_PLAN" = "true" ] && ARGS="$ARGS --solo-plan"
+          [ "$REMONTAR" = "true" ] && ARGS="$ARGS --remontar"
           echo "args=$ARGS" >> $GITHUB_OUTPUT
           echo "ARGS: '$ARGS'"
 
