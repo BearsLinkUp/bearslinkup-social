@@ -346,7 +346,8 @@ function htmlPieza(tipo, d) {
       return `<div class="s T">${logo()}<div class="txt">${cuerpo}</div></div>`;
     }
     case 'C': return `<div class="s C">${logo()}<div class="txt"><h1>${d.titular}</h1>${pie({ linea: d.linea || 'bearslinkup.com' })}</div></div>`;
-    case 'R': return `<div class="s v R"><div class="grad"></div><div class="txt"><h1>${d.titular}</h1></div></div>`;
+    case 'R': if (!d.titular) return `<div class="s v R"></div>`;
+      return `<div class="s v R"><div class="grad"></div><div class="txt"><h1>${d.titular}</h1></div></div>`;
     case 'RC': return `<div class="s v C RC">${logo()}<div class="txt"><h1>${d.titular}</h1>${pie({ linea: d.linea || 'bearslinkup.com' })}</div></div>`;
   }
   throw new Error(`Plantilla desconocida ${tipo}`);
