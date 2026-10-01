@@ -37,20 +37,19 @@
       "titular": "Three passes. <em>Nobody asked</em> to see them.",
       "clips": [
         {
-          "escena": "Macro shot of a welder running a root pass in an open steel butt joint, welding helmet down, face not visible, leather gloves. The arc travels slowly left to right as a small white point of light, molten pool following. Camera static.",
-          "sub": "Root."
+          "escena": "Medium close shot of a welder at a steel workbench in a small Puerto Rico fabrication shop, TIG welding a butt joint between two thick steel plates. Welding helmet DOWN, face not visible, worn leather jacket, leather TIG gloves. One gloved hand holds a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine; the other feeds a thin silver filler rod into the joint. The arc is a small intense white point at the joint, no sparks.",
+          "movimiento": "Realistic documentary footage continuing this exact photo. The torch travels very slowly and steadily along the joint while the filler rod dips in and out in a small, regular rhythm. The arc flickers naturally, faint smoke rises. Static camera with a very slow push-in. No sudden movements. Ambient hiss of the TIG arc.",
+          "sub": "Three passes."
         },
         {
-          "escena": "Same steel joint, fill pass over the root, welding helmet down, leather gloves, slightly wider framing, gentle weave motion of the electrode. Camera drifts in very slowly.",
-          "sub": "Fill."
+          "escena": "Close-up of the same welding: two gloved hands, a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine angled over a steel plate joint with a fresh shiny weld bead forming behind the cup, a thin filler rod entering the puddle. Small white arc, no sparks, background dark and out of focus.",
+          "movimiento": "Realistic macro footage continuing this exact photo. The torch moves a few centimeters slowly along the joint, the bead grows behind it, the filler rod dabs the puddle steadily. Camera static. No new objects. Ambient arc hiss.",
+          "sub": ""
         },
         {
-          "escena": "Same steel joint, cap pass, welding helmet down, leather gloves, the finished stack of weld beads visible below the torch. Slow push in.",
-          "sub": "Cap."
-        },
-        {
-          "escena": "Gloved hands resting beside a finished three-pass weld on a steel plate, cooling, no arc, no spark, no glow anywhere. One thumb runs along the bead. Camera slowly tilts up from the weld. No face in frame.",
-          "sub": "Three passes.<br><em>Nobody asked to see them.</em>"
+          "escena": "Close-up of a finished multi-pass weld on a steel plate butt joint, still slightly warm, heat tint colors on the metal, resting on a steel bench. A gloved hand rests beside it. No torch in frame, no arc, no spark, no glow. Soft side light from a shop door.",
+          "movimiento": "Realistic documentary footage continuing this exact photo. Very slow camera push-in along the weld. The gloved thumb slowly runs along the bead once. Nothing else moves. Quiet shop ambience.",
+          "sub": "Nobody asked<br><em>to see them.</em>"
         }
       ],
       "cierre": "Your profile shows <em>the work.</em>",
