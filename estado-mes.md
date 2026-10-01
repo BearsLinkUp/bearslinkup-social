@@ -1,8 +1,8 @@
 # Ultima corrida mensual
 
 - resultado: **success**
-- corrida: 5 · disparada por push
-- terminada: 2026-10-01 11:40 UTC
+- corrida: 6 · disparada por push
+- terminada: 2026-10-01 12:10 UTC
 - argumentos: ` --mes=2026-10 --solo=02,05,08,11`
 
 ```
