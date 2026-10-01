@@ -41,18 +41,18 @@
       "titular": "Three passes. <em>Nobody asked</em> to see them.",
       "clips": [
         {
-          "escena": "Medium close shot of a welder at a steel workbench in a small Puerto Rico fabrication shop, TIG welding a butt joint between two thick steel plates. Welding helmet DOWN, face not visible, worn leather jacket, leather TIG gloves. One gloved hand holds a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine; the other feeds a thin silver filler rod into the joint. The arc is a small intense white point at the joint, no sparks.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The torch travels very slowly and steadily along the joint while the filler rod dips in and out in a small, regular rhythm. The arc flickers naturally, faint smoke rises. Static camera with a very slow push-in. No sudden movements. Ambient hiss of the TIG arc.",
+          "stock": 35590715,
+          "inicio": 4,
           "sub": "Three passes."
         },
         {
-          "escena": "Close-up of the same welding: two gloved hands, a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine angled over a steel plate joint with a fresh shiny weld bead forming behind the cup, a thin filler rod entering the puddle. Small white arc, no sparks, background dark and out of focus.",
-          "movimiento": "Realistic macro footage continuing this exact photo. The torch moves a few centimeters slowly along the joint, the bead grows behind it, the filler rod dabs the puddle steadily. Camera static. No new objects. Ambient arc hiss.",
+          "stock": 27212738,
+          "inicio": 3,
           "sub": ""
         },
         {
-          "escena": "Close-up of a finished multi-pass weld on a steel plate butt joint, still slightly warm, heat tint colors on the metal, resting on a steel bench. A gloved hand rests beside it. No torch in frame, no arc, no spark, no glow. Soft side light from a shop door.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. Very slow camera push-in along the weld. The gloved thumb slowly runs along the bead once. Nothing else moves. Quiet shop ambience.",
+          "stock": 39803672,
+          "inicio": 6,
           "sub": "Nobody asked<br><em>to see them.</em>"
         }
       ],
@@ -111,19 +111,19 @@
       "titular": "6G no es un título. <em>Es una posición.</em>",
       "clips": [
         {
-          "escena": "A pipe welder in a small working fabrication shop in Puerto Rico, TIG welding a STRAIGHT carbon steel pipe (not an elbow, not a bend) fixed on a pipe stand and tilted at a 45-degree angle (6G test position). The butt joint is in the middle of the straight pipe where two straight sections meet, with a partially completed circumferential weld around it. Welding helmet DOWN, face not visible, worn leather jacket, leather TIG gloves. He holds a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine and feeds a filler rod with the other hand. Small white arc, no sparks. Low three-quarter angle.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The welder moves the torch very slowly around the pipe joint, the filler rod dips steadily, the arc flickers, faint smoke drifts. His body stays still. Camera static with a very slow push-in. No sudden movements. Ambient arc hiss.",
-          "sub": "6G."
+          "stock": 27212745,
+          "inicio": 3,
+          "sub": "No es un título."
         },
         {
-          "escena": "Wider shot of the same 6G test: a STRAIGHT fixed steel pipe (not an elbow) on a stand tilted at 45 degrees, the welder kneeling and leaning to reach under the joint, helmet DOWN, face not visible, leather jacket and gloves, holding a real industrial water-cooled TIG torch with a black rubber torch body, a pink-white ceramic alumina cup and a short tungsten electrode, with its gas hose and power cable running back out of frame to the welding machine. The welding machine and its cables are visible on the floor behind him. Small white arc, no sparks.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The welder keeps welding slowly under the joint with steady, small hand movements. Very slow orbit of the camera to the right. Nothing appears or disappears. Ambient shop sound and arc hiss.",
-          "sub": "Tubo fijo.<br><em>45 grados.</em>"
+          "stock": 27212748,
+          "inicio": 3,
+          "sub": "<em>Es una posición.</em>"
         },
         {
-          "escena": "Empty pipe test stand in a fabrication shop: a STRAIGHT carbon steel pipe (not an elbow) tilted at 45 degrees, with a completed circumferential butt weld in the middle where two straight sections meet. Clean, even weld ripples, slight heat tint. No people, no hands, no torch, no arc, no glow.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The camera slowly orbits a little around the pipe joint to show the weld. Nothing else moves. Quiet shop ambience.",
-          "sub": "No es un título.<br><em>Es una posición.</em>"
+          "stock": 37325024,
+          "inicio": 5,
+          "sub": "La que corres<br><em>todos los días.</em>"
         }
       ],
       "cierre": "Ponla en tu <em>perfil.</em>",
@@ -181,18 +181,18 @@
       "titular": "TIG, MIG <em>or Stick?</em>",
       "clips": [
         {
-          "escena": "Tabletop still life, no people: three welded steel test coupons lying side by side on a worn steel workbench, each with a different weld bead (TIG, MIG and stick). No people, no hands, no torch, no arc, no glow. Soft side light, shop softly out of focus behind.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The camera slides very slowly to the right across the three coupons. Nothing else moves. Quiet shop ambience.",
+          "stock": 36227034,
+          "inicio": 2,
           "sub": "TIG. MIG. Stick."
         },
         {
-          "escena": "A printed resume on a clipboard resting on an office desk, a bare hand holding a pen over one line. Text on the paper is blurred and unreadable. Only the hand and forearm in a plain work shirt sleeve, no face, no welding helmet, no welding gear. Soft window light.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The pen taps the paper once and then underlines a line slowly. Camera static. Quiet office-shop ambience.",
+          "stock": 36227035,
+          "inicio": 2,
           "sub": "The resume says<br><em>\"welder.\"</em>"
         },
         {
-          "escena": "A recruiter's hand drawing a pen line through a name on a printed candidate list on a desk in an industrial office, other names already crossed out, text blurred and unreadable. Hands only, no face. Window light.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. The hand slowly draws one straight line through a name. The camera pushes in very slowly. Quiet ambience.",
+          "stock": 37325025,
+          "inicio": 5,
           "sub": "You find out<br><em>on test day.</em>"
         }
       ],
@@ -251,18 +251,17 @@
       "titular": "Sube el resumé. <em>Marca lo que corres.</em>",
       "clips": [
         {
-          "escena": "A welder standing in a small fabrication shop in Puerto Rico taking a smartphone out of his work jacket pocket, welding helmet pushed up on top of his head, face visible, no torch in his hands, no arc, no spark, no glow anywhere. Daylight from a roll-up door behind him.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. He slowly lifts the phone and looks at the screen; the screen faces away from the camera. Camera static. Quiet shop ambience.",
-          "sub": "Desde el<br><em>celular.</em>"
+          "stock": 4938984,
+          "inicio": 0.5,
+          "sub": "Sube tu<br><em>resumé.</em>"
         },
         {
-          "escena": "Close-up, centered composition: a welder's real, rough, slightly dirty bare hand holding a modern smartphone upright, facing the camera straight on. The phone screen is perfectly flat, frontal and centered, occupying the middle third of the image, and the screen is a solid, evenly lit pure bright chroma-key green with no reflections, no glare, no interface and no text. The cuff of a worn dark work jacket is visible at the wrist. Background: a dark fabrication shop, softly out of focus.",
           "pantalla": "marca/app-registro.png",
-          "sub": "Crea tu<br><em>perfil.</em>"
+          "sub": ""
         },
         {
-          "escena": "A completed circumferential butt weld joining two carbon steel pipe sections on a pipe stand in a fabrication shop, clean even ripples, slight heat tint. No people, no torch, no arc, no glow.",
-          "movimiento": "Realistic documentary footage continuing this exact photo. Very slow camera push-in toward the weld. Nothing else moves. Quiet shop ambience.",
+          "stock": 15456286,
+          "inicio": 3,
           "sub": "Marca qué procesos<br><em>y posiciones corres.</em>"
         }
       ],
