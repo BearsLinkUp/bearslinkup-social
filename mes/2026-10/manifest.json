@@ -38,6 +38,15 @@
           {
             "ok": false,
             "problemas": [
+              "The image does not show what was requested.",
+              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands."
+            ],
+            "sinQA": false
+          },
+          {
+            "ok": false,
+            "problemas": [
+              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
               "The image does not show what was requested."
             ],
             "sinQA": false
@@ -45,20 +54,6 @@
           {
             "ok": true,
             "problemas": [],
-            "sinQA": false
-          },
-          {
-            "ok": true,
-            "problemas": [],
-            "sinQA": false
-          },
-          {
-            "ok": false,
-            "problemas": [
-              "The image does not show what was requested.",
-              "A lit torch is visible.",
-              "Spark/glow is visible."
-            ],
             "sinQA": false
           }
         ]
@@ -132,20 +127,17 @@
           {
             "ok": false,
             "problemas": [
-              "The image does not show what was requested."
+              "The image does not show what was requested.",
+              "A welding torch, MIG gun or electrode holder looks fake, toy-like, melted, oversized or physically impossible, or has no cable/hose attached, or someone appears to weld with no machine connected."
             ],
             "sinQA": false
           },
           {
             "ok": false,
             "problemas": [
+              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
               "The image does not show what was requested."
             ],
-            "sinQA": false
-          },
-          {
-            "ok": true,
-            "problemas": [],
             "sinQA": false
           }
         ]
@@ -216,30 +208,23 @@
           {
             "ok": false,
             "problemas": [
+              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
+              "The image does not show what was requested."
+            ],
+            "sinQA": false
+          },
+          {
+            "ok": false,
+            "problemas": [
               "The image does not show what was requested.",
-              "Bare hands or bare forearms near hot metal or welding."
+              "Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine)."
             ],
             "sinQA": false
           },
           {
             "ok": false,
             "problemas": [
-              "Clearly readable letters, words, numbers, logos or watermarks anywhere (tiny illegible marks are fine).",
-              "It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light."
-            ],
-            "sinQA": false
-          },
-          {
-            "ok": false,
-            "problemas": [
-              "It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light."
-            ],
-            "sinQA": false
-          },
-          {
-            "ok": false,
-            "problemas": [
-              "A human is visible with a lit torch in hand.",
+              "It looks like AI or a 3D render: plastic skin, over-glossy, fake cinematic grading, colored neon light.",
               "The image does not show what was requested."
             ],
             "sinQA": false
@@ -308,42 +293,22 @@
       "qa": {
         "clips": [
           {
-            "ok": false,
-            "problemas": [
-              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
-              "The image does not show what was requested."
-            ],
-            "sinQA": false
-          },
-          {
-            "ok": false,
-            "problemas": [
-              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
-              "The image does not show what was requested."
-            ],
-            "sinQA": false
-          },
-          {
             "ok": true,
             "problemas": [],
             "sinQA": false
           },
           {
-            "ok": false,
+            "ok": true,
             "problemas": [
-              "A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.",
-              "The image does not show what was requested."
+              "QA no disponible"
             ],
-            "sinQA": false
+            "sinQA": true,
+            "pantalla": true
           }
         ]
       },
-      "archivos": [
-        "11.mp4"
-      ],
-      "portada": "11-portada.jpg",
-      "revisar": true,
-      "listo": true
+      "listo": false,
+      "error": "fal 403 en /fal-ai/bytedance/seedream/v4/text-to-image: {\"detail\":\"User is locked. Reason: Exhausted balance. Top up your balance at fal.ai/dashboard/billing.\"}"
     },
     {
       "id": "12",
@@ -391,6 +356,6 @@
     }
   ],
   "base": "https://raw.githubusercontent.com/BearsLinkUp/bearslinkup-social/main/mes/2026-10/",
-  "estado": "completo",
-  "actualizado": "2026-10-01T02:36:51.249Z"
+  "estado": "parcial",
+  "actualizado": "2026-10-01T04:43:02.062Z"
 }
