@@ -42,19 +42,19 @@
       "clips": [
         {
           "escena": "Macro shot of a welder running a root pass in an open steel butt joint, welding helmet down, face not visible, leather gloves. The arc travels slowly left to right as a small white point of light, molten pool following. Camera static.",
-          "sub": "Root."
+          "sub": "Three passes."
         },
         {
           "escena": "Same steel joint, fill pass over the root, welding helmet down, leather gloves, slightly wider framing, gentle weave motion of the electrode. Camera drifts in very slowly.",
-          "sub": "Fill."
+          "sub": ""
         },
         {
           "escena": "Same steel joint, cap pass, welding helmet down, leather gloves, the finished stack of weld beads visible below the torch. Slow push in.",
-          "sub": "Cap."
+          "sub": ""
         },
         {
           "escena": "Gloved hands resting beside a finished three-pass weld on a steel plate, cooling, no arc, no spark, no glow anywhere. One thumb runs along the bead. Camera slowly tilts up from the weld. No face in frame.",
-          "sub": "Three passes.<br><em>Nobody asked to see them.</em>"
+          "sub": "Nobody asked<br><em>to see them.</em>"
         }
       ],
       "cierre": "Your profile shows <em>the work.</em>",
