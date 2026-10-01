@@ -277,7 +277,49 @@ const MOV_DEFECTO = 'Realistic documentary footage that continues this exact pho
  * Si el clip trae "pantalla", el celular de la foto muestra la captura real de la app
  * (sin IA en la pantalla).
  */
+const BANCO_VIDEO = fs.existsSync('marca/banco-video.json') ? JSON.parse(fs.readFileSync('marca/banco-video.json', 'utf8')).tomas : [];
+
+/** Toma real del banco (Pexels): se baja, se corta a SEG_CLIP desde "inicio" y se lleva a 1080x1920. */
+async function clipStock(spec, destino) {
+  const t = BANCO_VIDEO.find(x => x.id === spec.stock);
+  if (!t) throw new Error(`La toma ${spec.stock} no está en marca/banco-video.json`);
+  const crudo = path.join(TMP, `stock-${t.id}.mp4`);
+  if (!fs.existsSync(crudo)) await bajar(t.url, crudo);
+  const ini = Math.max(0, Math.min(Number(spec.inicio || 0), Math.max(0, t.dur - SEG_CLIP - 0.2)));
+  ff(['-ss', String(ini), '-i', crudo, '-t', String(SEG_CLIP),
+    '-vf', 'scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,fps=30,setsar=1,eq=saturation=0.92:contrast=1.04',
+    '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-ar', '44100', '-ac', '2', destino]);
+  return { ok: true, stock: t.id };
+}
+
+/** Celular dibujado (sin IA) sobre negro con resplandor verde, con la app real adentro. */
+async function clipMockup(nav, pantalla, destino) {
+  const app = await videoPantalla(nav, pantalla, path.join(TMP, 'app.mp4'));
+  const fondo = path.join(TMP, 'mock-fondo.png');
+  const pag = await nav.newPage({ viewport: { width: 1080, height: 1920 } });
+  await pag.setContent(`<html><body style="margin:0"><div style="width:1080px;height:1920px;background:radial-gradient(ellipse 70% 45% at 50% 42%,rgba(22,163,74,.45),rgba(22,163,74,.08) 55%,rgba(7,9,8,0) 75%),#070908;position:relative">
+    <div style="position:absolute;left:260px;top:300px;width:560px;height:1140px;border-radius:72px;background:#111;box-shadow:0 40px 120px rgba(0,0,0,.6),inset 0 0 0 3px #2a2a2a"></div>
+    <div style="position:absolute;left:278px;top:318px;width:524px;height:1104px;border-radius:56px;background:#00FF00"></div>
+    <div style="position:absolute;left:470px;top:334px;width:140px;height:34px;border-radius:20px;background:#111"></div></div></body></html>`);
+  await pag.screenshot({ path: fondo }); await pag.close();
+  const W = 524, H = 1104, X = 278, Y = 318, T = SEG_CLIP;
+  ff(['-loop', '1', '-t', String(T), '-i', fondo, '-i', app, '-f', 'lavfi', '-t', String(T), '-i', 'anullsrc=r=44100:cl=stereo',
+    '-filter_complex',
+    `[1:v]scale=${W}:-2,pad=${W}:${H}:0:(oh-ih)/2:0xF4F5F5[a];[0:v][a]overlay=${X}:${Y}[f];` +
+    `[0:v]colorkey=0x00FF00:0.3:0.05[k];[f][k]overlay=0:0,scale=w='1080*(1+0.03*t/${T})':h=-2:eval=frame,crop=1080:1920,fps=30,format=yuv420p[v]`,
+    '-map', '[v]', '-map', '2:a', '-t', String(T), '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-c:a', 'aac', '-ar', '44100', '-ac', '2', destino]);
+  return destino;
+}
+
+/**
+ * Un clip del reel. Orden de preferencia, sin IA donde se suelda:
+ *  - "stock": toma real del banco (Pexels).
+ *  - "pantalla" sin "escena": celular dibujado con la app real.
+ *  - "escena": foto Seedream + Veo (solo para escenas SIN herramientas de soldar).
+ */
 async function clipRevisado(spec, destino, fotoDestino, nav) {
+  if (spec.stock) return clipStock(spec, destino);
+  if (spec.pantalla && !spec.escena) { await clipMockup(nav, spec.pantalla, destino); return { ok: true, pantalla: true }; }
   const foto = await fotoRevisada(spec.escena, 'R', fotoDestino, { width: 1080, height: 1920 });
   if (spec.pantalla) {
     await clipPantalla(nav, fotoDestino, spec.pantalla, destino);
@@ -524,6 +566,7 @@ function validarPlan(plan, slots) {
     if (!p.linea) err.push(`Pieza ${id}: falta "linea" (segmento · CTA corto)`);
     if (p.tipo !== 'reel' && !p.foto) err.push(`Pieza ${id}: falta "foto"`);
     if (p.tipo === 'carrusel' && (!Array.isArray(p.slides) || p.slides.length !== 4)) err.push(`Pieza ${id}: el carrusel lleva 4 "slides" después de la portada`);
+    if (p.tipo === 'reel' && Array.isArray(p.clips)) p.clips.forEach((c, k) => { if (c.stock && !BANCO_VIDEO.some(t => t.id === c.stock)) err.push(`Pieza ${id}: clip ${k + 1} usa una toma que no está en el banco`); });
     if (p.tipo === 'reel' && (!Array.isArray(p.clips) || p.clips.length < 3 || p.clips.length > 4 || !p.cierre)) err.push(`Pieza ${id}: el reel lleva 3 "clips" y "cierre"`);
     const texto = JSON.stringify(p).toLowerCase();
     for (const w of PROHIBIDAS) if (texto.includes(w)) err.push(`Pieza ${id}: palabra prohibida "${w.trim()}"`);
