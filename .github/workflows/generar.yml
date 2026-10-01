@@ -17,9 +17,11 @@ name: Generar semana Bears LinkUp
 # Pase lo que pase, la corrida deja estado-corrida.md commiteado con el
 # resultado y el log completo. Si algo revienta, ahi queda escrito.
 
+# APAGADO EL 30/sep/2026: el contenido ahora sale mensual con generar-mes.yml.
+# Este cron semanal gastaba fal.ai en el banco viejo de septiembre.
 on:
-  schedule:
-    - cron: '0 10 * * 1'
+  # schedule:
+  #   - cron: '0 10 * * 1'
   push:
     paths:
       - 'disparo.json'

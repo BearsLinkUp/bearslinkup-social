@@ -1,0 +1,111 @@
+name: Generar mes Bears LinkUp
+
+# Produce el contenido del MES SIGUIENTE completo: plan, fotos (Seedream V4),
+# reels (Wan 2.5), revision por IA, montaje de marca y manifest.json.
+# Despues, una tarea programada de Claude lo lee y programa todo en Metricool.
+#
+# Corre solo los dias 20, 21 y 22 a las 6:00 a.m. AST (10:00 UTC). El 20 hace
+# el trabajo; el 21 y el 22 solo retoman si algo quedo a medias (es reanudable:
+# lo que ya esta hecho no se vuelve a pagar).
+#
+# Tambien se puede disparar:
+#   - a mano, con "Run workflow"
+#   - empujando un commit que toque disparo-mes.json ({"mes":"2026-11","solo":"03,07"})
+
+on:
+  schedule:
+    - cron: '0 10 20,21,22 * *'
+  push:
+    paths:
+      - 'disparo-mes.json'
+  workflow_dispatch:
+    inputs:
+      mes:
+        description: 'Mes a producir (AAAA-MM). Vacio = el que toca.'
+        required: false
+        default: ''
+      solo:
+        description: 'Regenerar solo estas piezas (ej: 03,07). Vacio = lo que falte.'
+        required: false
+        default: ''
+      solo_plan:
+        description: 'Solo escribir el plan, sin generar medios'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: generar-mes-bearslinkup
+  cancel-in-progress: false
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Resolver argumentos
+        id: args
+        run: |
+          MES="${{ github.event.inputs.mes }}"
+          SOLO="${{ github.event.inputs.solo }}"
+          SOLO_PLAN="${{ github.event.inputs.solo_plan }}"
+          if [ "${{ github.event_name }}" = "push" ] && [ -f disparo-mes.json ]; then
+            leer() { node -e "const d=require('./disparo-mes.json');const v=d['$1'];process.stdout.write(v===undefined||v===null?'':String(v))"; }
+            MES=$(leer mes); SOLO=$(leer solo); SOLO_PLAN=$(leer solo_plan)
+          fi
+          ARGS=""
+          [ -n "$MES" ] && ARGS="$ARGS --mes=$MES"
+          [ -n "$SOLO" ] && ARGS="$ARGS --solo=$SOLO"
+          [ "$SOLO_PLAN" = "true" ] && ARGS="$ARGS --solo-plan"
+          echo "args=$ARGS" >> $GITHUB_OUTPUT
+          echo "ARGS: '$ARGS'"
+
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Instalar ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Generar el mes
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+          MODELO_IMAGEN: ${{ vars.MODELO_IMAGEN }}
+          MODELO_VIDEO: ${{ vars.MODELO_VIDEO }}
+          RES_VIDEO: ${{ vars.RES_VIDEO }}
+          PRESUPUESTO: ${{ vars.PRESUPUESTO }}
+        run: |
+          set -o pipefail
+          node generar-mes.js ${{ steps.args.outputs.args }} 2>&1 | tee corrida-mes.log
+
+      - name: Guardar en el repo
+        if: always()
+        run: |
+          git config user.name "bearslinkup-publisher"
+          git config user.email "admin@bearslinkup.com"
+          {
+            echo "# Ultima corrida mensual"
+            echo
+            echo "- resultado: **${{ job.status }}**"
+            echo "- corrida: ${{ github.run_number }} · disparada por ${{ github.event_name }}"
+            echo "- terminada: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo "- argumentos: \`${{ steps.args.outputs.args }}\`"
+            echo
+            echo '```'
+            [ -f corrida-mes.log ] && tail -n 200 corrida-mes.log || echo "(no llego a correr)"
+            echo '```'
+          } > estado-mes.md
+          git add -A mes/ estado-mes.md
+          git commit -m "mes: corrida ${{ github.run_number }} ${{ job.status }}" || echo "sin cambios"
+          git pull --rebase --autostash || true
+          git push || echo "no se pudo empujar"
