@@ -1,8 +1,8 @@
 # Ultima corrida mensual
 
 - resultado: **success**
-- corrida: 2 · disparada por push
-- terminada: 2026-10-01 02:27 UTC
+- corrida: 3 · disparada por push
+- terminada: 2026-10-01 02:36 UTC
 - argumentos: ` --mes=2026-10 --remontar`
 
 ```
@@ -60,13 +60,8 @@ Plan existente: 13 piezas
 
 ── 11 · 2026-10-28T19:00 · reel · es · Sube el resumé. Marca lo que corres.
    ✓ clip 1/4
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.; The image does not show what was requested.
    ✓ clip 2/4
-   · clip PASA 
    ✓ clip 3/4
-   · clip NO pasa — The image does not show what was requested.; A lit torch is visible.; Bare hands or bare forearms near hot metal or welding.
-   · clip NO pasa — A human face is visible while an arc, spark, weld glow or lit torch is visible, or while a torch/electrode holder is in the hands.; The image does not show what was requested.
    ✓ clip 4/4
    ✓ lista (marcada para revisar: la IA de QA no quedó conforme)
 
@@ -78,5 +73,5 @@ Plan existente: 13 piezas
    · uso la foto ya guardada en crudas/
    ✓ lista
 
-13/13 piezas listas · estado completo · gasto estimado $2.50
+13/13 piezas listas · estado completo · gasto estimado $0.00
 ```
