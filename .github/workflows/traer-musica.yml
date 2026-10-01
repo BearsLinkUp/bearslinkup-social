@@ -1,0 +1,52 @@
+name: Traer musica del banco
+
+# Baja las pistas de marca/banco-musica.json (Pixabay, uso comercial) y las guarda
+# recortadas en marca/musica/<id>.mp3 para que cualquier pieza (reels organicos o
+# anuncios) las pueda mezclar sin depender de que Pixabay responda ese dia.
+# Corre solo cuando cambia el banco o este archivo, o a mano.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'marca/banco-musica.json'
+      - '.github/workflows/traer-musica.yml'
+
+jobs:
+  traer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar ffmpeg y jq
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg jq
+
+      - name: Bajar y recortar pistas
+        run: |
+          mkdir -p marca/musica
+          n=$(jq '.pistas | length' marca/banco-musica.json)
+          for i in $(seq 0 $((n-1))); do
+            id=$(jq -r ".pistas[$i].id" marca/banco-musica.json)
+            url=$(jq -r ".pistas[$i].url" marca/banco-musica.json)
+            ini=$(jq -r ".pistas[$i].inicio // 0" marca/banco-musica.json)
+            fin=$((ini + 60))
+            echo "pista $id -> $url (0 a ${fin}s)"
+            if curl -fsSL -A "Mozilla/5.0" -o /tmp/p.mp3 "$url"; then
+              ffmpeg -y -hide_banner -loglevel error -i /tmp/p.mp3 -t "$fin" -ac 2 -ar 44100 -b:a 160k "marca/musica/${id}.mp3" || echo "fallo ffmpeg $id"
+            else
+              echo "no se pudo bajar $id"
+            fi
+          done
+          ls -la marca/musica
+
+      - name: Guardar en el repo
+        run: |
+          git config user.name "bearslinkup-publisher"
+          git config user.email "admin@bearslinkup.com"
+          git add marca/musica
+          git commit -m "musica: banco recortado" || echo "sin cambios"
+          git pull --rebase || true
+          git push || echo "no se pudo empujar"
