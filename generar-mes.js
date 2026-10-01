@@ -330,9 +330,13 @@ h1 em{font-style:normal;color:#4EAF68;}
 .R .grad{position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(to top,rgba(8,10,9,.78),rgba(8,10,9,0));}
 .R .txt{position:absolute;left:80px;right:80px;bottom:300px;}
 .R h1{font-size:86px;}
-.RC{height:1920px;}
+.s.v.RC{height:1920px;background:#1A5C38;}
 .RC .txt{top:46%;}
 .RC h1{font-size:96px;}
+.RC .pie{bottom:300px;}
+.RC .mark img{width:72px;height:72px;border-radius:16px;}
+.RC .mark span{font-size:32px;}
+.RC .web{font-size:30px;}
 `;
 
 const marca = () => `<div class="mark">${LOGO ? `<img src="${LOGO}">` : ''}<span>Bears LinkUp</span></div>`;
