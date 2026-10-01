@@ -1,0 +1,256 @@
+{
+  "mes": "2026-10",
+  "piezas": [
+    {
+      "id": "01",
+      "fecha": "2026-10-05T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "es",
+      "copy": "6G pasada. Otra vez.\n\nTaller nuevo, prueba nueva. Y el taller anterior no va a llamar a nadie para confirmar que la pasaste.\n\nEn Bears LinkUp tu perfil guarda tus procesos, tus posiciones y tus certificaciones, y lo ve quien contrata antes de llamarte.\n\nNo te promete que no te vuelvan a probar. Te pone en la prueba con tu récord por delante.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldadura #soldador #6G #PuertoRico #fabricacion #oficio",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "01-1.jpg",
+        "01-2.jpg",
+        "01-3.jpg",
+        "01-4.jpg",
+        "01-5.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "02",
+      "fecha": "2026-10-07T19:00:00-04:00",
+      "tipo": "reel",
+      "idioma": "en",
+      "copy": "Root. Fill. Cap.\n\nThen someone reads one page of paper and decides whether you can weld.\n\nOn Bears LinkUp the profile leads with what you run and where you run it — process, position, finished work. The people hiring read that before they call.\n\nFree to sign up. Link in bio.",
+      "hashtags": "#BearsLinkUp #welding #welder #rootpass #skilledtrades #fabrication #weldlife",
+      "primer_comentario": "",
+      "qa": {
+        "clips": []
+      },
+      "listo": false,
+      "error": "fal 403 en /fal-ai/wan-25-preview/text-to-video: Host not in allowlist: queue.fal.run. Add this host to your network egress settings to allow access."
+    },
+    {
+      "id": "03",
+      "fecha": "2026-10-09T12:00:00-04:00",
+      "tipo": "imagen",
+      "idioma": "es",
+      "copy": "El resumé lo subes igual. Lo que cambia es lo que sale primero.\n\nQué procesos corres, en qué posiciones y en qué pueblo trabajas. Eso es lo que mira el que contrata antes de llamarte.\n\nCrea tu perfil desde el celular. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldador #soldadura #PuertoRico #empleo #taller #oficio",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "03.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "04",
+      "fecha": "2026-10-12T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "en",
+      "copy": "The credential opens the door. Someone still has to know the door is there.\n\nOn Bears LinkUp your inspector profile carries your credential, the codes you work to and the projects you've signed off — in front of the contractors, shops and agencies looking for inspection.\n\nFree to sign up. Link in bio.",
+      "hashtags": "#BearsLinkUp #CWI #weldinginspector #QAQC #weldinginspection #skilledtrades",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "04-1.jpg",
+        "04-2.jpg",
+        "04-3.jpg",
+        "04-4.jpg",
+        "04-5.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "05",
+      "fecha": "2026-10-14T19:00:00-04:00",
+      "tipo": "reel",
+      "idioma": "es",
+      "copy": "Tubo fijo a 45 grados. El que la ha corrido sabe por qué duele.\n\nY en un resumé se escribe igual que cualquier otra línea.\n\nEn Bears LinkUp la posición va en su propio espacio del perfil, donde la ve quien busca exactamente eso.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #6G #soldadura #tuberia #soldador #PuertoRico #pasederaiz",
+      "primer_comentario": "",
+      "qa": {
+        "clips": []
+      },
+      "listo": false,
+      "error": "fal 403 en /fal-ai/wan-25-preview/text-to-video: Host not in allowlist: queue.fal.run. Add this host to your network egress settings to allow access."
+    },
+    {
+      "id": "06",
+      "fecha": "2026-10-16T12:00:00-04:00",
+      "tipo": "imagen",
+      "idioma": "en",
+      "copy": "\"What's the cheapest you can do it for?\"\n\nWhen that's the first question on every call, you're being shopped on price, not hired on work.\n\nOn Bears LinkUp the customer sees your finished jobs — gates, railings, stairs, structure — before they ask for the estimate.\n\nFree to list your shop. Link in bio.",
+      "hashtags": "#BearsLinkUp #metalfabrication #weldingshop #ironwork #fabricationshop #PuertoRico",
+      "primer_comentario": "",
+      "qa": {},
+      "listo": false,
+      "error": "fal 403 en /fal-ai/bytedance/seedream/v4/text-to-image: Host not in allowlist: queue.fal.run. Add this host to your network egress settings to allow access."
+    },
+    {
+      "id": "07",
+      "fecha": "2026-10-19T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "es",
+      "copy": "Veinte años de portones, rejas y escaleras. Y las fotos están en el celular.\n\nO en un grupo de WhatsApp. O en la memoria del cliente que te recomendó — el único sitio donde el cliente nuevo no puede buscar.\n\nEn Bears LinkUp el trabajo terminado vive en el perfil del taller.\n\nAbre el perfil de tu taller. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #herreria #portones #rejas #taller #PuertoRico #fabricacion",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "07-1.jpg",
+        "07-2.jpg",
+        "07-3.jpg",
+        "07-4.jpg",
+        "07-5.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "08",
+      "fecha": "2026-10-21T19:00:00-04:00",
+      "tipo": "reel",
+      "idioma": "en",
+      "copy": "The resume says \"welder.\" It doesn't say TIG, MIG or Stick, and it doesn't say what position.\n\nSo you find out on test day — after the schedule moved and the client is already waiting.\n\nBears LinkUp is only welders, fabricators and inspectors. Every profile shows process and position before you open it.\n\nCreating your agency account is free. Link in bio.",
+      "hashtags": "#BearsLinkUp #staffing #industrialstaffing #recruiting #skilledtrades #welding",
+      "primer_comentario": "",
+      "qa": {
+        "clips": []
+      },
+      "listo": false,
+      "error": "fal 403 en /fal-ai/wan-25-preview/text-to-video: Host not in allowlist: queue.fal.run. Add this host to your network egress settings to allow access."
+    },
+    {
+      "id": "09",
+      "fecha": "2026-10-23T12:00:00-04:00",
+      "tipo": "imagen",
+      "idioma": "es",
+      "copy": "Mides el filete, anotas la medida, firmas. El trabajo se para o sigue por lo que tú escribiste.\n\nEse criterio es lo que te contrata, y es lo más difícil de enseñar en una llamada de quince minutos.\n\nEn Bears LinkUp tu perfil de inspector pone los códigos que trabajas y los proyectos que has firmado donde los ve quien necesita inspección.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #inspector #CWI #inspeccion #soldadura #calidad #PuertoRico",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "09.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "10",
+      "fecha": "2026-10-26T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "en",
+      "copy": "Every posting fills your inbox. Almost nothing in it passes the test.\n\nOn the general job boards you pay to be seen, and then you pay again in the hours it takes to sort through what showed up.\n\nBears LinkUp is only welders, fabricators and inspectors. Every profile shows process and position before you open it.\n\nCreating your agency account is free. Link in bio.",
+      "hashtags": "#BearsLinkUp #staffing #recruiting #industrialrecruiting #skilledtrades #hiring",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "10-1.jpg",
+        "10-2.jpg",
+        "10-3.jpg",
+        "10-4.jpg",
+        "10-5.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "11",
+      "fecha": "2026-10-28T19:00:00-04:00",
+      "tipo": "reel",
+      "idioma": "es",
+      "copy": "El resumé lo subes desde el celular. Después marcas lo que de verdad corres: procesos, posiciones y el pueblo donde trabajas.\n\nEso es lo que sale primero cuando alguien busca gente.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldador #soldadura #PuertoRico #registro #oficio #taller",
+      "primer_comentario": "",
+      "qa": {
+        "clips": []
+      },
+      "listo": false,
+      "error": "fal 403 en /fal-ai/wan-25-preview/text-to-video: Host not in allowlist: queue.fal.run. Add this host to your network egress settings to allow access."
+    },
+    {
+      "id": "12",
+      "fecha": "2026-10-30T12:00:00-04:00",
+      "tipo": "imagen",
+      "idioma": "en",
+      "copy": "Guys leave for Texas and start over. New shop, new test, nobody around who has seen their work.\n\nThe profile doesn't start over. Processes, positions and finished work travel with the account — and the platform reads in Spanish and in English.\n\nFree to sign up. PR and the US. Link in bio.",
+      "hashtags": "#BearsLinkUp #welder #welding #pipewelder #Texas #PuertoRico #skilledtrades",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "12.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    },
+    {
+      "id": "13",
+      "fecha": "2026-11-02T12:00:00-04:00",
+      "tipo": "carrusel",
+      "idioma": "es",
+      "copy": "Llenar un perfil en un idioma que no es el tuyo te hace escribir menos de lo que sabes.\n\nBears LinkUp trabaja en español y en inglés, con selector. Tú describes tu oficio como lo hablas, y el que contrata en Texas lo lee en el suyo.\n\nCrea tu perfil. Gratis. Link en la bio.",
+      "hashtags": "#BearsLinkUp #soldador #soldadura #PuertoRico #español #oficio #fabricacion",
+      "primer_comentario": "",
+      "qa": {
+        "foto": {
+          "ok": true,
+          "provista": true
+        }
+      },
+      "archivos": [
+        "13-1.jpg",
+        "13-2.jpg",
+        "13-3.jpg",
+        "13-4.jpg",
+        "13-5.jpg"
+      ],
+      "revisar": false,
+      "listo": true
+    }
+  ],
+  "base": "https://raw.githubusercontent.com/BearsLinkUp/bearslinkup-social/main/mes/2026-10/",
+  "estado": "parcial",
+  "actualizado": "2026-10-01T00:47:21.127Z"
+}
