@@ -41,3 +41,9 @@ Cada pieza empuja a **crear perfil** en la plataforma (registro gratis para todo
 - Decir que la plataforma certifica AWS o ASME.
 - Números que no estén en estas reglas.
 - Mencionar Weld Bear International EDU.
+
+## Línea de apoyo (`linea`)
+Cada pieza lleva `linea`: segmento + CTA corto, separados por " · " (ej. "Talleres y fabricadores · Crea tu cuenta gratis"). Máximo 48 caracteres. Va debajo del titular con una barra verde. Los carruseles llevan además `linea_cierre` para la última tarjeta (ej. "bearslinkup.com · Link en la bio").
+
+## Estilo del arte
+Tipografía pesada (Inter Black), titular grande, palabra clave en verde, barra verde corta, logo oficial arriba a la izquierda. Titulares cortos: 3 a 7 palabras. Nada de párrafos sobre la foto.
