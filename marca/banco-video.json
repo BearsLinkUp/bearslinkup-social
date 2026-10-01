@@ -1,0 +1,174 @@
+{
+  "_lee_esto": "Banco de tomas REALES de soldadura (Pexels, licencia gratis con uso comercial). Revisadas a mano el 1 oct 2026: careta abajo, guantes, sin logos grandes. Los reels usan SOLO estas tomas para todo lo que muestre soldar o esmerilar: la IA no dibuja bien antorchas ni pistolas. Para agregar tomas, revisarlas antes.",
+  "tomas": [
+    {
+      "id": 27212738,
+      "url": "https://videos.pexels.com/video-files/27212738/12096170_1080_1920_30fps.mp4",
+      "dur": 12,
+      "tags": [
+        "tig",
+        "tubo",
+        "arco"
+      ],
+      "autor": "Sururi Ballıdağ",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/27212738/"
+    },
+    {
+      "id": 27212745,
+      "url": "https://videos.pexels.com/video-files/27212745/12096275_1080_1920_30fps.mp4",
+      "dur": 12,
+      "tags": [
+        "tig",
+        "tubo",
+        "arco"
+      ],
+      "autor": "Sururi Ballıdağ",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/27212745/"
+    },
+    {
+      "id": 27212748,
+      "url": "https://videos.pexels.com/video-files/27212748/12096246_1080_1920_30fps.mp4",
+      "dur": 11,
+      "tags": [
+        "tig",
+        "tubo",
+        "arco"
+      ],
+      "autor": "Sururi Ballıdağ",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/27212748/"
+    },
+    {
+      "id": 39803672,
+      "url": "https://videos.pexels.com/video-files/39803672/16974786_1080_1920_30fps.mp4",
+      "dur": 20,
+      "tags": [
+        "tig",
+        "tubo",
+        "varilla"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/39803672/"
+    },
+    {
+      "id": 35590715,
+      "url": "https://videos.pexels.com/video-files/35590715/15082533_1080_1920_30fps.mp4",
+      "dur": 20,
+      "tags": [
+        "tig",
+        "varilla",
+        "careta"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/35590715/"
+    },
+    {
+      "id": 4938984,
+      "url": "https://videos.pexels.com/video-files/4938984/4938984-sd_540_960_30fps.mp4",
+      "dur": 7,
+      "tags": [
+        "stick",
+        "careta",
+        "humo"
+      ],
+      "autor": "Maria Jose Navarro",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/4938984/"
+    },
+    {
+      "id": 4938985,
+      "url": "https://videos.pexels.com/video-files/4938985/4938985-sd_540_960_30fps.mp4",
+      "dur": 20,
+      "tags": [
+        "stick",
+        "careta",
+        "taller"
+      ],
+      "autor": "Maria Jose Navarro",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/4938985/"
+    },
+    {
+      "id": 37325024,
+      "url": "https://videos.pexels.com/video-files/37325024/15809617_1080_1920_32fps.mp4",
+      "dur": 15,
+      "tags": [
+        "stick",
+        "careta",
+        "chispas"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/37325024/"
+    },
+    {
+      "id": 36227034,
+      "url": "https://videos.pexels.com/video-files/36227034/15363043_1080_1920_30fps.mp4",
+      "dur": 10,
+      "tags": [
+        "mig",
+        "careta",
+        "humo"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/36227034/"
+    },
+    {
+      "id": 36227035,
+      "url": "https://videos.pexels.com/video-files/36227035/15363039_1080_1920_30fps.mp4",
+      "dur": 10,
+      "tags": [
+        "mig",
+        "banco",
+        "chispas"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/36227035/"
+    },
+    {
+      "id": 37325025,
+      "url": "https://videos.pexels.com/video-files/37325025/15809624_1080_1920_32fps.mp4",
+      "dur": 15,
+      "tags": [
+        "esmeril",
+        "prensa",
+        "careta"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/37325025/"
+    },
+    {
+      "id": 15456286,
+      "url": "https://videos.pexels.com/video-files/15456286/15456286-hd_1080_1920_30fps.mp4",
+      "dur": 11,
+      "tags": [
+        "esmeril",
+        "chispas",
+        "cerca"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/15456286/"
+    },
+    {
+      "id": 34127177,
+      "url": "https://videos.pexels.com/video-files/34127177/14470935_1080_1920_24fps.mp4",
+      "dur": 30,
+      "tags": [
+        "esmeril",
+        "chispas",
+        "cerca"
+      ],
+      "autor": "",
+      "fuente": "Pexels (licencia gratuita, uso comercial)",
+      "pagina": "https://www.pexels.com/video/34127177/"
+    }
+  ]
+}

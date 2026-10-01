@@ -11,11 +11,10 @@ Cada pieza empuja a **crear perfil** en la plataforma (registro gratis para todo
 
 ## Formatos fijos
 - **Lunes 12:00 p.m. · carrusel**: portada con foto + 4 tarjetas (`slides`). Las tarjetas 1 y 2 son frases cortas (`texto`). La 3 es una lista de 3 palabras (`lista`) con una línea corta opcional (`texto`). La 4 es el cierre (`cierre`), una frase de CTA de máximo 5 palabras.
-- **Miércoles 7:00 p.m. · reel**: 3 clips de 6 s + `cierre` de marca (máximo 5 palabras). Cada clip lleva:
-  - `escena` (inglés): la FOTO del primer cuadro, descrita como foto documental real. Si hay soldadura, describe la herramienta real: TIG con cuerpo negro, copa de cerámica, electrodo de tungsteno, manguera y cable hacia la máquina; MIG con pistola y cable; stick con porta-electrodo y cable. La soldadura de un tubo va en la junta entre dos secciones, nunca en el borde abierto.
-  - `movimiento` (inglés): movimiento lento y realista sobre esa foto (cámara casi fija, manos que avanzan despacio). Nada aparece ni desaparece.
-  - `sub` (idioma de la pieza, máximo 6 palabras, puede ir vacío "").
-  - Si un clip muestra la pantalla del celular, usa `"pantalla": "marca/app-registro.png"` y en `escena` pide la mano sosteniendo el celular de frente con la pantalla verde chroma (el sistema monta la app real ahí). Nunca pidas pantallas inventadas.
+- **Miércoles 7:00 p.m. · reel**: 3 clips de 6 s + `cierre` de marca (máximo 5 palabras). Cada clip lleva `sub` (idioma de la pieza, máximo 6 palabras, puede ir "") y UNA de estas fuentes:
+  - `stock`: el `id` de una toma de `marca/banco-video.json` + `inicio` (segundo donde empieza). **Toda escena donde se suelde, se esmerile o salga una herramienta de soldar va con stock.** La IA no dibuja bien antorchas ni pistolas. Escoge por `tags`, no repitas una toma dentro del mes y evita las del mes anterior.
+  - `pantalla`: `"marca/app-registro.png"` sin `escena` → celular dibujado con el registro real de la app. Úsalo como mucho en un reel al mes.
+  - `escena` + `movimiento` (inglés): foto IA animada, SOLO para escenas sin herramientas ni soldadura (una oficina, un portón terminado, un papel en un escritorio).
 - **Viernes 12:00 p.m. · imagen**: una foto con titular.
 
 ## Estilo visual (minimalista, que se vea lo menos IA posible)
