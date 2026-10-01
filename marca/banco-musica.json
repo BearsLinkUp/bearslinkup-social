@@ -1,0 +1,68 @@
+{
+  "_lee_esto": "Música de fondo de los reels. Pixabay Content License: gratis, uso comercial, sin atribución. El sistema rota estas pistas y toma 21 s desde 'inicio'.",
+  "pistas": [
+    {
+      "id": 1,
+      "estilo": "industrial",
+      "url": "https://cdn.pixabay.com/download/audio/2022/02/18/audio_8f472893e9.mp3",
+      "pagina": "https://pixabay.com/music/beats-destruction-cool-anger-car-survive-masculine-music-21201/",
+      "inicio": 20
+    },
+    {
+      "id": 2,
+      "estilo": "industrial",
+      "url": "https://cdn.pixabay.com/download/audio/2023/09/12/audio_c7687d54a5.mp3",
+      "pagina": "https://pixabay.com/music/trap-industrial-trap-royalty-free-music-166198/",
+      "inicio": 20
+    },
+    {
+      "id": 3,
+      "estilo": "industrial",
+      "url": "https://cdn.pixabay.com/download/audio/2025/12/05/audio_61eb3dd229.mp3",
+      "pagina": "https://pixabay.com/music/trap-dark-industrial-protest-rap-type-beat-prod-by-onesevenbeatxs-444027/",
+      "inicio": 20
+    },
+    {
+      "id": 4,
+      "estilo": "dembow",
+      "url": "https://cdn.pixabay.com/download/audio/2026/05/01/audio_9fb126d430.mp3",
+      "pagina": "https://pixabay.com/music/reggaeton-pista-de-dembow-para-party/",
+      "inicio": 20
+    },
+    {
+      "id": 5,
+      "estilo": "dembow",
+      "url": "https://cdn.pixabay.com/download/audio/2026/02/18/audio_d26f56a633.mp3",
+      "pagina": "https://pixabay.com/music/beats-beat-de-dembow-estilo-bulin/",
+      "inicio": 20
+    },
+    {
+      "id": 6,
+      "estilo": "dembow",
+      "url": "https://cdn.pixabay.com/download/audio/2026/03/31/audio_3a9f3d5bc5.mp3",
+      "pagina": "https://pixabay.com/music/reggaeton-reggaeton-beat-511839/",
+      "inicio": 20
+    },
+    {
+      "id": 7,
+      "estilo": "rock",
+      "url": "https://cdn.pixabay.com/download/audio/2026/03/12/audio_bea8e8877a.mp3",
+      "pagina": "https://pixabay.com/music/rock-energetic-action-sport-500409/",
+      "inicio": 20
+    },
+    {
+      "id": 8,
+      "estilo": "rock",
+      "url": "https://cdn.pixabay.com/download/audio/2026/02/27/audio_3ff32914d3.mp3",
+      "pagina": "https://pixabay.com/music/hard-rock-action-rock-492798/",
+      "inicio": 20
+    },
+    {
+      "id": 9,
+      "estilo": "hiphop",
+      "url": "https://cdn.pixabay.com/download/audio/2026/07/14/audio_e1cf897d2c.mp3",
+      "pagina": "https://pixabay.com/music/alternative-hip-hop-hip-hop-sport/",
+      "inicio": 20
+    }
+  ]
+}
