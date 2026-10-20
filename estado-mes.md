@@ -1,19 +1,13 @@
 # Ultima corrida mensual
 
-- resultado: **success**
-- corrida: 7 · disparada por push
-- terminada: 2026-10-01 13:36 UTC
-- argumentos: ` --mes=2026-10 --solo=11`
+- resultado: **failure**
+- corrida: 8 · disparada por schedule
+- terminada: 2026-10-20 14:49 UTC
+- argumentos: ``
 
 ```
-Bears LinkUp · mes 2026-10
-Plan existente: 13 piezas
+Bears LinkUp · mes 2026-11
+Escribiendo plan con anthropic/claude-sonnet-5: 12 piezas
 
-── 11 · 2026-10-28T19:00 · reel · es · Sube el resumé. Marca lo que corres.
-   ✓ clip 1/3
-   ✓ clip 2/3
-   ✓ clip 3/3
-   ✓ lista
-
-13/13 piezas listas · estado completo · gasto estimado $0.00
+✗ fal 403 en /openrouter/router: {"detail":"User is locked. Reason: Exhausted balance. Top up your balance at fal.ai/dashboard/billing."}
 ```
